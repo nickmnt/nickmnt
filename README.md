@@ -3,7 +3,7 @@
 <div align="center">
   <img src="https://github.com/nimamt/nimamt/blob/main/assets/quebec_flag.jpg?raw=true" alt="Québec"/>&nbsp;
   <img src="https://github.com/nimamt/nimamt/blob/main/assets/canada_flag.jpg?raw=true" alt="Canada"/>
-  <h3 align="center">📍 Québec, Montréal</h4>
+  <h3 align="center">📍 Montréal, Québec</h4>
   <h4 align="center">Mes projets mis en avant sont disponibles ci-dessous / My highlighted projects are available below</h4>
 </div>
 
@@ -16,19 +16,19 @@
 ## ✏️ &nbsp;Projets / Projects
 
 <!-- BLOG-POST-LIST:START -->
-- [🤖 Extensive repository on ML, Reinforcement Learning, NLP, Computer Vision, and Deep Learning](https://github.com/nimamt/machine_learning)
+- [🤖 ML, Reinforcement Learning, NLP, Computer Vision, and Deep Learning](https://github.com/nimamt/machine_learning)
 - [🌐 Telegram Clone](https://cyris.io/blog/reverse-engineer-api-copy)
 - [🌐 Medium Clone](https://github.com/nimamt/medium_clone)
 - [🌐 Ecommerce Website](https://github.com/nimamt/shop)
 - [🌐 Instagram Clone](https://github.com/nimamt/instagram)
-- [🌐 Responsive static website](https://github.com/nimamt/rockstone)
+- [🌐 Responsive Static Website](https://github.com/nimamt/rockstone)
 
 ## ✨ &nbsp;Remarques / Notes
 
 <!-- BLOG-POST-LIST:START -->
 - All web projects are either my own idea or my upgraded versions of course projects
 - Projects are all hosted with demos
-- Hosted demos with .Net back-end take long to load at first because of Cloud Provider's service
+- Hosted demos with .Net back-end take long to load at first because of cloud provider's service
 - All projects are with React and .Net 6
 <!-- BLOG-POST-LIST:END -->
 
