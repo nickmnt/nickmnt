@@ -1,8 +1,8 @@
-### Hi there 👋
+### Salut / Hi there 👋
 
 <div align="center">
 <!-- <h1 align="center">Hi <img width="35" src="https://github.com/1999AZZAR/1999AZZAR/blob/main/resources/img/waving.gif">, I'm Nima</h1> -->
-<h4 align="center">My highlighted projects are available below</h4>
+<h4 align="center">Mes projets mis en avant sont disponibles ci-dessous / My highlighted projects are available below</h4>
 </div>
 
 <div align="center">
@@ -11,7 +11,7 @@
        alt="snake" /></a>
 </div>
 
-## ✏️ &nbsp;Projects
+## ✏️ &nbsp;Projets / Projects
 
 <!-- BLOG-POST-LIST:START -->
 - [🤖 Extensive repository on ML, Reinforcement Learning, NLP, Computer Vision, and Deep Learning](https://github.com/nimamt/machine_learning)
@@ -21,7 +21,7 @@
 - [🌐 Instagram Clone](https://github.com/nimamt/instagram)
 - [🌐 Responsive static website](https://github.com/nimamt/rockstone)
 
-## ✨ &nbsp;Note
+## ✨ &nbsp;Remarques / Notes
 
 <!-- BLOG-POST-LIST:START -->
 - All web projects are either my own idea or my upgraded versions of course projects
