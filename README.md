@@ -1,8 +1,10 @@
-### Salut / Hi there 👋
+## Salut / Hi there 👋
 
 <div align="center">
-<!-- <h1 align="center">Hi <img width="35" src="https://github.com/1999AZZAR/1999AZZAR/blob/main/resources/img/waving.gif">, I'm Nima</h1> -->
-<h4 align="center">Mes projets mis en avant sont disponibles ci-dessous / My highlighted projects are available below</h4>
+  <img src="https://github.com/nimamt/nimamt/blob/main/assets/quebec_flag.jpg?raw=true" alt="Québec"/>&nbsp;
+  <img src="https://github.com/nimamt/nimamt/blob/main/assets/canada_flag.jpg?raw=true" alt="Canada"/>
+  <h3 align="center">📍 Québec, Montréal</h4>
+  <h4 align="center">Mes projets mis en avant sont disponibles ci-dessous / My highlighted projects are available below</h4>
 </div>
 
 <div align="center">
