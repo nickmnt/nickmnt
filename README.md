@@ -16,12 +16,12 @@
 ## ✏️ &nbsp;Projets / Projects
 
 <!-- BLOG-POST-LIST:START -->
-- [🤖 ML, Reinforcement Learning, NLP, Computer Vision, and Deep Learning](https://github.com/nimamt/machine_learning)
 - [🌐 Telegram Clone](https://github.com/nimamt/react-talk)
 - [🌐 Medium Clone](https://github.com/nimamt/medium_clone)
 - [🌐 Ecommerce Website](https://github.com/nimamt/shop)
 - [🌐 Instagram Clone](https://github.com/nimamt/instagram)
 - [🌐 Responsive Static Website](https://github.com/nimamt/rockstone)
+- [🤖 ML, Reinforcement Learning, NLP, Computer Vision, and Deep Learning](https://github.com/nimamt/machine_learning)
 
 ## ✨ &nbsp;Remarques / Notes  
 <details>
