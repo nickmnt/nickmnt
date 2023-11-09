@@ -1,8 +1,8 @@
 ## Salut / Hi there 👋
 
 <div align="center">
-  <img src="https://github.com/nimamt/nimamt/blob/main/assets/quebec_flag.jpg?raw=true" alt="Québec"/>&nbsp;
-  <img src="https://github.com/nimamt/nimamt/blob/main/assets/canada_flag.jpg?raw=true" alt="Canada"/>
+  <img src="https://github.com/nickmnt/nickmnt/blob/main/assets/quebec_flag.jpg?raw=true" alt="Québec"/>&nbsp;
+  <img src="https://github.com/nickmnt/nickmnt/blob/main/assets/canada_flag.jpg?raw=true" alt="Canada"/>
   <h3 align="center">📍 Montréal, Québec</h4>
   <h4 align="center">Mes projets mis en avant sont disponibles ci-dessous / My highlighted projects are available below</h4>
 </div>
@@ -16,12 +16,12 @@
 ## ✏️ &nbsp;Projets / Projects
 
 <!-- BLOG-POST-LIST:START -->
-- [🌐 Telegram Clone](https://github.com/nimamt/react-talk)
-- [🌐 Medium Clone](https://github.com/nimamt/medium_clone)
-- [🌐 Ecommerce Website](https://github.com/nimamt/shop)
-- [🌐 Instagram Clone](https://github.com/nimamt/instagram)
-- [🌐 Responsive Static Website](https://github.com/nimamt/rockstone)
-- [🤖 ML, Reinforcement Learning, NLP, Computer Vision, and Deep Learning](https://github.com/nimamt/machine_learning)
+- [🌐 Telegram Clone](https://github.com/nickmnt/react-talk)
+- [🌐 Medium Clone](https://github.com/nickmnt/medium_clone)
+- [🌐 Ecommerce Website](https://github.com/nickmnt/shop)
+- [🌐 Instagram Clone](https://github.com/nickmnt/instagram)
+- [🌐 Responsive Static Website](https://github.com/nickmnt/rockstone)
+- [🤖 ML, Reinforcement Learning, NLP, Computer Vision, and Deep Learning](https://github.com/nickmnt/machine_learning)
 
 ## ✨ &nbsp;Remarques / Notes  
 <details>
