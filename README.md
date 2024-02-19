@@ -1,16 +1,10 @@
 ## Salut / Hi there 👋
 
 <div align="center">
-  <img src="https://github.com/nickmnt/nickmnt/blob/main/assets/quebec_flag.jpg?raw=true" alt="Québec"/>&nbsp;
-  <img src="https://github.com/nickmnt/nickmnt/blob/main/assets/canada_flag.jpg?raw=true" alt="Canada"/>
+<!--   <img src="https://github.com/nickmnt/nickmnt/blob/main/assets/quebec_flag.jpg?raw=true" alt="Québec"/>&nbsp;
+  <img src="https://github.com/nickmnt/nickmnt/blob/main/assets/canada_flag.jpg?raw=true" alt="Canada"/> -->
   <h3 align="center">📍 Montréal, Québec</h4>
   <h4 align="center">Mes projets mis en avant sont disponibles ci-dessous / My highlighted projects are available below</h4>
-</div>
-
-<div align="center">
-  <a href="#">
-  <img  src="https://github.com/1999AZZAR/1999AZZAR/blob/main/resources/img/grid-snake.svg"
-       alt="snake" /></a>
 </div>
 
 ## ✏️ &nbsp;Projets / Projects
