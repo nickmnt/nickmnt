@@ -9,6 +9,12 @@
 
 ## ✏️ &nbsp;Projets / Projects
 
+<h3 align="center">Made using:</h3>
+<h4 align="center">⚙️ .NET, Angular, React.</h4>
+<h4 align="center">🛠️ Typescript, Javascript, HTML, CSS, SCSS, Bootstrap, Tailwind</h4>
+<h4 align="center">🛠️ SQL, Entity Framework, XUnit, Automapper, Moq, SignalR</h4>
+
+
 <!-- BLOG-POST-LIST:START -->
 - [🌐 Dating App Clone](https://github.com/nickmnt/dating-app)
 - [🌐 Telegram Clone](https://github.com/nickmnt/react-talk)
