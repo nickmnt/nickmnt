@@ -22,7 +22,7 @@
 - [🌐 Ecommerce Website](https://github.com/nickmnt/shop)
 - [🌐 Instagram Clone](https://github.com/nickmnt/instagram)
 - [🌐 Responsive Static Website](https://github.com/nickmnt/rockstone)
-- [🤖 ML, Reinforcement Learning, NLP, Computer Vision, and Deep Learning](https://github.com/nickmnt/machine_learning)
+- [🤖 Python Data Analysis and Machine Learning ](https://github.com/nickmnt/data)
 
 ## ✨ &nbsp;Remarques / Notes  
 <details>
