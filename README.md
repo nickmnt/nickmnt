@@ -31,7 +31,7 @@
     <li style="list-style: none; position: relative;">💡 All web projects are either my own idea or my upgraded versions of course projects</li>
     <li style="list-style: none; position: relative;">🚀 Projects are all hosted with demos</li>
     <li style="list-style: none; position: relative;">⏳ Hosted demos with .Net back-end take long to load at first because of cloud provider's service</li>
-    <li style="list-style: none; position: relative;">⚛️ All projects are with React and .Net 6</li>
+    <li style="list-style: none; position: relative;">⚛️ All projects are with Angular, React and .Net 6</li>
   </ul>
 </details>
 
@@ -39,7 +39,7 @@
 - 💡 Tous les projets Web sont soit ma propre idée, soit mes versions améliorées de projets de cours
 - 🚀 Les projets sont tous hébergés avec des démos
 - ⏳ Les démos hébergées avec le back-end .Net peuvent prendre un certain temps à se charger initialement en raison du service du fournisseur de cloud
-- ⚛️ Tous les projets sont construits avec React et .Net 6
+- ⚛️ Tous les projets sont construits avec Angular, React et .Net 6
 
 
 <!-- BLOG-POST-LIST:END -->
