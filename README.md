@@ -11,8 +11,7 @@
 
 <h3 align="center">Made using:</h3>
 <h4 align="center">⚙️ .NET, Angular, React.</h4>
-<h4 align="center"> Typescript, Javascript, HTML, CSS, SCSS, Bootstrap, Tailwind</h4>
-<h4 align="center">🛠️ SQL, Entity Framework, XUnit, Automapper, Moq, SignalR</h4>
+<h4 align="center">🛠️ Projects have dockerfiles, architecture, design patterns, and testing</h4>
 
 
 <!-- BLOG-POST-LIST:START -->
@@ -25,7 +24,7 @@
 - [🌐 Medium Clone](https://github.com/nickmnt/medium_clone)
 - > 🛠️ .NET, React, Typescript, MobX, Docker, Entity Framework, SQL, Automapper
 - [🌐 Ecommerce Website](https://github.com/nickmnt/shop)
-- > 🛠️.NET, React, Typescript,Redux, Docker, Entity Framework, SQL, Automapper
+- > 🛠️.NET, React, Typescript, Redux, Docker, Entity Framework, SQL, Automapper
 - [🌐 Instagram Clone](https://github.com/nickmnt/instagram)
 - > 🛠️ React, Javascript, Sass
 - [🌐 Responsive Static Website](https://github.com/nickmnt/rockstone)
