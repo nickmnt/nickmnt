@@ -17,15 +17,15 @@
 
 <!-- BLOG-POST-LIST:START -->
 - [🌐 Microservices](https://github.com/nickmnt/microservice)
-- > 🛠️ .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, Cloud 
+- > 🛠️ .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, Cloud
 - [🌐 Dating App Clone](https://github.com/nickmnt/dating-app)
-- > 🛠️ .NET, Angular, Typescript, RxJs, NgRx, Docker, Entity Framework, SQL, Bootstrap
+- > 🛠️ .NET, Angular, Typescript, RxJs, NgRx, Docker, Entity Framework, SQL, Bootstrap, Xunit, Moq, Automapper, SignalR
 - [🌐 Telegram Clone](https://github.com/nickmnt/react-talk)
-- > 🛠️ .NET, React, Typescript, MobX, Docker, Entity Framework, SQL
+- > 🛠️ .NET, React, Typescript, MobX, Docker, Entity Framework, SQL, Xunit, Moq, Automapper, SignalR
 - [🌐 Medium Clone](https://github.com/nickmnt/medium_clone)
-- > 🛠️ .NET, React, Typescript, MobX, Docker, Entity Framework, SQL
+- > 🛠️ .NET, React, Typescript, MobX, Docker, Entity Framework, SQL, Automapper
 - [🌐 Ecommerce Website](https://github.com/nickmnt/shop)
-- > 🛠️.NET, React, Typescript,Redux, Docker, Entity Framework, SQL
+- > 🛠️.NET, React, Typescript,Redux, Docker, Entity Framework, SQL, Automapper
 - [🌐 Instagram Clone](https://github.com/nickmnt/instagram)
 - > 🛠️ React, Javascript, Sass
 - [🌐 Responsive Static Website](https://github.com/nickmnt/rockstone)
