@@ -11,27 +11,27 @@
 
 <h3 align="center">Made using:</h3>
 <h4 align="center">⚙️ .NET, Angular, React.</h4>
-<h4 align="center">🛠️ Typescript, Javascript, HTML, CSS, SCSS, Bootstrap, Tailwind</h4>
+<h4 align="center"> Typescript, Javascript, HTML, CSS, SCSS, Bootstrap, Tailwind</h4>
 <h4 align="center">🛠️ SQL, Entity Framework, XUnit, Automapper, Moq, SignalR</h4>
 
 
 <!-- BLOG-POST-LIST:START -->
 - [🌐 Microservices](https://github.com/nickmnt/microservice)
-- > .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, Cloud 
+- > 🛠️ .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, Cloud 
 - [🌐 Dating App Clone](https://github.com/nickmnt/dating-app)
-- > .NET, Angular, Typescript, RxJs, NgRx, Docker, Entity Framework, SQL, Bootstrap
+- > 🛠️ .NET, Angular, Typescript, RxJs, NgRx, Docker, Entity Framework, SQL, Bootstrap
 - [🌐 Telegram Clone](https://github.com/nickmnt/react-talk)
-- > .NET, React, Typescript, MobX, Docker, Entity Framework, SQL
+- > 🛠️ .NET, React, Typescript, MobX, Docker, Entity Framework, SQL
 - [🌐 Medium Clone](https://github.com/nickmnt/medium_clone)
-- > .NET, React, Typescript, MobX, Docker, Entity Framework, SQL
+- > 🛠️ .NET, React, Typescript, MobX, Docker, Entity Framework, SQL
 - [🌐 Ecommerce Website](https://github.com/nickmnt/shop)
-- > .NET, React, Typescript,Redux, Docker, Entity Framework, SQL
+- > 🛠️.NET, React, Typescript,Redux, Docker, Entity Framework, SQL
 - [🌐 Instagram Clone](https://github.com/nickmnt/instagram)
-- > React, Javascript, Sass
+- > 🛠️ React, Javascript, Sass
 - [🌐 Responsive Static Website](https://github.com/nickmnt/rockstone)
-- > React, Javascript, Sass
-- [🤖 Python Data Analysis and Machine Learning ](https://github.com/nickmnt/data)
-
+- > 🛠️ React, Javascript, Sass
+- [🤖 Python Data Analysis and Machine Learning](https://github.com/nickmnt/data)
+- > 🛠️ Python, SQL, Data Analysis
 ## ✨ &nbsp;Remarques / Notes  
 <details>
   <summary>ENGLISH VERSION - Click!</summary>
