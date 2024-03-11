@@ -11,7 +11,7 @@
 
 <h3 align="center">Made using:</h3>
 <h4 align="center">⚙️ .NET, Angular, React.</h4>
-<h4 align="center">🛠️ Projects have dockerfiles, architecture, design patterns, and testing</h4>
+<h4 align="center">🛠️ The projects have dockerfiles, architecture, design patterns, and testing</h4>
 
 <!-- BLOG-POST-LIST:START -->
 - [🌐 Microservices](https://github.com/nickmnt/microservice)
