@@ -16,12 +16,20 @@
 
 
 <!-- BLOG-POST-LIST:START -->
+- [🌐 Microservices](https://github.com/nickmnt/microservice)
+- > .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, Cloud 
 - [🌐 Dating App Clone](https://github.com/nickmnt/dating-app)
+- > .NET, Angular, RxJs, NgRx, Docker, Entity Framework, SQL, Bootstrap
 - [🌐 Telegram Clone](https://github.com/nickmnt/react-talk)
+- > .NET, React, MobX, Docker, Entity Framework, SQL
 - [🌐 Medium Clone](https://github.com/nickmnt/medium_clone)
+- > .NET, React, MobX, Docker, Entity Framework, SQL
 - [🌐 Ecommerce Website](https://github.com/nickmnt/shop)
+- > .NET, React, Redux, Docker, Entity Framework, SQL
 - [🌐 Instagram Clone](https://github.com/nickmnt/instagram)
+- > React, Javascript, Sass
 - [🌐 Responsive Static Website](https://github.com/nickmnt/rockstone)
+- > React, Javascript, Sass
 - [🤖 Python Data Analysis and Machine Learning ](https://github.com/nickmnt/data)
 
 ## ✨ &nbsp;Remarques / Notes  
