@@ -14,9 +14,11 @@
 <h4 align="center">🛠️ The projects have dockerfiles, architecture, design patterns, and testing</h4>
 
 <!-- BLOG-POST-LIST:START -->
-- [🌐 Microservices](https://github.com/nickmnt/microservice)
+- [🌐 Infrastructure Microservices](https://github.com/nickmnt/microservice)
   > 🛠️ .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, Cloud
   > <details><summary>Screenshots (Hidden) - Click to open!</summary><img src="https://github.com/nickmnt/microservice/blob/main/Images/KubernetesArchitecture.png" alt="Screenshot"></img></details>
+- [🌐 Expense Tracker Microservices](https://github.com/nickmnt/expense)
+  > 🛠️ .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, NoSQL, Cloud
 - [🌐 Dating App Clone](https://github.com/nickmnt/dating-app)
   > 🛠️ .NET, Angular, Typescript, RxJs, NgRx, Docker, Entity Framework, SQL, Bootstrap, xUnit, Moq, Automapper, SignalR
   > <details><summary>Screenshots (Hidden) - Click to open!</summary><img src="https://github.com/nickmnt/dating-app/blob/main/screenshots/AdminPanel.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/dating-app/blob/main/screenshots/Chat.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/dating-app/blob/main/screenshots/Messages.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/dating-app/blob/main/screenshots/Matches.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/dating-app/blob/main/screenshots/Login.png?raw=true" alt="Screenshot"></img></details>
