@@ -34,7 +34,7 @@
 - [🌐 Instagram Clone](https://github.com/nickmnt/instagram)
   > 🛠️ React, Javascript, Sass
   > <details> <summary>Screenshots (Hidden) - Click to open!</summary> <img src="https://github.com/nickmnt/instagram/blob/master/screenshots/Comment.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/instagram/blob/master/screenshots/Homepage.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/instagram/blob/master/screenshots/Login.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/instagram/blob/master/screenshots/PostExtra.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/instagram/blob/master/screenshots/ProfilePost.png?raw=true" alt="Screenshot"></img></details>
-- [🌐 Responsive Static Website](https://github.com/nickmnt/rockstone)
+- [🌐 Real Estate Website](https://github.com/nickmnt/rockstone)
   > 🛠️ React, Javascript, Sass
   > <details> <summary>Screenshots (Hidden) - Click to open!</summary> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Start.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Middle.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Cards.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Footer.png?raw=true" alt="Screenshot"></img></details>
 - [🤖 Python Data Analysis and Machine Learning](https://github.com/nickmnt/data)
