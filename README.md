@@ -40,13 +40,15 @@
 - [🤖 Python Data Analysis and Machine Learning](https://github.com/nickmnt/data)
   > 🛠️ Python, SQL, Data Analysis
 ## ✨ &nbsp;Remarques / Notes  
-<details>
-  <summary>ENGLISH VERSION - Click!</summary>
-  <ul>  
-    <li style="list-style: none; position: relative;">💡 All web projects are either my own idea or my upgraded versions of course projects</li>
-    <li style="list-style: none; position: relative;">🚀 Projects are all hosted with demos</li>
-  </ul>
-</details>
+
+### EN
+
+<ul>  
+  <li style="list-style: none; position: relative;">💡 All web projects are either my own idea or my upgraded versions of course projects</li>
+  <li style="list-style: none; position: relative;">🚀 Projects are all hosted with demos</li>
+</ul>
+
+### FR
 
 <!-- BLOG-POST-LIST:START -->
 - 💡 Tous les projets Web sont soit ma propre idée, soit mes versions améliorées de projets de cours
