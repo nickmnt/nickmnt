@@ -3,8 +3,8 @@
 <div align="center">
 <!--   <img src="https://github.com/nickmnt/nickmnt/blob/main/assets/quebec_flag.jpg?raw=true" alt="Québec"/>&nbsp;
   <img src="https://github.com/nickmnt/nickmnt/blob/main/assets/canada_flag.jpg?raw=true" alt="Canada"/> -->
-  <h3 align="center">📍 Montréal, Québec</h4>
-  <h4 align="center">Mes projets sont disponibles ci-dessous / My projects are available below</h4>
+  <h3 align="center">📍 Canada</h4>
+  <h4 align="center">My projects are available below / Mes projets sont disponibles ci-dessous</h4>
 </div>
 
 ## ✏️ &nbsp;Projets / Projects
