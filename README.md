@@ -1,17 +1,7 @@
-## Salut / Hi there 👋
-
-<div align="center">
-<!--   <img src="https://github.com/nickmnt/nickmnt/blob/main/assets/quebec_flag.jpg?raw=true" alt="Québec"/>&nbsp;
-  <img src="https://github.com/nickmnt/nickmnt/blob/main/assets/canada_flag.jpg?raw=true" alt="Canada"/> -->
-  <h3 align="center">📍 Canada</h4>
-  <h4 align="center">My projects are available below / Mes projets sont disponibles ci-dessous</h4>
-</div>
-
-## ✏️ &nbsp;Projets / Projects
+## ✏️ &nbsp;Personal Projects
 
 <h3 align="center">Made using:</h3>
 <h4 align="center">⚙️ .NET, Angular, React.</h4>
-<h4 align="center">🛠️ The projects have dockerfiles, architecture, design patterns, and testing</h4>
 
 <!-- BLOG-POST-LIST:START -->
 - [🌐 Infrastructure Microservices](https://github.com/nickmnt/microservice)
@@ -39,26 +29,6 @@
   > <details> <summary>Screenshots (Hidden) - Click to open!</summary> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Start.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Middle.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Cards.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Footer.png?raw=true" alt="Screenshot"></img></details>
 - [🤖 Python Data Analysis and Machine Learning](https://github.com/nickmnt/data)
   > 🛠️ Python, SQL, Data Analysis
-## ✨ &nbsp;Remarques / Notes  
-
-### EN
-
-<ul>  
-  <li style="list-style: none; position: relative;">💡 All web projects are either my own idea or my upgraded versions of course projects</li>
-  <li style="list-style: none; position: relative;">🚀 Projects are all hosted with demos</li>
-</ul>
-
-### FR
-
-<!-- BLOG-POST-LIST:START -->
-- 💡 Tous les projets Web sont soit ma propre idée, soit mes versions améliorées de projets de cours
-- 🚀 Les projets sont tous hébergés avec des démos
-
-
-<!-- BLOG-POST-LIST:END -->
-
-&nbsp;
-
   
 
 <!--
