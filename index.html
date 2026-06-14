@@ -90,11 +90,11 @@
         <span class="brand-mark">NM</span>
         <span class="brand-text">Nick Moein</span>
       </a>
-      <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+      <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-controls="site-nav" aria-expanded="false">
         <span></span>
         <span></span>
       </button>
-      <nav class="site-nav" aria-label="Primary navigation">
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
         <a href="#experience">Experience</a>
         <a href="#projects">Projects</a>
         <a href="#skills">Skills</a>
@@ -419,11 +419,11 @@
               </button>
             </div>
             <div class="contact-links" aria-label="Profile links">
-              <a href="https://github.com/nickmnt" target="_blank" rel="noreferrer">
+              <a href="https://github.com/nickmnt" target="_blank" rel="noopener noreferrer">
                 <svg class="icon" aria-hidden="true"><use href="#icon-github"></use></svg>
                 github.com/nickmnt
               </a>
-              <a href="https://www.linkedin.com/in/nickmnt/" target="_blank" rel="noreferrer">
+              <a href="https://www.linkedin.com/in/nickmnt/" target="_blank" rel="noopener noreferrer">
                 <svg class="icon" aria-hidden="true"><use href="#icon-linkedin"></use></svg>
                 linkedin.com/in/nickmnt
               </a>
@@ -432,27 +432,22 @@
                 Canada
               </span>
             </div>
+            <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
           </div>
 
-          <form class="contact-form reveal" id="contact-form">
-            <label>
-              <span>Name</span>
-              <input type="text" name="name" autocomplete="name" required />
-            </label>
-            <label>
-              <span>Email</span>
-              <input type="email" name="email" autocomplete="email" required />
-            </label>
-            <label>
-              <span>Message</span>
-              <textarea name="message" rows="5" required></textarea>
-            </label>
-            <button class="button button-primary" type="submit">
-              <span>Send Message</span>
-              <svg class="icon" aria-hidden="true"><use href="#icon-arrow"></use></svg>
-            </button>
-            <p class="form-status" role="status" aria-live="polite"></p>
-          </form>
+          <aside class="contact-card reveal" aria-label="Recruiter fit summary">
+            <p class="eyebrow">Fast fit check</p>
+            <h3>Best conversations</h3>
+            <ul>
+              <li>Full-stack .NET, React, and TypeScript product engineering roles.</li>
+              <li>Backend services, REST APIs, CI/CD, automation, testing, and cloud delivery.</li>
+              <li>Teams that value secure code reviews, mentoring, and practical ownership.</li>
+            </ul>
+            <a class="button button-secondary" href="https://www.linkedin.com/in/nickmnt/" target="_blank" rel="noopener noreferrer">
+              <svg class="icon" aria-hidden="true"><use href="#icon-linkedin"></use></svg>
+              <span>Open LinkedIn</span>
+            </a>
+          </aside>
         </div>
       </section>
     </main>

@@ -3,93 +3,103 @@ const header = document.querySelector("[data-header]");
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = [...document.querySelectorAll(".site-nav a")];
 const sections = [...document.querySelectorAll("main section[id]")];
+const year = document.querySelector("[data-year]");
+const copyEmailButton = document.querySelector("[data-copy-email]");
+const copyStatus = document.querySelector("[data-copy-status]");
 
-document.querySelector("[data-year]").textContent = new Date().getFullYear();
+if (year) {
+  year.textContent = new Date().getFullYear();
+}
 
-navToggle.addEventListener("click", () => {
-  const isOpen = header.classList.toggle("nav-open");
+function setNavOpen(isOpen) {
+  if (!header || !navToggle) return;
+
+  header.classList.toggle("nav-open", isOpen);
   navToggle.setAttribute("aria-expanded", String(isOpen));
-});
+}
+
+if (header && navToggle) {
+  navToggle.addEventListener("click", () => {
+    setNavOpen(!header.classList.contains("nav-open"));
+  });
+}
 
 navLinks.forEach((link) => {
   link.addEventListener("click", () => {
-    header.classList.remove("nav-open");
-    navToggle.setAttribute("aria-expanded", "false");
+    setNavOpen(false);
   });
 });
 
-document.querySelector("[data-copy-email]").addEventListener("click", async (event) => {
-  const button = event.currentTarget;
-  const label = button.querySelector("span");
-  const previous = label.textContent;
+if (copyEmailButton) {
+  copyEmailButton.addEventListener("click", async (event) => {
+    const button = event.currentTarget;
+    const label = button.querySelector("span");
+    const previous = label ? label.textContent : "";
 
-  try {
-    await navigator.clipboard.writeText(email);
-    label.textContent = "Copied";
-  } catch {
-    label.textContent = email;
-  }
+    try {
+      await navigator.clipboard.writeText(email);
+      if (label) label.textContent = "Copied";
+      if (copyStatus) copyStatus.textContent = "Email copied to clipboard.";
+    } catch {
+      if (label) label.textContent = email;
+      if (copyStatus) copyStatus.textContent = email;
+    }
 
-  window.setTimeout(() => {
-    label.textContent = previous;
-  }, 1600);
-});
+    window.setTimeout(() => {
+      if (label) label.textContent = previous;
+      if (copyStatus) copyStatus.textContent = "";
+    }, 1800);
+  });
+}
 
-document.querySelector("#contact-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const data = new FormData(form);
-  const name = data.get("name").trim();
-  const sender = data.get("email").trim();
-  const message = data.get("message").trim();
-  const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
-  const body = encodeURIComponent(`${message}\n\nFrom: ${name}\nEmail: ${sender}`);
-  const status = form.querySelector(".form-status");
+if ("IntersectionObserver" in window) {
+  document.documentElement.classList.add("supports-reveal");
 
-  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-  status.textContent = "Opening your email app.";
-});
-
-const revealObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.16 }
-);
-
-document.querySelectorAll(".reveal").forEach((element, index) => {
-  element.style.transitionDelay = `${Math.min(index * 35, 180)}ms`;
-  revealObserver.observe(element);
-});
-
-const navObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      navLinks.forEach((link) => {
-        link.classList.toggle("is-active", link.getAttribute("href") === `#${entry.target.id}`);
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
       });
-    });
-  },
-  { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
-);
+    },
+    { threshold: 0.16 }
+  );
 
-sections.forEach((section) => navObserver.observe(section));
+  document.querySelectorAll(".reveal").forEach((element, index) => {
+    element.style.transitionDelay = `${Math.min(index * 35, 180)}ms`;
+    revealObserver.observe(element);
+  });
+}
+
+if ("IntersectionObserver" in window && navLinks.length > 0) {
+  const navObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach((link) => {
+          link.classList.toggle("is-active", link.getAttribute("href") === `#${entry.target.id}`);
+        });
+      });
+    },
+    { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
+  );
+
+  sections.forEach((section) => navObserver.observe(section));
+}
 
 const canvas = document.querySelector("#system-canvas");
-const context = canvas.getContext("2d");
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const context = canvas ? canvas.getContext("2d") : null;
+const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 let width = 0;
 let height = 0;
 let nodes = [];
 let animationFrame = 0;
 
 function resizeCanvas() {
+  if (!canvas || !context) return;
+
   const ratio = Math.min(window.devicePixelRatio || 1, 2);
   width = canvas.offsetWidth;
   height = canvas.offsetHeight;
@@ -116,6 +126,8 @@ function resizeCanvas() {
 }
 
 function drawNetwork(time) {
+  if (!context) return;
+
   context.clearRect(0, 0, width, height);
 
   const gradient = context.createLinearGradient(width * 0.3, 0, width, height);
