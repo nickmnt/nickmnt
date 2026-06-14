@@ -12,7 +12,7 @@ I work mostly with C#, .NET, React, Angular, TypeScript, SQL, Docker, Kubernetes
 - React and Angular frontends connected to practical .NET systems.
 - Testing, CI/CD, Dockerized services, and cloud-oriented deployment patterns.
 
-## Projects
+## Open Source Projects
 
 | Project | What it shows | Stack |
 | --- | --- | --- |
