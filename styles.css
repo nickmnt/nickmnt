@@ -531,14 +531,21 @@ textarea:focus-visible {
 }
 
 .project-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .project-card,
 .skill-card {
-  min-height: 17rem;
   padding: 1.2rem;
   transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.project-card {
+  min-height: 20rem;
+}
+
+.skill-card {
+  min-height: 15rem;
 }
 
 .project-card:hover,
@@ -574,6 +581,22 @@ textarea:focus-visible {
   font-size: 1.35rem;
 }
 
+.project-card h3 a:hover,
+.project-card h3 a:focus-visible {
+  color: var(--primary-strong);
+}
+
+.project-proof {
+  margin: 1rem 0 0;
+  padding-left: 1.15rem;
+  color: #d7deea;
+  font-size: 0.94rem;
+}
+
+.project-proof li + li {
+  margin-top: 0.45rem;
+}
+
 .tag-list {
   display: flex;
   flex-wrap: wrap;
@@ -597,10 +620,6 @@ textarea:focus-visible {
 
 .skills-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.skill-card {
-  min-height: 15rem;
 }
 
 .skill-icon {
