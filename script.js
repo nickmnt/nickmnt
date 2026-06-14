@@ -132,7 +132,7 @@ function drawNetwork(time) {
 
   const gradient = context.createLinearGradient(width * 0.3, 0, width, height);
   gradient.addColorStop(0, "rgba(59, 130, 246, 0.14)");
-  gradient.addColorStop(0.56, "rgba(139, 92, 246, 0.11)");
+  gradient.addColorStop(0.56, "rgba(249, 115, 22, 0.1)");
   gradient.addColorStop(1, "rgba(45, 212, 191, 0.08)");
   context.fillStyle = gradient;
   context.fillRect(width * 0.36, 0, width * 0.64, height);
@@ -173,7 +173,7 @@ function drawNetwork(time) {
 
     context.beginPath();
     context.arc(node.x, node.y, node.size + 8, 0, Math.PI * 2);
-    context.strokeStyle = node.lane === 0 ? "rgba(45, 212, 191, 0.16)" : "rgba(139, 92, 246, 0.12)";
+    context.strokeStyle = node.lane === 0 ? "rgba(45, 212, 191, 0.16)" : "rgba(249, 115, 22, 0.11)";
     context.stroke();
   });
 
@@ -186,6 +186,16 @@ window.addEventListener("resize", () => {
   cancelAnimationFrame(animationFrame);
   resizeCanvas();
   if (!reducedMotion) {
+    animationFrame = requestAnimationFrame(drawNetwork);
+  }
+});
+
+document.addEventListener("visibilitychange", () => {
+  cancelAnimationFrame(animationFrame);
+  animationFrame = 0;
+
+  if (!document.hidden && !reducedMotion) {
+    resizeCanvas();
     animationFrame = requestAnimationFrame(drawNetwork);
   }
 });
