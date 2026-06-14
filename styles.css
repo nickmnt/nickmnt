@@ -536,6 +536,7 @@ textarea:focus-visible {
 
 .project-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
 }
 
 .project-card,
@@ -545,7 +546,9 @@ textarea:focus-visible {
 }
 
 .project-card {
-  min-height: 30rem;
+  display: flex;
+  flex-direction: column;
+  min-height: auto;
 }
 
 .skill-card {
@@ -583,6 +586,10 @@ textarea:focus-visible {
 .skill-card h3 {
   margin-bottom: 0.7rem;
   font-size: 1.35rem;
+}
+
+.project-card h3 {
+  margin-top: 0.1rem;
 }
 
 .project-shot {
@@ -1004,6 +1011,14 @@ textarea:focus-visible {
   .skill-card,
   .metric-card {
     min-height: auto;
+  }
+
+  .project-diagram {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-diagram::before {
+    display: none;
   }
 }
 

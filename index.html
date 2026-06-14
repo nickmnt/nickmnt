@@ -238,104 +238,31 @@
       <section class="section" id="projects" aria-labelledby="projects-title">
         <div class="container">
           <div class="section-heading reveal">
-            <p class="eyebrow">Selected projects</p>
-            <h2 id="projects-title">Public work that proves backend depth, architecture range, and product delivery.</h2>
+            <p class="eyebrow">Personal projects</p>
+            <h2 id="projects-title">Personal full-stack projects built around product workflows and realtime behavior.</h2>
             <p>
-              These repositories are selected for hiring signal: distributed systems, realtime features,
-              production-style testing, persistence, containerization, and frontend implementation.
+              These repositories show practical product flows across authenticated apps, messaging,
+              ecommerce, publishing, persistence, and modern frontend state management.
             </p>
           </div>
 
           <div class="project-grid">
             <article class="project-card reveal">
               <div class="project-topline">
-                <span>Microservices</span>
-                <a href="https://github.com/nickmnt/microservice" target="_blank" rel="noopener noreferrer" aria-label="Open Infrastructure Microservices on GitHub">
-                  <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
-                </a>
-              </div>
-              <figure class="project-shot">
-                <img
-                  src="https://github.com/nickmnt/microservice/blob/main/Images/KubernetesArchitecture.png?raw=true"
-                  alt="Kubernetes architecture diagram from the Infrastructure Microservices repository"
-                  loading="lazy"
-                  width="640"
-                  height="360"
-                />
-              </figure>
-              <h3><a href="https://github.com/nickmnt/microservice" target="_blank" rel="noopener noreferrer">Infrastructure Microservices</a></h3>
-              <p>Distributed .NET service architecture using gRPC, RabbitMQ, REST, SQL, Docker, Kubernetes, and cloud infrastructure patterns.</p>
-              <ul class="project-proof">
-                <li><strong>Built:</strong> service boundaries, messaging, APIs, persistence, and Kubernetes deployment flow.</li>
-                <li><strong>Hard part:</strong> keeping infrastructure concerns visible without burying business service responsibilities.</li>
-                <li><strong>Proof:</strong> useful signal for teams hiring around cloud-native C# systems.</li>
-              </ul>
-              <div class="tag-list">
-                <span>.NET</span>
-                <span>gRPC</span>
-                <span>Kubernetes</span>
-              </div>
-            </article>
-
-            <article class="project-card reveal">
-              <div class="project-topline">
-                <span>Cloud app</span>
-                <a href="https://github.com/nickmnt/expense" target="_blank" rel="noopener noreferrer" aria-label="Open Expense Tracker Microservices on GitHub">
-                  <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
-                </a>
-              </div>
-              <div
-                class="project-shot project-diagram"
-                role="img"
-                aria-label="Expense Tracker architecture diagram showing API routes, microservices, message broker, SQL storage, and NoSQL storage."
-              >
-                <span>API</span>
-                <span>Services</span>
-                <span>Broker</span>
-                <span>SQL</span>
-                <span>NoSQL</span>
-              </div>
-              <h3><a href="https://github.com/nickmnt/expense" target="_blank" rel="noopener noreferrer">Expense Tracker Microservices</a></h3>
-              <p>Cloud-oriented expense platform using .NET microservices, SQL and NoSQL storage, Docker, and distributed messaging.</p>
-              <ul class="project-proof">
-                <li><strong>Built:</strong> expense-domain services with relational and document-style persistence paths.</li>
-                <li><strong>Hard part:</strong> separating service ownership instead of cramming product logic into one app.</li>
-                <li><strong>Proof:</strong> demonstrates practical data modeling choices across storage types.</li>
-              </ul>
-              <div class="tag-list">
-                <span>REST</span>
-                <span>NoSQL</span>
-                <span>Docker</span>
-              </div>
-            </article>
-
-            <article class="project-card reveal">
-              <div class="project-topline">
-                <span>Realtime app</span>
+                <span>Matchmaking</span>
                 <a href="https://github.com/nickmnt/dating-app" target="_blank" rel="noopener noreferrer" aria-label="Open Realtime Matchmaking App on GitHub">
                   <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
                 </a>
               </div>
-              <figure class="project-shot">
-                <img
-                  src="https://github.com/nickmnt/dating-app/blob/main/screenshots/AdminPanel.png?raw=true"
-                  alt="Admin panel screenshot from the Realtime Matchmaking App repository"
-                  loading="lazy"
-                  width="640"
-                  height="360"
-                />
-              </figure>
               <h3><a href="https://github.com/nickmnt/dating-app" target="_blank" rel="noopener noreferrer">Realtime Matchmaking App</a></h3>
-              <p>Angular and .NET application with TypeScript, Entity Framework, SQL, SignalR, xUnit, Moq, and Docker.</p>
+              <p>Authenticated product flows, admin screens, matching, and SignalR messaging.</p>
               <ul class="project-proof">
-                <li><strong>Built:</strong> authenticated product flows, admin screens, realtime communication, persistence, and tests.</li>
-                <li><strong>Hard part:</strong> coordinating UI state, SignalR behavior, and backend data consistency.</li>
-                <li><strong>Proof:</strong> frames the engineering challenge clearly for reviewers evaluating full-stack delivery.</li>
+                <li><strong>Stack:</strong> .NET, Angular, TypeScript, NgRx, SignalR, EF Core, SQL, xUnit.</li>
               </ul>
               <div class="tag-list">
+                <span>.NET</span>
                 <span>Angular</span>
                 <span>SignalR</span>
-                <span>xUnit</span>
               </div>
             </article>
 
@@ -346,26 +273,53 @@
                   <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
                 </a>
               </div>
-              <figure class="project-shot">
-                <img
-                  src="https://github.com/nickmnt/react-talk/blob/master/screenshots/SampleChat.png?raw=true"
-                  alt="Chat interface screenshot from the Realtime Messaging Platform repository"
-                  loading="lazy"
-                  width="640"
-                  height="360"
-                />
-              </figure>
               <h3><a href="https://github.com/nickmnt/react-talk" target="_blank" rel="noopener noreferrer">Realtime Messaging Platform</a></h3>
-              <p>React, TypeScript, MobX, .NET, Entity Framework, SQL, SignalR, Docker, xUnit, and AutoMapper.</p>
+              <p>Chat, group management, contacts, saved messages, and realtime state.</p>
               <ul class="project-proof">
-                <li><strong>Built:</strong> React messaging UI, MobX state management, SignalR updates, backend APIs, and persistence.</li>
-                <li><strong>Hard part:</strong> keeping realtime UI behavior understandable across frontend and backend boundaries.</li>
-                <li><strong>Proof:</strong> gives reviewers a clear path from visible behavior to implementation.</li>
+                <li><strong>Stack:</strong> .NET, React, TypeScript, MobX, SignalR, EF Core, SQL, Docker.</li>
               </ul>
               <div class="tag-list">
                 <span>React</span>
                 <span>MobX</span>
-                <span>SQL</span>
+                <span>SignalR</span>
+              </div>
+            </article>
+
+            <article class="project-card reveal">
+              <div class="project-topline">
+                <span>Ecommerce</span>
+                <a href="https://github.com/nickmnt/shop" target="_blank" rel="noopener noreferrer" aria-label="Open Ecommerce Storefront on GitHub">
+                  <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
+                </a>
+              </div>
+              <h3><a href="https://github.com/nickmnt/shop" target="_blank" rel="noopener noreferrer">Ecommerce Storefront</a></h3>
+              <p>Product catalog, cart, checkout, and order flow.</p>
+              <ul class="project-proof">
+                <li><strong>Stack:</strong> .NET, React, TypeScript, Redux, EF Core, SQL, Docker.</li>
+              </ul>
+              <div class="tag-list">
+                <span>React</span>
+                <span>Redux</span>
+                <span>Docker</span>
+              </div>
+            </article>
+
+            <article class="project-card reveal">
+              <div class="project-topline">
+                <span>Publishing</span>
+                <a href="https://github.com/nickmnt/publishing_cms" target="_blank" rel="noopener noreferrer" aria-label="Open Publishing CMS on GitHub">
+                  <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
+                </a>
+              </div>
+              <h3><a href="https://github.com/nickmnt/publishing_cms" target="_blank" rel="noopener noreferrer">Publishing CMS</a></h3>
+              <p>Articles, comments, rich editing, moderation, and user management.</p>
+              <ul class="project-proof">
+                <li><strong>Stack:</strong> .NET, React, TypeScript, MobX, EF Core, SQL, Docker.</li>
+              </ul>
+              <div class="tag-list">
+                <span>React</span>
+                <span>MobX</span>
+                <span>EF Core</span>
               </div>
             </article>
           </div>
