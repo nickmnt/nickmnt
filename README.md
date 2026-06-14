@@ -1,47 +1,116 @@
-## ✏️ &nbsp;Personal Projects
+# Nick Moein
 
-<h3 align="center">Made using:</h3>
-<h4 align="center">⚙️ .NET, Angular, React.</h4>
+Full-stack .NET developer in Canada building secure, cloud-backed web applications with C#, React, TypeScript, Azure, Docker, Kubernetes, and SQL.
 
-<!-- BLOG-POST-LIST:START -->
-- [🌐 Dating App Clone](https://github.com/nickmnt/dating-app)
-  > 🛠️ .NET, Angular, Typescript, RxJs, NgRx, Docker, Entity Framework, SQL, Bootstrap, xUnit, Moq, Automapper, SignalR
-  > <details><summary>Screenshots (Hidden) - Click to open!</summary><img src="https://github.com/nickmnt/dating-app/blob/main/screenshots/AdminPanel.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/dating-app/blob/main/screenshots/Chat.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/dating-app/blob/main/screenshots/Messages.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/dating-app/blob/main/screenshots/Matches.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/dating-app/blob/main/screenshots/Login.png?raw=true" alt="Screenshot"></img></details>
-- [🌐 Telegram Clone](https://github.com/nickmnt/react-talk)
-  > 🛠️ .NET, React, Typescript, MobX, Docker, Entity Framework, SQL, xUnit, Moq, Automapper, SignalR
-  > <details><summary>Screenshots (Hidden) - Click to open!</summary><img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/SampleChat.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/Drawer.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/GroupInfo.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/MakeAdmin.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/EditGroup.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/CreateGroup.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/First.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/ProfileSettings.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/SavedMessages.png?raw=true" alt="Screenshot"></img><img src="https://github.com/nickmnt/react-talk/blob/master/screenshots/Contacts.png?raw=true" alt="Screenshot"></img></details>
-- [🌐 Medium Clone](https://github.com/nickmnt/medium_clone)
-  > 🛠️ .NET, React, Typescript, MobX, Docker, Entity Framework, SQL, Automapper
-  > <details> <summary>Screenshots (Hidden) - Click to open!</summary> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/Intro.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/IntoEnd.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/Article.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/EndAndComments.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/EditArticlesWithSpecialTextEditor.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/EditArticlePictureDragOrClick.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/Register.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/ManageAndApproveArticles_Admin.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/ManageCategoriesAndStatistics_Admin.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/ManageEditAndApproveUsersSeeStatistics_Admin.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/medium_clone/blob/main/screenshots/EditProfile.png?raw=true" alt="Screenshot"></img></details>
-- [🌐 Ecommerce Website](https://github.com/nickmnt/shop)
-  > 🛠️.NET, React, Typescript, Redux, Docker, Entity Framework, SQL, Automapper
-  > <details> <summary>Screenshots (Hidden) - Click to open!</summary> <img src="https://github.com/nickmnt/shop/blob/main/screenshots/Intro.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/shop/blob/main/screenshots/Products1.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/shop/blob/main/screenshots/Products2.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/shop/blob/main/screenshots/ProductInfo.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/shop/blob/main/screenshots/Cart.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/shop/blob/main/screenshots/Checkout1.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/shop/blob/main/screenshots/Checkout2.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/shop/blob/main/screenshots/Checkout3.png?raw=true" alt="Screenshot"></img></details>
-- [🌐 Instagram Clone](https://github.com/nickmnt/instagram)
-  > 🛠️ React, Javascript, Sass
-  > <details> <summary>Screenshots (Hidden) - Click to open!</summary> <img src="https://github.com/nickmnt/instagram/blob/master/screenshots/Comment.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/instagram/blob/master/screenshots/Homepage.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/instagram/blob/master/screenshots/Login.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/instagram/blob/master/screenshots/PostExtra.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/instagram/blob/master/screenshots/ProfilePost.png?raw=true" alt="Screenshot"></img></details>
-- [🌐 Infrastructure Microservices](https://github.com/nickmnt/microservice)
-  > 🛠️ .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, Cloud
-  > <details><summary>Screenshots (Hidden) - Click to open!</summary><img src="https://github.com/nickmnt/microservice/blob/main/Images/KubernetesArchitecture.png" alt="Screenshot"></img></details>
-- [🌐 Expense Tracker Microservices](https://github.com/nickmnt/expense)
-  > 🛠️ .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, NoSQL, Cloud
-- [🌐 Real Estate Website](https://github.com/nickmnt/rockstone)
-  > 🛠️ React, Javascript, Sass
-  > <details> <summary>Screenshots (Hidden) - Click to open!</summary> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Start.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Middle.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Cards.png?raw=true" alt="Screenshot"></img> <img src="https://github.com/nickmnt/rockstone/blob/master/screenshots/Footer.png?raw=true" alt="Screenshot"></img></details>
-- [🤖 Python Data Analysis and Machine Learning](https://github.com/nickmnt/data)
-  > 🛠️ Python, SQL, Data Analysis
-  
+[Portfolio](https://nickmnt.github.io/nickmnt/) | [Resume](Nick-Moein-Resume.html) | [LinkedIn](https://www.linkedin.com/in/nickmnt/) | [GitHub](https://github.com/nickmnt) | [Email](mailto:nick.moeintaghavi@gmail.com)
 
-<!--
-**nimamt/nimamt** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+## Recruiter Snapshot
 
-Here are some ideas to get you started:
+I am a Software Developer II at Genetec with production experience across .NET, React, TypeScript, Azure CI/CD, automated testing, security reviews, and cloud-oriented microservices. My strongest lane is full-stack product engineering with a backend foundation: APIs, data modeling, real-time workflows, delivery pipelines, and maintainable systems that teams can actually ship.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- Reduced Azure CI/CD build times by 50%.
+- Shortened selected automated test runs by up to 50% while improving reliability and maintainability.
+- Won 1st place in a company hackathon with a project that influenced product roadmaps.
+- Mentored junior developers on ramp-up, engineering quality, and delivery practices.
+- Identified and mitigated security vulnerabilities through code reviews and security assessments.
+
+## Best Fit
+
+- Full-stack .NET, React, and TypeScript product engineering roles.
+- Backend services, REST APIs, CI/CD, automation, testing, and cloud delivery.
+- Teams that value practical ownership, secure code review, maintainable systems, and measurable delivery improvements.
+
+## Featured Projects
+
+### [Infrastructure Microservices](https://github.com/nickmnt/microservice)
+
+Distributed .NET service architecture using gRPC, RabbitMQ, REST, SQL, Docker, Kubernetes, and cloud infrastructure patterns.
+
+- Designed service boundaries around independent infrastructure concerns.
+- Used message-based communication and gRPC to model inter-service workflows.
+- Documented deployment architecture with Kubernetes-oriented diagrams and containerized services.
+
+Tech: .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, cloud architecture
+
+### [Expense Tracker Microservices](https://github.com/nickmnt/expense)
+
+Cloud-oriented expense platform using .NET microservices, SQL and NoSQL persistence, Docker, and distributed messaging.
+
+- Built service-oriented backend components around expense tracking workflows.
+- Modeled mixed persistence needs with relational and NoSQL storage.
+- Practiced production-style architecture patterns beyond a single monolithic CRUD app.
+
+Tech: .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL, NoSQL
+
+### [Realtime Matchmaking App](https://github.com/nickmnt/dating-app)
+
+Full-stack social application with authentication, profiles, matching, admin workflows, persistence, and real-time communication.
+
+- Built authenticated product flows, admin screens, and real-time messaging with SignalR.
+- Managed frontend state with Angular, RxJS, and NgRx.
+- Added automated tests with xUnit and Moq, plus Docker support for repeatable setup.
+
+Tech: .NET, Angular, TypeScript, RxJS, NgRx, SignalR, Entity Framework, SQL, Docker, xUnit, Moq
+
+### [Realtime Messaging Platform](https://github.com/nickmnt/react-talk)
+
+Chat platform built with React, TypeScript, MobX, .NET, Entity Framework, SQL, SignalR, Docker, and automated tests.
+
+- Implemented messaging, group management, profile settings, contacts, and saved-message workflows.
+- Coordinated real-time SignalR behavior with frontend state and backend persistence.
+- Used xUnit and Moq to cover backend behavior and improve confidence during changes.
+
+Tech: .NET, React, TypeScript, MobX, SignalR, Entity Framework, SQL, Docker, xUnit, Moq, AutoMapper
+
+## Additional Projects
+
+| Project | Focus | Stack |
+| --- | --- | --- |
+| [Publishing CMS](https://github.com/nickmnt/medium_clone) | Articles, comments, rich editing, admin moderation, user management | .NET, React, TypeScript, MobX, Entity Framework, SQL, Docker |
+| [Ecommerce Storefront](https://github.com/nickmnt/shop) | Product catalog, cart, checkout, order flow | .NET, React, TypeScript, Redux, Entity Framework, SQL, Docker |
+| [Social Photo App](https://github.com/nickmnt/instagram) | Feed, profiles, posts, comments, responsive UI | React, JavaScript, Sass |
+| [Real Estate Website](https://github.com/nickmnt/rockstone) | Property marketing site and responsive frontend | React, JavaScript, Sass |
+| [Python Data Analysis](https://github.com/nickmnt/data) | Data analysis and machine learning practice | Python, SQL |
+
+## Technical Toolkit
+
+| Area | Tools |
+| --- | --- |
+| Backend | C#, .NET, ASP.NET Core, REST APIs, Entity Framework, SQL, NoSQL, Redis |
+| Frontend | React, Angular, TypeScript, JavaScript, RxJS, NgRx, Redux, MobX |
+| Cloud and DevOps | Azure, AWS, Docker, Kubernetes, Terraform, Jenkins, CI/CD |
+| Architecture | Microservices, gRPC, RabbitMQ, distributed systems, cloud-oriented design |
+| Engineering practices | Unit testing, integration testing, E2E testing, code reviews, security assessment, performance optimization |
+
+## Experience
+
+### Software Developer II, Genetec
+
+Jan 2026 - Present
+
+- Developed and maintained scalable .NET Core access control applications for a security-focused platform.
+- Optimized Azure CI/CD pipelines, reducing build times by 50%.
+- Reduced selected automated test runtimes by up to 50% while improving reliability and maintainability.
+- Mentored junior developers on ramp-up, engineering quality, and delivery practices.
+- Automated repetitive developer and QA workflows to reduce manual handoffs and speed issue triage.
+
+### Software Developer, Genetec
+
+Jun 2024 - Jan 2026
+
+- Built full-stack web application features using C#, .NET, React, TypeScript, and SQL-based systems.
+- Won 1st place in a company hackathon with a project that influenced product roadmaps.
+- Identified and mitigated security vulnerabilities through code reviews and security assessments.
+- Improved maintainability by refactoring legacy components and expanding automated test coverage.
+
+## Education
+
+B.S. Computer Science, Ferdowsi University. Software Engineering specialization. 3.99 / 4.00 GPA.
+
+## Contact
+
+I am open to strong full-stack, backend-leaning .NET, cloud delivery, automation, and product engineering conversations.
+
+- Email: [nick.moeintaghavi@gmail.com](mailto:nick.moeintaghavi@gmail.com)
+- LinkedIn: [linkedin.com/in/nickmnt](https://www.linkedin.com/in/nickmnt/)
+- Portfolio: [nickmnt.github.io/nickmnt](https://nickmnt.github.io/nickmnt/)
