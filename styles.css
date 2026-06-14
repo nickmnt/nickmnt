@@ -34,7 +34,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: "Aptos", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.65;
   letter-spacing: 0;
@@ -134,7 +134,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 0.72rem;
-  font-weight: 750;
+  font-weight: 700;
   line-height: 1;
 }
 
@@ -268,7 +268,7 @@ button {
   margin: 0 0 1rem;
   color: var(--primary-strong);
   font-size: 0.88rem;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 h1,
@@ -281,7 +281,7 @@ p {
 h1,
 h2,
 h3 {
-  font-family: "Aptos Display", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   line-height: 1.02;
   letter-spacing: 0;
 }
@@ -290,7 +290,7 @@ h1 {
   max-width: 1030px;
   margin-bottom: 1rem;
   font-size: 4.2rem;
-  font-weight: 780;
+  font-weight: 800;
 }
 
 .hero-copy {
@@ -321,7 +321,7 @@ h1 {
   border-radius: var(--radius);
   padding: 0 1rem;
   color: var(--text);
-  font-weight: 760;
+  font-weight: 700;
   line-height: 1;
   transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
 }
@@ -402,7 +402,7 @@ textarea:focus-visible {
   margin: 0;
   color: var(--text);
   font-size: 1.04rem;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.3;
 }
 
@@ -423,7 +423,7 @@ textarea:focus-visible {
 .contact-copy h2 {
   margin-bottom: 1rem;
   font-size: 3rem;
-  font-weight: 760;
+  font-weight: 700;
 }
 
 .section-heading p,
@@ -510,7 +510,7 @@ textarea:focus-visible {
 .role {
   margin-bottom: 0.25rem;
   color: var(--primary-strong);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .experience-head h3 {
@@ -545,7 +545,7 @@ textarea:focus-visible {
 }
 
 .project-card {
-  min-height: 20rem;
+  min-height: 30rem;
 }
 
 .skill-card {
@@ -555,7 +555,7 @@ textarea:focus-visible {
 .project-card:hover,
 .skill-card:hover,
 .metric-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: rgba(96, 165, 250, 0.42);
   background: rgba(31, 41, 55, 0.72);
 }
@@ -585,6 +585,55 @@ textarea:focus-visible {
   font-size: 1.35rem;
 }
 
+.project-shot {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  margin: 0 0 1.1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: var(--radius);
+  background: rgba(11, 18, 32, 0.76);
+}
+
+.project-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-diagram {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.project-diagram::before {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.55), rgba(249, 115, 22, 0.45), transparent);
+}
+
+.project-diagram span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-height: 3.2rem;
+  place-items: center;
+  border: 1px solid rgba(96, 165, 250, 0.34);
+  border-radius: var(--radius);
+  background: rgba(17, 24, 39, 0.88);
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: center;
+}
+
 .project-card h3 a:hover,
 .project-card h3 a:focus-visible {
   color: var(--primary-strong);
@@ -595,6 +644,11 @@ textarea:focus-visible {
   padding-left: 1.15rem;
   color: #d7deea;
   font-size: 0.94rem;
+}
+
+.project-proof strong {
+  color: var(--text);
+  font-weight: 700;
 }
 
 .project-proof li + li {

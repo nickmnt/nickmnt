@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nick Moein Resume</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #111827;
+        --muted: #4b5563;
+        --line: #d1d5db;
+        --accent: #2563eb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 48px 28px;
+        color: var(--ink);
+        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.5;
+      }
+
+      header {
+        border-bottom: 2px solid var(--ink);
+        padding-bottom: 18px;
+        margin-bottom: 28px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 6px;
+        font-size: 2.4rem;
+        line-height: 1;
+      }
+
+      h2 {
+        margin: 28px 0 10px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 6px;
+        color: var(--accent);
+        font-size: 1rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      h3 {
+        margin-bottom: 4px;
+        font-size: 1.05rem;
+      }
+
+      a {
+        color: var(--accent);
+      }
+
+      .meta,
+      .subhead {
+        color: var(--muted);
+      }
+
+      .role {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      ul {
+        margin-top: 8px;
+        padding-left: 20px;
+      }
+
+      li + li {
+        margin-top: 5px;
+      }
+
+      @media print {
+        body {
+          padding: 0;
+        }
+
+        a {
+          color: var(--ink);
+          text-decoration: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Nick Moein</h1>
+      <p class="subhead">Full-stack .NET developer in Canada</p>
+      <p class="meta">
+        nick.moeintaghavi@gmail.com | github.com/nickmnt | linkedin.com/in/nickmnt
+      </p>
+    </header>
+
+    <main>
+      <section>
+        <h2>Profile</h2>
+        <p>
+          Software Developer II with production experience across C#, .NET, React, TypeScript, Azure CI/CD,
+          automated testing, and cloud-oriented microservices. Delivery impact includes 50% faster builds,
+          50% faster automated test runs, mentorship, security reviews, and a 1st-place company hackathon win.
+        </p>
+      </section>
+
+      <section>
+        <h2>Experience</h2>
+        <article>
+          <div class="role">
+            <h3>Software Developer II, Genetec</h3>
+            <span>Jan 2026 - Present</span>
+          </div>
+          <ul>
+            <li>Developed and maintained scalable .NET Core access control applications for a market-leading security platform.</li>
+            <li>Optimized Azure CI/CD pipelines, reducing build times by 50%.</li>
+            <li>Reduced automated test time by up to 50% while improving reliability and maintainability.</li>
+            <li>Mentored junior developers on ramp-up, engineering quality, and delivery practices.</li>
+            <li>Automated repetitive developer and QA workflows to reduce manual handoffs and speed issue triage.</li>
+          </ul>
+        </article>
+
+        <article>
+          <div class="role">
+            <h3>Software Developer, Genetec</h3>
+            <span>Jun 2024 - Jan 2026</span>
+          </div>
+          <ul>
+            <li>Built full-stack web application features using C#, .NET, React, TypeScript, and SQL-based systems.</li>
+            <li>Won 1st place in a company hackathon with a project that influenced product roadmaps.</li>
+            <li>Identified and mitigated security vulnerabilities through code reviews and security assessments.</li>
+            <li>Improved maintainability by refactoring legacy components and expanding automated test coverage.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section>
+        <h2>Projects</h2>
+        <ul>
+          <li>Infrastructure Microservices: .NET, gRPC, RabbitMQ, Kubernetes, Docker, REST, SQL.</li>
+          <li>Expense Tracker Microservices: .NET microservices, SQL and NoSQL persistence, Docker, messaging.</li>
+          <li>Realtime Matchmaking App: Angular, .NET, SignalR, Entity Framework, SQL, xUnit, Moq, Docker.</li>
+          <li>Realtime Messaging Platform: React, TypeScript, MobX, .NET, SignalR, SQL, Docker, xUnit.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Skills</h2>
+        <p>
+          C#, .NET, ASP.NET Core, REST APIs, React, Angular, TypeScript, SQL, NoSQL, Redis, Azure,
+          AWS, Docker, Kubernetes, Terraform, Jenkins, CI/CD, testing, code reviews, security assessment.
+        </p>
+      </section>
+
+      <section>
+        <h2>Education</h2>
+        <p>B.S. Computer Science, Ferdowsi University. Software Engineering specialization. 3.99 / 4.00 GPA.</p>
+      </section>
+    </main>
+  </body>
+</html>

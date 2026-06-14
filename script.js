@@ -6,6 +6,7 @@ const sections = [...document.querySelectorAll("main section[id]")];
 const year = document.querySelector("[data-year]");
 const copyEmailButton = document.querySelector("[data-copy-email]");
 const copyStatus = document.querySelector("[data-copy-status]");
+const hero = document.querySelector(".hero");
 
 if (year) {
   year.textContent = new Date().getFullYear();
@@ -96,6 +97,8 @@ let width = 0;
 let height = 0;
 let nodes = [];
 let animationFrame = 0;
+let networkRunning = false;
+let heroInView = !hero;
 
 function resizeCanvas() {
   if (!canvas || !context) return;
@@ -177,30 +180,63 @@ function drawNetwork(time) {
     context.stroke();
   });
 
-  if (!reducedMotion) {
+  if (!reducedMotion && networkRunning) {
     animationFrame = requestAnimationFrame(drawNetwork);
   }
 }
 
-window.addEventListener("resize", () => {
+function startNetwork() {
+  if (!canvas || !context || reducedMotion || networkRunning) return;
+
+  networkRunning = true;
+  animationFrame = requestAnimationFrame(drawNetwork);
+}
+
+function stopNetwork() {
+  networkRunning = false;
   cancelAnimationFrame(animationFrame);
+  animationFrame = 0;
+}
+
+window.addEventListener("resize", () => {
+  const shouldRestart = networkRunning;
+
+  stopNetwork();
   resizeCanvas();
-  if (!reducedMotion) {
-    animationFrame = requestAnimationFrame(drawNetwork);
+  if (shouldRestart) {
+    startNetwork();
   }
 });
 
 document.addEventListener("visibilitychange", () => {
-  cancelAnimationFrame(animationFrame);
-  animationFrame = 0;
+  stopNetwork();
 
-  if (!document.hidden && !reducedMotion) {
+  if (!document.hidden && heroInView) {
     resizeCanvas();
-    animationFrame = requestAnimationFrame(drawNetwork);
+    startNetwork();
   }
 });
 
 resizeCanvas();
-if (!reducedMotion) {
-  animationFrame = requestAnimationFrame(drawNetwork);
+
+if ("IntersectionObserver" in window && hero) {
+  const heroCanvasObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        heroInView = entry.isIntersecting;
+
+        if (entry.isIntersecting && !document.hidden) {
+          resizeCanvas();
+          startNetwork();
+        } else {
+          stopNetwork();
+        }
+      });
+    },
+    { threshold: 0.08 }
+  );
+
+  heroCanvasObserver.observe(hero);
+} else {
+  startNetwork();
 }
