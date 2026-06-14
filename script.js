@@ -18,10 +18,6 @@ navLinks.forEach((link) => {
   });
 });
 
-document.querySelector("[data-print-resume]").addEventListener("click", () => {
-  window.print();
-});
-
 document.querySelector("[data-copy-email]").addEventListener("click", async (event) => {
   const button = event.currentTarget;
   const label = button.querySelector("span");
