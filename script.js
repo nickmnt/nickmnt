@@ -163,11 +163,19 @@ function resizeCanvas() {
   if (!canvas || !context) return;
 
   const ratio = Math.min(window.devicePixelRatio || 1, 2);
+  const previousWidth = width;
   width = canvas.offsetWidth;
   height = canvas.offsetHeight;
   canvas.width = Math.floor(width * ratio);
   canvas.height = Math.floor(height * ratio);
   context.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+  /* Height-only resizes (mobile URL bar show/hide) keep the existing nodes
+     so the network doesn't visibly jump mid-scroll. */
+  if (width === previousWidth && nodes.length > 0) {
+    drawNetwork(0);
+    return;
+  }
 
   const nodeCount = width < 720 ? 14 : 26;
   nodes = Array.from({ length: nodeCount }, (_, index) => {

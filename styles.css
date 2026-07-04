@@ -600,16 +600,16 @@ h1 {
   margin-bottom: 1rem;
 }
 
-.role {
+.experience-head h3 {
   margin-bottom: 0.25rem;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+}
+
+.company {
   color: var(--accent);
   font-size: 0.94rem;
   font-weight: 700;
-}
-
-.experience-head h3 {
-  font-size: 1.3rem;
-  letter-spacing: -0.01em;
 }
 
 .experience-head time {
@@ -639,116 +639,6 @@ h1 {
 .experience-card li strong {
   color: var(--text);
   font-weight: 700;
-}
-
-/* ---------- Projects ---------- */
-
-.project-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  align-items: stretch;
-}
-
-.project-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 1.45rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(16, 21, 29, 0.6);
-  transition: transform 240ms var(--ease-out), border-color 240ms ease, background-color 240ms ease,
-    box-shadow 240ms ease;
-}
-
-.project-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent-line);
-  background: var(--surface-2);
-  box-shadow: var(--shadow-hover);
-}
-
-.project-topline {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.1rem;
-}
-
-.project-index {
-  font-family: var(--font-display);
-  color: rgba(45, 212, 191, 0.5);
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.project-tag {
-  color: var(--accent);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.project-card h3 {
-  margin-bottom: 0.55rem;
-  font-size: 1.26rem;
-  letter-spacing: -0.01em;
-}
-
-.project-card h3 a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  transition: color 200ms ease;
-}
-
-.project-card h3 a .icon {
-  width: 0.9rem;
-  height: 0.9rem;
-  color: var(--muted);
-  transition: transform 200ms var(--ease-out), color 200ms ease;
-}
-
-.project-card h3 a:hover,
-.project-card h3 a:focus-visible {
-  color: var(--accent-strong);
-}
-
-.project-card h3 a:hover .icon,
-.project-card h3 a:focus-visible .icon {
-  transform: translate(2px, -2px);
-  color: var(--accent-strong);
-}
-
-.project-card > p {
-  margin-bottom: 0;
-  color: var(--muted);
-  font-size: 0.97rem;
-}
-
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-top: auto;
-  padding-top: 1.15rem;
-}
-
-.tag-list span {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 0.22rem 0.6rem;
-  background: rgba(186, 196, 209, 0.06);
-  color: var(--body);
-  font-size: 0.79rem;
-  transition: border-color 200ms ease;
-}
-
-.project-card:hover .tag-list span {
-  border-color: rgba(45, 212, 191, 0.3);
 }
 
 /* ---------- Skills ---------- */
@@ -969,10 +859,6 @@ h1 {
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1020px) {
-  .project-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .about-layout,
   .contact-panel {
     grid-template-columns: 1fr;
@@ -1033,10 +919,6 @@ h1 {
   .hero {
     min-height: 86svh;
     padding: 6rem 0 3rem;
-  }
-
-  .project-grid {
-    grid-template-columns: 1fr;
   }
 
   .section {
@@ -1170,8 +1052,7 @@ h1 {
 
   .accent-text,
   .eyebrow,
-  .role,
-  .project-tag,
+  .company,
   .skills-row dt,
   .about-panel span {
     color: #0f766e;
@@ -1180,7 +1061,6 @@ h1 {
   .hero-copy,
   .section-heading p,
   .contact-copy p,
-  .project-card p,
   .about-panel p,
   .experience-card ul,
   .fit-card ul,
@@ -1197,7 +1077,6 @@ h1 {
   }
 
   .experience-card,
-  .project-card,
   .about-panel,
   .contact-panel,
   .fit-card {
