@@ -7,9 +7,19 @@ const year = document.querySelector("[data-year]");
 const copyEmailButton = document.querySelector("[data-copy-email]");
 const copyStatus = document.querySelector("[data-copy-status]");
 const hero = document.querySelector(".hero");
+const pointer = { x: 0, y: 0, active: false };
 
 if (year) {
   year.textContent = new Date().getFullYear();
+}
+
+function setPageProgress() {
+  if (!header) return;
+
+  const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+  header.style.setProperty("--scroll-progress", progress.toFixed(4));
+  header.classList.toggle("is-scrolled", window.scrollY > 12);
 }
 
 function setNavOpen(isOpen) {
@@ -30,6 +40,9 @@ navLinks.forEach((link) => {
     setNavOpen(false);
   });
 });
+
+window.addEventListener("scroll", setPageProgress, { passive: true });
+setPageProgress();
 
 if (copyEmailButton) {
   copyEmailButton.addEventListener("click", async (event) => {
@@ -100,6 +113,58 @@ let animationFrame = 0;
 let networkRunning = false;
 let heroInView = !hero;
 
+if (!reducedMotion) {
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      pointer.active = true;
+    },
+    { passive: true }
+  );
+
+  window.addEventListener("pointerleave", () => {
+    pointer.active = false;
+  });
+}
+
+function hydrateInteractiveMotion() {
+  if (reducedMotion) return;
+
+  document.querySelectorAll(".button").forEach((button) => {
+    button.addEventListener("pointermove", (event) => {
+      const rect = button.getBoundingClientRect();
+      const x = (event.clientX - rect.left - rect.width / 2) / rect.width;
+      const y = (event.clientY - rect.top - rect.height / 2) / rect.height;
+      button.style.setProperty("--lift-x", `${(x * 8).toFixed(2)}px`);
+      button.style.setProperty("--lift-y", `${(y * 6).toFixed(2)}px`);
+    });
+
+    button.addEventListener("pointerleave", () => {
+      button.style.removeProperty("--lift-x");
+      button.style.removeProperty("--lift-y");
+    });
+  });
+
+  document.querySelectorAll(".metric-card, .experience-card, .project-card, .skill-card, .about-panel, .contact-card").forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const x = (event.clientX - rect.left - rect.width / 2) / rect.width;
+      const y = (event.clientY - rect.top - rect.height / 2) / rect.height;
+      card.style.setProperty("--tilt-x", `${(-y * 2.4).toFixed(2)}deg`);
+      card.style.setProperty("--tilt-y", `${(x * 2.8).toFixed(2)}deg`);
+    });
+
+    card.addEventListener("pointerleave", () => {
+      card.style.removeProperty("--tilt-x");
+      card.style.removeProperty("--tilt-y");
+    });
+  });
+}
+
+hydrateInteractiveMotion();
+
 function resizeCanvas() {
   if (!canvas || !context) return;
 
@@ -140,6 +205,11 @@ function drawNetwork(time) {
   context.fillStyle = gradient;
   context.fillRect(width * 0.36, 0, width * 0.64, height);
 
+  const canvasRect = pointer.active ? canvas.getBoundingClientRect() : null;
+  const pointerX = canvasRect ? pointer.x - canvasRect.left : -1;
+  const pointerY = canvasRect ? pointer.y - canvasRect.top : -1;
+  const pointerInCanvas = pointer.active && pointerX >= 0 && pointerX <= width && pointerY >= 0 && pointerY <= height;
+
   nodes.forEach((node, index) => {
     if (!reducedMotion) {
       node.x += node.vx;
@@ -147,6 +217,19 @@ function drawNetwork(time) {
 
       if (Math.abs(node.x - node.baseX) > 24) node.vx *= -1;
       if (Math.abs(node.y - node.baseY) > 18) node.vy *= -1;
+
+      const dx = node.x - pointerX;
+      const dy = node.y - pointerY;
+      const pointerDistance = Math.hypot(dx, dy);
+
+      if (pointerInCanvas && pointerDistance < 190) {
+        const force = (1 - pointerDistance / 190) * 0.68;
+        node.x += (dx / Math.max(1, pointerDistance)) * force;
+        node.y += (dy / Math.max(1, pointerDistance)) * force;
+      }
+
+      node.x += (node.baseX - node.x) * 0.006;
+      node.y += (node.baseY - node.y) * 0.006;
     }
 
     for (let nextIndex = index + 1; nextIndex < nodes.length; nextIndex += 1) {
