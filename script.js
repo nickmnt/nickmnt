@@ -81,8 +81,13 @@ if ("IntersectionObserver" in window) {
     { threshold: 0.16 }
   );
 
-  document.querySelectorAll(".reveal").forEach((element, index) => {
-    element.style.transitionDelay = `${Math.min(index * 35, 180)}ms`;
+  const staggerCounters = new Map();
+
+  document.querySelectorAll(".reveal").forEach((element) => {
+    const group = element.closest("section") || document.body;
+    const indexInGroup = staggerCounters.get(group) || 0;
+    staggerCounters.set(group, indexInGroup + 1);
+    element.style.transitionDelay = `${Math.min(indexInGroup * 70, 350)}ms`;
     revealObserver.observe(element);
   });
 }
@@ -137,8 +142,8 @@ function hydrateInteractiveMotion() {
       const rect = button.getBoundingClientRect();
       const x = (event.clientX - rect.left - rect.width / 2) / rect.width;
       const y = (event.clientY - rect.top - rect.height / 2) / rect.height;
-      button.style.setProperty("--lift-x", `${(x * 8).toFixed(2)}px`);
-      button.style.setProperty("--lift-y", `${(y * 6).toFixed(2)}px`);
+      button.style.setProperty("--lift-x", `${(x * 5).toFixed(2)}px`);
+      button.style.setProperty("--lift-y", `${(y * 4).toFixed(2)}px`);
     });
 
     button.addEventListener("pointerleave", () => {
@@ -147,13 +152,13 @@ function hydrateInteractiveMotion() {
     });
   });
 
-  document.querySelectorAll(".metric-card, .experience-card, .project-card, .skill-card, .about-panel, .contact-card").forEach((card) => {
+  document.querySelectorAll(".project-card").forEach((card) => {
     card.addEventListener("pointermove", (event) => {
       const rect = card.getBoundingClientRect();
       const x = (event.clientX - rect.left - rect.width / 2) / rect.width;
       const y = (event.clientY - rect.top - rect.height / 2) / rect.height;
-      card.style.setProperty("--tilt-x", `${(-y * 2.4).toFixed(2)}deg`);
-      card.style.setProperty("--tilt-y", `${(x * 2.8).toFixed(2)}deg`);
+      card.style.setProperty("--tilt-x", `${(-y * 1.6).toFixed(2)}deg`);
+      card.style.setProperty("--tilt-y", `${(x * 2).toFixed(2)}deg`);
     });
 
     card.addEventListener("pointerleave", () => {
@@ -175,7 +180,7 @@ function resizeCanvas() {
   canvas.height = Math.floor(height * ratio);
   context.setTransform(ratio, 0, 0, ratio, 0, 0);
 
-  const nodeCount = width < 720 ? 22 : 36;
+  const nodeCount = width < 720 ? 14 : 26;
   nodes = Array.from({ length: nodeCount }, (_, index) => {
     const lane = index % 6;
     return {
@@ -199,9 +204,9 @@ function drawNetwork(time) {
   context.clearRect(0, 0, width, height);
 
   const gradient = context.createLinearGradient(width * 0.3, 0, width, height);
-  gradient.addColorStop(0, "rgba(59, 130, 246, 0.14)");
-  gradient.addColorStop(0.56, "rgba(249, 115, 22, 0.1)");
-  gradient.addColorStop(1, "rgba(45, 212, 191, 0.08)");
+  gradient.addColorStop(0, "rgba(59, 130, 246, 0.1)");
+  gradient.addColorStop(0.56, "rgba(249, 115, 22, 0.05)");
+  gradient.addColorStop(1, "rgba(45, 212, 191, 0.05)");
   context.fillStyle = gradient;
   context.fillRect(width * 0.36, 0, width * 0.64, height);
 
@@ -222,8 +227,8 @@ function drawNetwork(time) {
       const dy = node.y - pointerY;
       const pointerDistance = Math.hypot(dx, dy);
 
-      if (pointerInCanvas && pointerDistance < 190) {
-        const force = (1 - pointerDistance / 190) * 0.68;
+      if (pointerInCanvas && pointerDistance < 170) {
+        const force = (1 - pointerDistance / 170) * 0.4;
         node.x += (dx / Math.max(1, pointerDistance)) * force;
         node.y += (dy / Math.max(1, pointerDistance)) * force;
       }
@@ -238,8 +243,8 @@ function drawNetwork(time) {
       const dy = node.y - next.y;
       const distance = Math.hypot(dx, dy);
 
-      if (distance < 155) {
-        const alpha = (1 - distance / 155) * 0.2;
+      if (distance < 150) {
+        const alpha = (1 - distance / 150) * 0.15;
         context.strokeStyle = `rgba(96, 165, 250, ${alpha})`;
         context.lineWidth = 1;
         context.beginPath();
@@ -251,16 +256,11 @@ function drawNetwork(time) {
   });
 
   nodes.forEach((node, index) => {
-    const pulse = reducedMotion ? 0 : Math.sin(time / 650 + index) * 0.55;
+    const pulse = reducedMotion ? 0 : Math.sin(time / 900 + index) * 0.4;
     context.beginPath();
-    context.arc(node.x, node.y, Math.max(1.8, node.size + pulse), 0, Math.PI * 2);
-    context.fillStyle = node.lane === 0 ? "rgba(45, 212, 191, 0.72)" : "rgba(96, 165, 250, 0.82)";
+    context.arc(node.x, node.y, Math.max(1.6, node.size + pulse), 0, Math.PI * 2);
+    context.fillStyle = node.lane === 0 ? "rgba(45, 212, 191, 0.55)" : "rgba(96, 165, 250, 0.6)";
     context.fill();
-
-    context.beginPath();
-    context.arc(node.x, node.y, node.size + 8, 0, Math.PI * 2);
-    context.strokeStyle = node.lane === 0 ? "rgba(45, 212, 191, 0.16)" : "rgba(249, 115, 22, 0.11)";
-    context.stroke();
   });
 
   if (!reducedMotion && networkRunning) {
@@ -323,3 +323,4 @@ if ("IntersectionObserver" in window && hero) {
 } else {
   startNetwork();
 }
+
