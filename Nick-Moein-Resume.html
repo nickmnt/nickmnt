@@ -10,7 +10,7 @@
         --ink: #111827;
         --muted: #4b5563;
         --line: #d1d5db;
-        --accent: #2563eb;
+        --accent: #0f766e;
       }
 
       * {
@@ -84,6 +84,29 @@
         margin-top: 5px;
       }
 
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+        font-size: 0.95rem;
+      }
+
+      .toolbar button {
+        padding: 8px 16px;
+        border: 1px solid var(--accent);
+        border-radius: 8px;
+        background: var(--accent);
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .toolbar button:hover {
+        background: #115e59;
+      }
+
       @media print {
         body {
           padding: 0;
@@ -93,10 +116,18 @@
           color: var(--ink);
           text-decoration: none;
         }
+
+        .toolbar {
+          display: none;
+        }
       }
     </style>
   </head>
   <body>
+    <nav class="toolbar" aria-label="Resume actions">
+      <a href="index.html">&larr; Back to portfolio</a>
+      <button type="button" onclick="window.print()">Print / Save as PDF</button>
+    </nav>
     <header>
       <h1>Nick Moein</h1>
       <p class="subhead">Full-stack .NET developer in Canada</p>

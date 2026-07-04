@@ -13,6 +13,8 @@ if (year) {
   year.textContent = new Date().getFullYear();
 }
 
+/* ---------- Header scroll progress ---------- */
+
 function setPageProgress() {
   if (!header) return;
 
@@ -21,6 +23,11 @@ function setPageProgress() {
   header.style.setProperty("--scroll-progress", progress.toFixed(4));
   header.classList.toggle("is-scrolled", window.scrollY > 12);
 }
+
+window.addEventListener("scroll", setPageProgress, { passive: true });
+setPageProgress();
+
+/* ---------- Mobile navigation ---------- */
 
 function setNavOpen(isOpen) {
   if (!header || !navToggle) return;
@@ -33,6 +40,19 @@ if (header && navToggle) {
   navToggle.addEventListener("click", () => {
     setNavOpen(!header.classList.contains("nav-open"));
   });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && header.classList.contains("nav-open")) {
+      setNavOpen(false);
+      navToggle.focus();
+    }
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (header.classList.contains("nav-open") && !header.contains(event.target)) {
+      setNavOpen(false);
+    }
+  });
 }
 
 navLinks.forEach((link) => {
@@ -41,8 +61,7 @@ navLinks.forEach((link) => {
   });
 });
 
-window.addEventListener("scroll", setPageProgress, { passive: true });
-setPageProgress();
+/* ---------- Copy email ---------- */
 
 if (copyEmailButton) {
   copyEmailButton.addEventListener("click", async (event) => {
@@ -65,6 +84,8 @@ if (copyEmailButton) {
     }, 1800);
   });
 }
+
+/* ---------- Reveal on scroll ---------- */
 
 if ("IntersectionObserver" in window) {
   document.documentElement.classList.add("supports-reveal");
@@ -92,6 +113,8 @@ if ("IntersectionObserver" in window) {
   });
 }
 
+/* ---------- Active nav highlighting ---------- */
+
 if ("IntersectionObserver" in window && navLinks.length > 0) {
   const navObserver = new IntersectionObserver(
     (entries) => {
@@ -107,6 +130,8 @@ if ("IntersectionObserver" in window && navLinks.length > 0) {
 
   sections.forEach((section) => navObserver.observe(section));
 }
+
+/* ---------- Hero canvas (network) ---------- */
 
 const canvas = document.querySelector("#system-canvas");
 const context = canvas ? canvas.getContext("2d") : null;
@@ -133,42 +158,6 @@ if (!reducedMotion) {
     pointer.active = false;
   });
 }
-
-function hydrateInteractiveMotion() {
-  if (reducedMotion) return;
-
-  document.querySelectorAll(".button").forEach((button) => {
-    button.addEventListener("pointermove", (event) => {
-      const rect = button.getBoundingClientRect();
-      const x = (event.clientX - rect.left - rect.width / 2) / rect.width;
-      const y = (event.clientY - rect.top - rect.height / 2) / rect.height;
-      button.style.setProperty("--lift-x", `${(x * 5).toFixed(2)}px`);
-      button.style.setProperty("--lift-y", `${(y * 4).toFixed(2)}px`);
-    });
-
-    button.addEventListener("pointerleave", () => {
-      button.style.removeProperty("--lift-x");
-      button.style.removeProperty("--lift-y");
-    });
-  });
-
-  document.querySelectorAll(".project-card").forEach((card) => {
-    card.addEventListener("pointermove", (event) => {
-      const rect = card.getBoundingClientRect();
-      const x = (event.clientX - rect.left - rect.width / 2) / rect.width;
-      const y = (event.clientY - rect.top - rect.height / 2) / rect.height;
-      card.style.setProperty("--tilt-x", `${(-y * 1.6).toFixed(2)}deg`);
-      card.style.setProperty("--tilt-y", `${(x * 2).toFixed(2)}deg`);
-    });
-
-    card.addEventListener("pointerleave", () => {
-      card.style.removeProperty("--tilt-x");
-      card.style.removeProperty("--tilt-y");
-    });
-  });
-}
-
-hydrateInteractiveMotion();
 
 function resizeCanvas() {
   if (!canvas || !context) return;
@@ -204,9 +193,9 @@ function drawNetwork(time) {
   context.clearRect(0, 0, width, height);
 
   const gradient = context.createLinearGradient(width * 0.3, 0, width, height);
-  gradient.addColorStop(0, "rgba(59, 130, 246, 0.1)");
-  gradient.addColorStop(0.56, "rgba(249, 115, 22, 0.05)");
-  gradient.addColorStop(1, "rgba(45, 212, 191, 0.05)");
+  gradient.addColorStop(0, "rgba(45, 212, 191, 0.07)");
+  gradient.addColorStop(0.6, "rgba(45, 212, 191, 0.03)");
+  gradient.addColorStop(1, "rgba(125, 240, 220, 0.05)");
   context.fillStyle = gradient;
   context.fillRect(width * 0.36, 0, width * 0.64, height);
 
@@ -244,8 +233,8 @@ function drawNetwork(time) {
       const distance = Math.hypot(dx, dy);
 
       if (distance < 150) {
-        const alpha = (1 - distance / 150) * 0.15;
-        context.strokeStyle = `rgba(96, 165, 250, ${alpha})`;
+        const alpha = (1 - distance / 150) * 0.14;
+        context.strokeStyle = `rgba(45, 212, 191, ${alpha})`;
         context.lineWidth = 1;
         context.beginPath();
         context.moveTo(node.x, node.y);
@@ -259,7 +248,7 @@ function drawNetwork(time) {
     const pulse = reducedMotion ? 0 : Math.sin(time / 900 + index) * 0.4;
     context.beginPath();
     context.arc(node.x, node.y, Math.max(1.6, node.size + pulse), 0, Math.PI * 2);
-    context.fillStyle = node.lane === 0 ? "rgba(45, 212, 191, 0.55)" : "rgba(96, 165, 250, 0.6)";
+    context.fillStyle = node.lane === 0 ? "rgba(125, 240, 220, 0.6)" : "rgba(45, 212, 191, 0.5)";
     context.fill();
   });
 
@@ -323,4 +312,3 @@ if ("IntersectionObserver" in window && hero) {
 } else {
   startNetwork();
 }
-

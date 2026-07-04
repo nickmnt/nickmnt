@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#0b1220" />
+    <meta name="theme-color" content="#0a0d12" />
     <meta
       name="description"
-      content="Full-stack .NET/C# developer in Canada with Genetec experience, React frontends, Azure CI/CD, microservices, and measurable build/test improvements."
+      content="Nick Moein — full-stack .NET developer at Genetec in Canada. C#, React, Azure CI/CD, cloud microservices, 50% faster builds, 1st-place hackathon."
     />
     <link rel="canonical" href="https://nickmnt.github.io/nickmnt/" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -24,6 +24,12 @@
       content="Full-stack .NET developer with production Genetec experience, cloud delivery, secure systems, and measurable CI/test improvements."
     />
     <title>Nick Moein | Full-Stack .NET Developer in Canada</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
     <script type="application/ld+json">
       {
@@ -31,6 +37,7 @@
         "@type": "Person",
         "name": "Nick Moein",
         "jobTitle": "Full-Stack .NET Developer",
+        "worksFor": { "@type": "Organization", "name": "Genetec" },
         "email": "mailto:nick.moeintaghavi@gmail.com",
         "address": {
           "@type": "PostalAddress",
@@ -42,10 +49,9 @@
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
     <svg aria-hidden="true" class="svg-sprite">
-      <symbol id="icon-arrow" viewBox="0 0 24 24">
-        <path d="M5 12h13m-5-5 5 5-5 5" />
-      </symbol>
       <symbol id="icon-github" viewBox="0 0 24 24">
         <path d="M12 2.8a9.2 9.2 0 0 0-2.9 17.9c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 0 1.6 1.1 1.6 1.1.9 1.5 2.4 1.1 2.9.8.1-.7.4-1.1.7-1.4-2.2-.3-4.6-1.1-4.6-5A3.9 3.9 0 0 1 7 8a3.6 3.6 0 0 1 .1-2.7s.8-.3 2.7 1a9.1 9.1 0 0 1 4.8 0c1.9-1.3 2.7-1 2.7-1a3.6 3.6 0 0 1 .1 2.7 3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .4.3.8 1 .8 2v2.5c0 .3.2.6.7.5A9.2 9.2 0 0 0 12 2.8z" />
       </symbol>
@@ -66,31 +72,23 @@
         <path d="M7 17 17 7" />
         <path d="M9 7h8v8" />
       </symbol>
-      <symbol id="icon-briefcase" viewBox="0 0 24 24">
-        <path d="M4 8h16v11H4z" />
-        <path d="M9 8V5h6v3" />
-        <path d="M4 12h16" />
+      <symbol id="icon-file" viewBox="0 0 24 24">
+        <path d="M6 3h8l4 4v14H6z" />
+        <path d="M14 3v4h4" />
+        <path d="M9 12h6" />
+        <path d="M9 16h6" />
       </symbol>
       <symbol id="icon-map" viewBox="0 0 24 24">
         <path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11z" />
         <path d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
       </symbol>
-      <symbol id="icon-code" viewBox="0 0 24 24">
-        <path d="m8 9-4 3 4 3" />
-        <path d="m16 9 4 3-4 3" />
-        <path d="m14 5-4 14" />
-      </symbol>
     </svg>
 
     <header class="site-header" data-header>
       <a class="brand" href="#home" aria-label="Nick Moein home">
-        <span class="brand-mark">NM</span>
+        <span class="brand-mark" aria-hidden="true">NM</span>
         <span class="brand-text">Nick Moein</span>
       </a>
-      <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-controls="site-nav" aria-expanded="false">
-        <span></span>
-        <span></span>
-      </button>
       <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
         <a href="#experience">Experience</a>
         <a href="#projects">Projects</a>
@@ -98,89 +96,83 @@
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
+      <div class="header-actions">
+        <a class="button button-primary button-sm header-cta" href="mailto:nick.moeintaghavi@gmail.com">
+          <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
+          <span>Email</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-controls="site-nav" aria-expanded="false">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </header>
 
-    <main>
+    <main id="main">
       <section class="hero" id="home" aria-labelledby="hero-title">
         <canvas id="system-canvas" aria-hidden="true"></canvas>
-        <div class="hero-grid" aria-hidden="true"></div>
         <div class="container hero-content">
-          <p class="eyebrow reveal">Nick Moein / Full-stack .NET developer in Canada</p>
+          <p class="status-chip reveal">
+            <span class="status-dot" aria-hidden="true"></span>
+            Software Developer II at Genetec &middot; Canada
+          </p>
           <h1 class="reveal" id="hero-title">
-            Full-stack .NET developer shipping secure cloud-backed systems with C#, React, Azure, and Kubernetes.
+            Full-stack .NET developer who ships <span class="accent-text">secure, production software</span>.
           </h1>
           <p class="hero-copy reveal">
-                        I am a Software Developer II at Genetec with production experience across C#, .NET, React, TypeScript,
-            Azure CI/CD, Kubernetes-oriented architecture, automated testing, and cloud microservices. I ship production features, improve delivery systems, mentor developers, and build prototypes that influence product plans.
+            C# / .NET on the backend, React / TypeScript on the frontend. I build access control features on
+            Genetec security products, tune Azure CI/CD, and deliver cloud microservices. Bilingual: English and French.
           </p>
 
           <div class="hero-actions reveal" aria-label="Primary links">
-            <a class="button button-secondary" href="mailto:nick.moeintaghavi@gmail.com">
+            <a class="button button-primary" href="mailto:nick.moeintaghavi@gmail.com">
               <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
               <span>Email Nick</span>
             </a>
-            <a class="button button-ghost" href="https://www.linkedin.com/in/nickmnt/" target="_blank" rel="noopener noreferrer">
-              <svg class="icon" aria-hidden="true"><use href="#icon-linkedin"></use></svg>
-              <span>LinkedIn</span>
+            <a class="button button-secondary" href="Nick-Moein-Resume.html">
+              <svg class="icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+              <span>View resume</span>
             </a>
             <a class="button button-ghost" href="https://github.com/nickmnt" target="_blank" rel="noopener noreferrer">
               <svg class="icon" aria-hidden="true"><use href="#icon-github"></use></svg>
               <span>GitHub</span>
             </a>
+            <a class="button button-ghost" href="https://www.linkedin.com/in/nickmnt/" target="_blank" rel="noopener noreferrer">
+              <svg class="icon" aria-hidden="true"><use href="#icon-linkedin"></use></svg>
+              <span>LinkedIn</span>
+            </a>
           </div>
 
-          <dl class="hero-meta reveal" aria-label="Professional summary">
-            <div>
-              <dt>Role</dt>
-              <dd>Software Developer II</dd>
-            </div>
-            <div>
-              <dt>Backend</dt>
-              <dd>C# / .NET</dd>
-            </div>
-            <div>
-              <dt>Frontend</dt>
-              <dd>React / TypeScript</dd>
-            </div>
-            <div>
-              <dt>Cloud</dt>
-              <dd>Azure, AWS, CI/CD</dd>
-            </div>
-          </dl>
+          <ul class="proof-strip reveal" aria-label="Measured results">
+            <li>
+              <strong>50<span class="unit">%</span></strong>
+              <span>faster Azure CI/CD builds</span>
+            </li>
+            <li>
+              <strong>50<span class="unit">%</span></strong>
+              <span>shorter automated test runs (up to)</span>
+            </li>
+            <li>
+              <strong>1<span class="unit">st</span></strong>
+              <span>place, company hackathon</span>
+            </li>
+            <li>
+              <strong>3.99<span class="unit">/4</span></strong>
+              <span>GPA, ranked 1st in class</span>
+            </li>
+          </ul>
         </div>
       </section>
 
-      <section class="section section-compact" id="experience" aria-labelledby="experience-title">
+      <section class="section" id="experience" aria-labelledby="experience-title">
         <div class="container">
           <div class="section-heading reveal">
             <p class="eyebrow">Experience</p>
-            <h2 id="experience-title">Production ownership across secure cloud-backed systems.</h2>
+            <h2 id="experience-title">Two years shipping Genetec security products.</h2>
             <p>
-              At Genetec, I ship platform features, tune build and test systems, review security risks, mentor developers, and work across teams when production software needs clear ownership.
+              Platform features, build and test systems, security reviews, mentoring, and cross-team delivery on
+              production software.
             </p>
-          </div>
-
-          <div class="impact-grid">
-            <article class="metric-card reveal">
-              <span>Current level</span>
-              <strong>SD II</strong>
-              <p>Software Developer II at Genetec, shipping production security platform work across teams.</p>
-            </article>
-            <article class="metric-card reveal">
-              <span>Product scope</span>
-              <strong>Full-stack</strong>
-              <p>Built backend services, REST APIs, React interfaces, and internal tools for production teams.</p>
-            </article>
-            <article class="metric-card reveal">
-              <span>Innovation</span>
-              <strong>1st</strong>
-              <p>Won a company hackathon with a project that changed product planning.</p>
-            </article>
-            <article class="metric-card reveal">
-              <span>Team growth</span>
-              <strong>Mentor</strong>
-              <p>Helped junior developers ramp up, write cleaner code, and ship with confidence.</p>
-            </article>
           </div>
 
           <div class="timeline" aria-label="Work experience">
@@ -191,15 +183,14 @@
                   <p class="role">Software Developer II</p>
                   <h3>Genetec, Canada</h3>
                 </div>
-                <time datetime="2026-01">Jan 2026 - Present</time>
+                <time datetime="2026-01">Jan 2026 &ndash; Present</time>
               </div>
               <ul>
-                <li>Built and maintained .NET Core access control applications with Scrum and Kanban teams on Genetec security products.</li>
-                <li>Cut Azure CI/CD build times by 50% and owned pipeline features and fixes.</li>
-                <li>Reduced automated test time by up to 50% by redesigning brittle test flows.</li>
-                <li>Mentored junior developers through ramp-up, code reviews, and delivery habits.</li>
-                <li>Worked across teams to ship backend services, REST APIs, and production software for security products.</li>
-                <li>Automated developer and QA workflows that slowed handoffs and issue triage.</li>
+                <li>Build and maintain .NET Core access control applications on Genetec security products, working in Scrum and Kanban teams.</li>
+                <li>Cut Azure CI/CD build times by <strong>50%</strong> and own pipeline features and fixes.</li>
+                <li>Reduced automated test time by <strong>up to 50%</strong> by redesigning brittle test flows.</li>
+                <li>Mentor junior developers through ramp-up, code reviews, and delivery habits.</li>
+                <li>Automate developer and QA workflows that slowed handoffs and issue triage.</li>
               </ul>
             </article>
 
@@ -210,11 +201,11 @@
                   <p class="role">Software Developer</p>
                   <h3>Genetec, Canada</h3>
                 </div>
-                <time datetime="2024-06">Jun 2024 - Jan 2026</time>
+                <time datetime="2024-06">Jun 2024 &ndash; Jan 2026</time>
               </div>
               <ul>
                 <li>Built full-stack product features with C#, .NET, React, TypeScript, and SQL.</li>
-                <li>Won 1st place in a company hackathon with a project that changed product roadmaps.</li>
+                <li>Won <strong>1st place</strong> in a company hackathon with a project that influenced product roadmaps.</li>
                 <li>Found and fixed security vulnerabilities during code reviews and assessments.</li>
                 <li>Refactored legacy components and expanded automated test coverage.</li>
                 <li>Worked with customer-facing teams to troubleshoot production issues and build internal tools.</li>
@@ -224,145 +215,153 @@
         </div>
       </section>
 
-      <section class="section" id="projects" aria-labelledby="projects-title">
+      <section class="section section-alt" id="projects" aria-labelledby="projects-title">
         <div class="container">
           <div class="section-heading reveal">
             <p class="eyebrow">Personal projects</p>
-            <h2 id="projects-title">Full-stack projects with real product flows.</h2>
+            <h2 id="projects-title">Full-stack builds with real product flows.</h2>
             <p>
-              These repositories cover authentication, messaging, ecommerce, publishing, persistence, and frontend state management.
+              Four public repositories covering authentication, realtime messaging, ecommerce, publishing, and
+              frontend state management. All code is on GitHub.
             </p>
           </div>
 
           <div class="project-grid">
             <article class="project-card reveal">
               <div class="project-topline">
-                <span>Matchmaking</span>
-                <a href="https://github.com/nickmnt/dating-app" target="_blank" rel="noopener noreferrer" aria-label="Open Realtime Matchmaking App on GitHub">
+                <span class="project-index" aria-hidden="true">01</span>
+                <span class="project-tag">Matchmaking</span>
+              </div>
+              <h3>
+                <a href="https://github.com/nickmnt/dating-app" target="_blank" rel="noopener noreferrer">
+                  Realtime Matchmaking App
                   <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
                 </a>
-              </div>
-              <h3><a href="https://github.com/nickmnt/dating-app" target="_blank" rel="noopener noreferrer">Realtime Matchmaking App</a></h3>
+              </h3>
               <p>Authentication flows, admin screens, matching, and SignalR messaging.</p>
-              <ul class="project-proof">
-                <li><strong>Stack:</strong> .NET, Angular, TypeScript, NgRx, SignalR, EF Core, SQL, xUnit.</li>
-              </ul>
               <div class="tag-list">
                 <span>.NET</span>
                 <span>Angular</span>
+                <span>NgRx</span>
                 <span>SignalR</span>
+                <span>EF Core</span>
+                <span>xUnit</span>
               </div>
             </article>
 
             <article class="project-card reveal">
               <div class="project-topline">
-                <span>Messaging</span>
-                <a href="https://github.com/nickmnt/react-talk" target="_blank" rel="noopener noreferrer" aria-label="Open Realtime Messaging Platform on GitHub">
+                <span class="project-index" aria-hidden="true">02</span>
+                <span class="project-tag">Messaging</span>
+              </div>
+              <h3>
+                <a href="https://github.com/nickmnt/react-talk" target="_blank" rel="noopener noreferrer">
+                  Realtime Messaging Platform
                   <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
                 </a>
-              </div>
-              <h3><a href="https://github.com/nickmnt/react-talk" target="_blank" rel="noopener noreferrer">Realtime Messaging Platform</a></h3>
+              </h3>
               <p>Chat, groups, contacts, saved messages, and realtime state.</p>
-              <ul class="project-proof">
-                <li><strong>Stack:</strong> .NET, React, TypeScript, MobX, SignalR, EF Core, SQL, Docker.</li>
-              </ul>
               <div class="tag-list">
+                <span>.NET</span>
                 <span>React</span>
                 <span>MobX</span>
                 <span>SignalR</span>
-              </div>
-            </article>
-
-            <article class="project-card reveal">
-              <div class="project-topline">
-                <span>Ecommerce</span>
-                <a href="https://github.com/nickmnt/shop" target="_blank" rel="noopener noreferrer" aria-label="Open Ecommerce Storefront on GitHub">
-                  <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
-                </a>
-              </div>
-              <h3><a href="https://github.com/nickmnt/shop" target="_blank" rel="noopener noreferrer">Ecommerce Storefront</a></h3>
-              <p>Catalog, cart, checkout, and order flow.</p>
-              <ul class="project-proof">
-                <li><strong>Stack:</strong> .NET, React, TypeScript, Redux, EF Core, SQL, Docker.</li>
-              </ul>
-              <div class="tag-list">
-                <span>React</span>
-                <span>Redux</span>
+                <span>EF Core</span>
                 <span>Docker</span>
               </div>
             </article>
 
             <article class="project-card reveal">
               <div class="project-topline">
-                <span>Publishing</span>
-                <a href="https://github.com/nickmnt/publishing_cms" target="_blank" rel="noopener noreferrer" aria-label="Open Publishing CMS on GitHub">
+                <span class="project-index" aria-hidden="true">03</span>
+                <span class="project-tag">Ecommerce</span>
+              </div>
+              <h3>
+                <a href="https://github.com/nickmnt/shop" target="_blank" rel="noopener noreferrer">
+                  Ecommerce Storefront
                   <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
                 </a>
-              </div>
-              <h3><a href="https://github.com/nickmnt/publishing_cms" target="_blank" rel="noopener noreferrer">Publishing CMS</a></h3>
-              <p>Articles, comments, rich editing, moderation, and user management.</p>
-              <ul class="project-proof">
-                <li><strong>Stack:</strong> .NET, React, TypeScript, MobX, EF Core, SQL, Docker.</li>
-              </ul>
+              </h3>
+              <p>Catalog, cart, checkout, and order flow.</p>
               <div class="tag-list">
+                <span>.NET</span>
+                <span>React</span>
+                <span>Redux</span>
+                <span>EF Core</span>
+                <span>SQL</span>
+                <span>Docker</span>
+              </div>
+            </article>
+
+            <article class="project-card reveal">
+              <div class="project-topline">
+                <span class="project-index" aria-hidden="true">04</span>
+                <span class="project-tag">Publishing</span>
+              </div>
+              <h3>
+                <a href="https://github.com/nickmnt/publishing_cms" target="_blank" rel="noopener noreferrer">
+                  Publishing CMS
+                  <svg class="icon" aria-hidden="true"><use href="#icon-external"></use></svg>
+                </a>
+              </h3>
+              <p>Articles, comments, rich editing, moderation, and user management.</p>
+              <div class="tag-list">
+                <span>.NET</span>
                 <span>React</span>
                 <span>MobX</span>
                 <span>EF Core</span>
+                <span>SQL</span>
+                <span>Docker</span>
               </div>
             </article>
           </div>
         </div>
       </section>
 
-      <section class="section skills-section" id="skills" aria-labelledby="skills-title">
+      <section class="section" id="skills" aria-labelledby="skills-title">
         <div class="container">
           <div class="section-heading reveal">
             <p class="eyebrow">Skills</p>
-            <h2 id="skills-title">The stack I use to ship web products.</h2>
+            <h2 id="skills-title">The stack I ship with.</h2>
           </div>
 
-          <div class="skills-grid">
-            <article class="skill-card reveal">
-              <div class="skill-icon"><svg class="icon" aria-hidden="true"><use href="#icon-code"></use></svg></div>
-              <h3>.NET Backend</h3>
-              <p>C#, .NET, .NET Core, ASP.NET Core, REST APIs, Entity Framework Core, microservices.</p>
-            </article>
-            <article class="skill-card reveal">
-              <div class="skill-icon"><svg class="icon" aria-hidden="true"><use href="#icon-code"></use></svg></div>
-              <h3>Frontend</h3>
-              <p>React, TypeScript, JavaScript, HTML, CSS, Angular, accessible UI.</p>
-            </article>
-            <article class="skill-card reveal">
-              <div class="skill-icon"><svg class="icon" aria-hidden="true"><use href="#icon-code"></use></svg></div>
-              <h3>Data</h3>
-              <p>SQL, T-SQL, MySQL, NoSQL, Redis, query design, persistence, caching.</p>
-            </article>
-            <article class="skill-card reveal">
-              <div class="skill-icon"><svg class="icon" aria-hidden="true"><use href="#icon-code"></use></svg></div>
-              <h3>Cloud and DevOps</h3>
-              <p>Azure, AWS, Docker, Kubernetes, Terraform, Jenkins, CI/CD pipelines.</p>
-            </article>
-            <article class="skill-card reveal">
-              <div class="skill-icon"><svg class="icon" aria-hidden="true"><use href="#icon-briefcase"></use></svg></div>
-              <h3>Engineering Practices</h3>
-              <p>Unit, integration, and E2E tests, code reviews, security assessment, performance work.</p>
-            </article>
-            <article class="skill-card reveal">
-              <div class="skill-icon"><svg class="icon" aria-hidden="true"><use href="#icon-briefcase"></use></svg></div>
-              <h3>Collaboration</h3>
-              <p>Problem solving, mentorship, prioritization, cross-team communication, Scrum, Kanban.</p>
-            </article>
-          </div>
+          <dl class="skills-list">
+            <div class="skills-row reveal">
+              <dt>Backend</dt>
+              <dd>C#, .NET, ASP.NET Core, REST APIs, Entity Framework Core, microservices</dd>
+            </div>
+            <div class="skills-row reveal">
+              <dt>Frontend</dt>
+              <dd>React, TypeScript, JavaScript, Angular, HTML, CSS, accessible UI</dd>
+            </div>
+            <div class="skills-row reveal">
+              <dt>Data</dt>
+              <dd>SQL, T-SQL, MySQL, NoSQL, Redis, query design, caching</dd>
+            </div>
+            <div class="skills-row reveal">
+              <dt>Cloud &amp; DevOps</dt>
+              <dd>Azure, AWS, Docker, Kubernetes, Terraform, Jenkins, CI/CD pipelines</dd>
+            </div>
+            <div class="skills-row reveal">
+              <dt>Quality</dt>
+              <dd>Unit, integration, and E2E testing, code reviews, security assessment, performance work</dd>
+            </div>
+            <div class="skills-row reveal">
+              <dt>Ways of working</dt>
+              <dd>Mentorship, prioritization, cross-team communication, Scrum, Kanban</dd>
+            </div>
+          </dl>
         </div>
       </section>
 
-      <section class="section" id="about" aria-labelledby="about-title">
+      <section class="section section-alt" id="about" aria-labelledby="about-title">
         <div class="container about-layout">
           <div class="section-heading reveal">
             <p class="eyebrow">About</p>
-            <h2 id="about-title">Bilingual developer with backend depth and product judgment.</h2>
+            <h2 id="about-title">Backend depth, product judgment, two languages.</h2>
             <p>
-              I build across the stack, with depth in .NET backend services, cloud delivery, automated testing, and practical frontend work. I work in Agile teams and communicate in English and French.
+              I build across the stack, with depth in .NET backend services, cloud delivery, and automated
+              testing, plus practical frontend work. I work in Agile teams and communicate in English and French.
             </p>
           </div>
 
@@ -370,10 +369,10 @@
             <div>
               <span>Education</span>
               <strong>B.S. Computer Science</strong>
-              <p>Ferdowsi University. Software Engineering specialization. Jul 2023.</p>
+              <p>Ferdowsi University, Software Engineering specialization. Jul 2023.</p>
             </div>
             <div>
-              <span>Academic signal</span>
+              <span>Academic record</span>
               <strong>3.99 / 4.00 GPA</strong>
               <p>Ranked 1st by GPA among peers.</p>
             </div>
@@ -387,53 +386,55 @@
       </section>
 
       <section class="section contact-section" id="contact" aria-labelledby="contact-title">
-        <div class="container contact-layout">
-          <div class="contact-copy reveal">
-            <p class="eyebrow">Contact</p>
-            <h2 id="contact-title">Open to product engineering teams.</h2>
-            <p>
-              Reach out about .NET, cloud, full-stack product development, automation, CI/CD, or backend services work.
-            </p>
-            <div class="contact-actions">
-              <a class="button button-primary" href="mailto:nick.moeintaghavi@gmail.com">
-                <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
-                <span>Email Nick</span>
-              </a>
-              <button class="button button-secondary" type="button" data-copy-email>
-                <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
-                <span>Copy Email</span>
-              </button>
+        <div class="container">
+          <div class="contact-panel reveal">
+            <div class="contact-copy">
+              <p class="eyebrow">Contact</p>
+              <h2 id="contact-title">Hiring for a .NET or full-stack team?</h2>
+              <p>
+                Email is the fastest way to reach me about full-stack .NET, React, cloud, backend, or platform
+                roles. I reply to recruiters and hiring managers directly.
+              </p>
+              <div class="contact-actions">
+                <a class="button button-primary" href="mailto:nick.moeintaghavi@gmail.com">
+                  <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
+                  <span>Email Nick</span>
+                </a>
+                <button class="button button-secondary" type="button" data-copy-email>
+                  <svg class="icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
+                  <span>Copy email</span>
+                </button>
+                <a class="button button-ghost" href="Nick-Moein-Resume.html">
+                  <svg class="icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+                  <span>View resume</span>
+                </a>
+              </div>
+              <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
+              <div class="contact-links" aria-label="Profile links">
+                <a href="https://github.com/nickmnt" target="_blank" rel="noopener noreferrer">
+                  <svg class="icon" aria-hidden="true"><use href="#icon-github"></use></svg>
+                  github.com/nickmnt
+                </a>
+                <a href="https://www.linkedin.com/in/nickmnt/" target="_blank" rel="noopener noreferrer">
+                  <svg class="icon" aria-hidden="true"><use href="#icon-linkedin"></use></svg>
+                  linkedin.com/in/nickmnt
+                </a>
+                <span>
+                  <svg class="icon" aria-hidden="true"><use href="#icon-map"></use></svg>
+                  Canada
+                </span>
+              </div>
             </div>
-            <div class="contact-links" aria-label="Profile links">
-              <a href="https://github.com/nickmnt" target="_blank" rel="noopener noreferrer">
-                <svg class="icon" aria-hidden="true"><use href="#icon-github"></use></svg>
-                github.com/nickmnt
-              </a>
-              <a href="https://www.linkedin.com/in/nickmnt/" target="_blank" rel="noopener noreferrer">
-                <svg class="icon" aria-hidden="true"><use href="#icon-linkedin"></use></svg>
-                linkedin.com/in/nickmnt
-              </a>
-              <span>
-                <svg class="icon" aria-hidden="true"><use href="#icon-map"></use></svg>
-                Canada
-              </span>
-            </div>
-            <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
-          </div>
 
-          <aside class="contact-card reveal" aria-label="Recruiter fit summary">
-            <p class="eyebrow">Fit check</p>
-            <h3>Best matches</h3>
-            <ul>
-              <li>Full-stack .NET, React, and TypeScript product roles.</li>
-              <li>Backend services, REST APIs, CI/CD, automation, testing, and cloud delivery.</li>
-              <li>Teams that value secure code reviews, mentoring, and practical ownership.</li>
-            </ul>
-            <a class="button button-secondary" href="https://www.linkedin.com/in/nickmnt/" target="_blank" rel="noopener noreferrer">
-              <svg class="icon" aria-hidden="true"><use href="#icon-linkedin"></use></svg>
-              <span>Open LinkedIn</span>
-            </a>
-          </aside>
+            <aside class="fit-card" aria-label="Recruiter fit summary">
+              <h3>Where I fit best</h3>
+              <ul>
+                <li>Full-stack .NET, React, and TypeScript product roles.</li>
+                <li>Backend services, REST APIs, CI/CD, automation, testing, and cloud delivery.</li>
+                <li>Teams that value secure code reviews, mentoring, and practical ownership.</li>
+              </ul>
+            </aside>
+          </div>
         </div>
       </section>
     </main>
@@ -441,7 +442,7 @@
     <footer class="site-footer">
       <div class="container footer-inner">
         <p>Nick Moein</p>
-        <p><span data-year></span> / Software Developer II / Canada</p>
+        <p><span data-year></span> &middot; Software Developer II &middot; Canada</p>
       </div>
     </footer>
 
