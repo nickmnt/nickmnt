@@ -9,7 +9,7 @@ I work mostly with C#, .NET, React, Angular, TypeScript, SQL, Docker, Kubernetes
 ## What I Work On
 
 - Backend APIs, data modeling, authentication, real-time workflows, and service architecture.
-- React and Angular frontends connected to practical .NET systems.
+- React frontend.
 - Testing, CI/CD, Dockerized services, and cloud-oriented deployment patterns.
 
 ## Personal Projects
