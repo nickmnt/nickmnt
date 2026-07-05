@@ -31,6 +31,17 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Lenis adds these classes when it takes over scrolling; native smooth
+   scrolling would fight its programmatic scrolls. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
 section[id] {
   scroll-margin-top: 6rem;
 }
@@ -53,7 +64,21 @@ body::before {
   background:
     radial-gradient(52rem 30rem at 82% -6%, rgba(45, 212, 191, 0.07), transparent 68%),
     radial-gradient(40rem 26rem at -8% 40%, rgba(45, 212, 191, 0.04), transparent 70%),
+    radial-gradient(48rem 30rem at 50% 112%, rgba(45, 212, 191, 0.045), transparent 72%),
     var(--bg);
+}
+
+/* Static film grain: keeps large dark surfaces from looking flat.
+   feTurbulence data-URI, so no asset file and zero runtime cost. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 img,
@@ -125,6 +150,8 @@ a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--accent-strong);
   outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(45, 212, 191, 0.16);
+  border-radius: var(--radius-s);
 }
 
 /* ---------- Typography ---------- */
@@ -145,12 +172,12 @@ h3 {
 }
 
 h1 {
-  max-width: 24ch;
-  margin-bottom: 1.2rem;
-  font-size: clamp(2.35rem, 1.4rem + 3.6vw, 4rem);
+  max-width: 20ch;
+  margin-bottom: 1.4rem;
+  font-size: clamp(2.6rem, 1.35rem + 4.6vw, 5.2rem);
   font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
   text-wrap: balance;
 }
 
@@ -165,10 +192,10 @@ h1 {
 .section-heading h2,
 .contact-copy h2 {
   margin-bottom: 0.9rem;
-  font-size: clamp(1.6rem, 1.15rem + 1.7vw, 2.35rem);
+  font-size: clamp(1.9rem, 1.1rem + 2.6vw, 3.2rem);
   font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -0.02em;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 
@@ -210,7 +237,8 @@ h1 {
   border-radius: 14px;
   background: rgba(10, 13, 18, 0.78);
   backdrop-filter: blur(14px);
-  transition: border-color 200ms ease, background-color 200ms ease, box-shadow 200ms ease;
+  transition: border-color 200ms ease, background-color 200ms ease, box-shadow 200ms ease,
+    width 450ms var(--ease-out), padding 350ms var(--ease-out);
 }
 
 .site-header::after {
@@ -227,9 +255,13 @@ h1 {
   opacity: 0.9;
 }
 
+/* Scrolling condenses the header into a tighter floating dock. */
 .site-header.is-scrolled {
+  width: min(980px, calc(100% - 2rem));
+  padding: 0.45rem 0.45rem 0.45rem 0.7rem;
   border-color: var(--accent-line);
   background: rgba(10, 13, 18, 0.92);
+  backdrop-filter: blur(18px);
   box-shadow: 0 16px 44px rgba(0, 0, 0, 0.4);
 }
 
@@ -291,7 +323,24 @@ h1 {
 .site-nav a:focus-visible,
 .site-nav a.is-active {
   color: var(--text);
-  background: rgba(186, 196, 209, 0.09);
+  background-color: rgba(186, 196, 209, 0.09);
+}
+
+/* Desktop hover preview: a gradient underline sweeps in under links that
+   aren't already marked by the sliding indicator. */
+@media (min-width: 761px) {
+  .site-nav a {
+    background-image: linear-gradient(90deg, var(--accent), var(--accent-strong));
+    background-repeat: no-repeat;
+    background-position: 0.85rem calc(100% - 0.28rem);
+    background-size: 0% 2px;
+    transition: color 200ms ease, background-color 200ms ease, background-size 320ms var(--ease-out);
+  }
+
+  .site-nav a:hover:not(.is-active),
+  .site-nav a:focus-visible:not(.is-active) {
+    background-size: calc(100% - 1.7rem) 2px;
+  }
 }
 
 
@@ -443,6 +492,16 @@ h1 {
 .button.is-copied {
   border-color: var(--accent);
   color: var(--accent-strong);
+  animation: copied-ring 700ms ease-out;
+}
+
+@keyframes copied-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 16px rgba(45, 212, 191, 0);
+  }
 }
 
 .button.is-copied .icon {
@@ -628,6 +687,8 @@ h1 {
 
 .section {
   padding: 5.5rem 0;
+  /* Contain the ghost section numbers' negative z-index within the section. */
+  isolation: isolate;
 }
 
 .section-alt {
@@ -635,8 +696,27 @@ h1 {
 }
 
 .section-heading {
+  position: relative;
   max-width: 720px;
   margin-bottom: 2.6rem;
+}
+
+/* Ghost section numbers: oversized outlined figures floating behind each
+   heading; GSAP adds a scroll parallax drift when available. */
+.section-num {
+  position: absolute;
+  top: -2.4rem;
+  right: -0.5rem;
+  z-index: -1;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 3rem + 9vw, 10rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(45, 212, 191, 0.16);
+  pointer-events: none;
+  user-select: none;
 }
 
 .section-heading p,
@@ -678,17 +758,22 @@ h1 {
   position: relative;
   margin-left: 2.5rem;
   padding: 1.6rem 1.7rem;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius);
-  background: rgba(16, 21, 29, 0.6);
-  transition: border-color 240ms ease, background-color 240ms ease, transform 240ms var(--ease-out),
-    box-shadow 240ms ease;
+  /* Gradient border: surface fill clipped to padding-box, teal fade on border-box. */
+  background:
+    linear-gradient(rgba(16, 21, 29, 0.78), rgba(16, 21, 29, 0.78)) padding-box,
+    linear-gradient(160deg, rgba(45, 212, 191, 0.3), rgba(186, 196, 209, 0.08) 45%, rgba(45, 212, 191, 0.13)) border-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: transform 240ms var(--ease-out), box-shadow 240ms ease;
 }
 
 .experience-card:hover {
-  border-color: var(--accent-line);
+  background:
+    linear-gradient(rgba(18, 24, 33, 0.85), rgba(18, 24, 33, 0.85)) padding-box,
+    linear-gradient(160deg, rgba(45, 212, 191, 0.52), rgba(45, 212, 191, 0.15) 45%, rgba(45, 212, 191, 0.32)) border-box;
   transform: translateY(-3px);
-  box-shadow: var(--shadow-hover);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), var(--shadow-hover);
 }
 
 .experience-marker {
@@ -784,6 +869,7 @@ h1 {
 }
 
 .skills-row {
+  position: relative; /* anchors the pointer-tracking glow */
   display: grid;
   grid-template-columns: 12rem 1fr;
   gap: 1.5rem;
@@ -866,12 +952,16 @@ h1 {
 }
 
 .about-panel {
+  position: relative;
   display: grid;
   gap: 1rem;
   padding: 1.5rem;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius);
-  background: rgba(16, 21, 29, 0.6);
+  background:
+    linear-gradient(rgba(16, 21, 29, 0.78), rgba(16, 21, 29, 0.78)) padding-box,
+    linear-gradient(200deg, rgba(45, 212, 191, 0.3), rgba(186, 196, 209, 0.08) 45%, rgba(45, 212, 191, 0.13)) border-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .about-panel div {
@@ -934,11 +1024,23 @@ h1 {
 /* ---------- Contact ---------- */
 
 .contact-section {
+  position: relative;
   padding-bottom: 5.5rem;
+}
+
+/* Wide ambient glow behind the contact panel so the closing CTA feels lit. */
+.contact-section::before {
+  content: "";
+  position: absolute;
+  inset: -3rem 0 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(44rem 24rem at 50% 58%, rgba(45, 212, 191, 0.06), transparent 72%);
 }
 
 .contact-panel {
   position: relative;
+  z-index: 0; /* traps the ghost number's negative z-index above the panel background */
   overflow: hidden;
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
@@ -969,6 +1071,10 @@ h1 {
   }
 }
 
+.contact-copy {
+  position: relative; /* anchors the ghost section number */
+}
+
 .contact-actions {
   margin: 1.6rem 0 0.4rem;
 }
@@ -978,6 +1084,14 @@ h1 {
   margin: 0.6rem 0 0.6rem;
   color: var(--accent-strong);
   font-size: 0.92rem;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 250ms ease, transform 250ms var(--ease-out);
+}
+
+.copy-status.is-shown {
+  opacity: 1;
+  transform: none;
 }
 
 .contact-links {
@@ -995,7 +1109,16 @@ h1 {
 }
 
 .contact-links a {
-  transition: color 200ms ease, transform 200ms var(--ease-out);
+  background-image: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: color 200ms ease, transform 200ms var(--ease-out), background-size 320ms var(--ease-out);
+}
+
+.contact-links a:hover,
+.contact-links a:focus-visible {
+  background-size: 100% 1px;
 }
 
 .contact-links a .icon {
@@ -1014,18 +1137,24 @@ h1 {
 }
 
 .fit-card {
+  position: relative;
   align-self: start;
   padding: 1.4rem 1.5rem;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius);
-  background: rgba(10, 13, 18, 0.55);
-  transition: transform 240ms var(--ease-out), border-color 240ms ease, box-shadow 240ms ease;
+  background:
+    linear-gradient(rgba(10, 13, 18, 0.72), rgba(10, 13, 18, 0.72)) padding-box,
+    linear-gradient(160deg, rgba(45, 212, 191, 0.3), rgba(186, 196, 209, 0.08) 45%, rgba(45, 212, 191, 0.13)) border-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: transform 240ms var(--ease-out), box-shadow 240ms ease;
 }
 
 .fit-card:hover {
   transform: translateY(-3px);
-  border-color: var(--accent-line);
-  box-shadow: var(--shadow-soft);
+  background:
+    linear-gradient(rgba(12, 16, 22, 0.8), rgba(12, 16, 22, 0.8)) padding-box,
+    linear-gradient(160deg, rgba(45, 212, 191, 0.52), rgba(45, 212, 191, 0.15) 45%, rgba(45, 212, 191, 0.32)) border-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), var(--shadow-soft);
 }
 
 .fit-card h3 {
@@ -1171,7 +1300,7 @@ h1 {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transition: opacity 180ms ease, transform 180ms ease;
+    transition: opacity 200ms ease, transform 340ms var(--ease-spring);
   }
 
   /* The sliding indicator is desktop-only; the dropdown falls back to pill highlight. */
@@ -1288,6 +1417,124 @@ h1 {
   }
 }
 
+/* ---------- Motion enhancement (GSAP) ----------
+   .gsap-enhanced is added to <html> only when the GSAP CDN scripts loaded
+   and motion isn't reduced. Rules here hand ownership of an animation to
+   GSAP by switching off its CSS fallback, so the two never fight over the
+   same properties. */
+
+/* GSAP animates the indicator's transform/width; CSS keeps only the fade. */
+html.gsap-enhanced .nav-indicator {
+  transition: opacity 200ms ease;
+}
+
+html.gsap-enhanced .hero-enter,
+html.gsap-enhanced .section-heading.reveal,
+html.gsap-enhanced .about-panel.reveal {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition: none;
+}
+
+/* GSAP scrubs the timeline draw with scroll position via --line-scale. */
+html.gsap-enhanced.supports-reveal .timeline::before {
+  transform: scaleY(var(--line-scale, 0));
+  transform-origin: top;
+  transition: none;
+}
+
+/* GSAP cascades the chips per row; restore the plain hover transition. */
+html.gsap-enhanced.supports-reveal .skills-row .chip {
+  opacity: 1;
+  transform: none;
+  transition: border-color 200ms ease, background-color 200ms ease, color 200ms ease,
+    transform 200ms var(--ease-out);
+}
+
+/* Masked split text clips to the line box; tight display line-heights would
+   shear off descenders, so the masks get breathing room that negative
+   margins cancel out of the layout. */
+html.gsap-enhanced #hero-title > div,
+html.gsap-enhanced .section-heading h2 > div,
+html.gsap-enhanced .contact-copy h2 > div,
+.split-mask {
+  padding: 0.1em 0.06em 0.16em;
+  margin: -0.1em -0.06em -0.16em;
+}
+
+/* Split-text wrappers (SplitText or the hand-rolled fallback). */
+.split-mask {
+  display: inline-block;
+  overflow: clip;
+  vertical-align: bottom;
+}
+
+.split-word {
+  display: inline-block;
+}
+
+/* background-clip: text can't paint across split word wrappers, so each
+   word carries the gradient instead (it restarts per word, which reads
+   fine over a short phrase). */
+html.gsap-enhanced .accent-text {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent);
+}
+
+html.gsap-enhanced .accent-text .split-word {
+  background: linear-gradient(100deg, var(--accent), var(--accent-strong));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* text-wrap: balance re-flows once words become spans; keep wrapping
+   identical before and after the split so nothing shifts. */
+html.gsap-enhanced h1,
+html.gsap-enhanced .section-heading h2,
+html.gsap-enhanced .contact-copy h2 {
+  text-wrap: initial;
+}
+
+/* Magnetic buttons: GSAP owns their transform (lift baked into the magnet),
+   so the CSS hover lift is retired to avoid tug-of-war. */
+.button.is-magnetic:hover,
+.button.is-magnetic:focus-visible {
+  transform: none;
+}
+
+/* Pointer-tracking glow: a soft radial highlight follows the cursor across
+   cards. Coordinates come from JS as --mx/--my. */
+@media (hover: hover) and (pointer: fine) {
+  html.gsap-enhanced .experience-card::after,
+  html.gsap-enhanced .about-panel::after,
+  html.gsap-enhanced .fit-card::after,
+  html.gsap-enhanced .skills-row::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    background: radial-gradient(
+      320px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(45, 212, 191, 0.08),
+      transparent 65%
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms ease;
+  }
+
+  html.gsap-enhanced .experience-card:hover::after,
+  html.gsap-enhanced .about-panel:hover::after,
+  html.gsap-enhanced .fit-card:hover::after,
+  html.gsap-enhanced .skills-row:hover::after {
+    opacity: 1;
+  }
+}
+
 /* ---------- Reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1345,6 +1592,7 @@ h1 {
   }
 
   body::before,
+  body::after,
   .hero::after {
     display: none;
   }
