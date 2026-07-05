@@ -8,6 +8,7 @@ const copyEmailButton = document.querySelector("[data-copy-email]");
 const copyStatus = document.querySelector("[data-copy-status]");
 const hero = document.querySelector(".hero");
 const pointer = { x: 0, y: 0, active: false };
+const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 if (year) {
   year.textContent = new Date().getFullYear();
@@ -58,8 +59,100 @@ if (header && navToggle) {
 navLinks.forEach((link) => {
   link.addEventListener("click", () => {
     setNavOpen(false);
+    setActiveNavLink(link);
   });
 });
+
+/* ---------- Sliding nav indicator ---------- */
+
+const navIndicator = document.querySelector(".nav-indicator");
+let activeNavLink = null;
+
+function positionNavIndicator() {
+  if (!navIndicator) return;
+
+  if (!activeNavLink) {
+    navIndicator.style.opacity = "0";
+    return;
+  }
+
+  /* When appearing from hidden, jump into place instead of sweeping from x=0. */
+  const wasHidden = navIndicator.style.opacity !== "1";
+  if (wasHidden) {
+    navIndicator.style.transition = "none";
+  }
+
+  /* Inset by the link's own padding so the bar sits under the label. */
+  const inset = parseFloat(getComputedStyle(activeNavLink).paddingLeft) || 0;
+  navIndicator.style.opacity = "1";
+  navIndicator.style.width = `${Math.max(0, activeNavLink.offsetWidth - inset * 2)}px`;
+  navIndicator.style.transform = `translateX(${activeNavLink.offsetLeft + inset}px)`;
+
+  if (wasHidden) {
+    void navIndicator.offsetWidth;
+    navIndicator.style.transition = "";
+  }
+}
+
+function setActiveNavLink(link) {
+  navLinks.forEach((candidate) => {
+    candidate.classList.toggle("is-active", candidate === link);
+  });
+  activeNavLink = link || null;
+  positionNavIndicator();
+}
+
+window.addEventListener("resize", positionNavIndicator);
+
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(positionNavIndicator);
+}
+
+/* ---------- Hero entrance ---------- */
+
+/* Double rAF guarantees the hidden state paints once before the transition runs. */
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    document.body.classList.add("is-loaded");
+  });
+});
+
+/* ---------- Proof strip count-up ---------- */
+
+const proofStrip = document.querySelector(".proof-strip");
+const statValues = [...document.querySelectorAll(".proof-strip [data-count]")];
+
+function animateCount(element) {
+  const target = Number(element.dataset.count);
+  if (!Number.isFinite(target)) return;
+
+  const duration = 1200;
+  const start = performance.now();
+
+  function frame(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    element.textContent = String(Math.round(target * eased));
+    if (t < 1) requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+}
+
+if ("IntersectionObserver" in window && proofStrip && statValues.length > 0 && !reducedMotion) {
+  const statObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        statValues.forEach(animateCount);
+        statObserver.disconnect();
+      });
+    },
+    { threshold: 0.4 }
+  );
+
+  statObserver.observe(proofStrip);
+}
 
 /* ---------- Copy email ---------- */
 
@@ -67,11 +160,14 @@ if (copyEmailButton) {
   copyEmailButton.addEventListener("click", async (event) => {
     const button = event.currentTarget;
     const label = button.querySelector("span");
+    const iconUse = button.querySelector("use");
     const previous = label ? label.textContent : "";
 
     try {
       await navigator.clipboard.writeText(email);
       if (label) label.textContent = "Copied";
+      if (iconUse) iconUse.setAttribute("href", "#icon-check");
+      button.classList.add("is-copied");
       if (copyStatus) copyStatus.textContent = "Email copied to clipboard.";
     } catch {
       if (label) label.textContent = email;
@@ -80,6 +176,8 @@ if (copyEmailButton) {
 
     window.setTimeout(() => {
       if (label) label.textContent = previous;
+      if (iconUse) iconUse.setAttribute("href", "#icon-copy");
+      button.classList.remove("is-copied");
       if (copyStatus) copyStatus.textContent = "";
     }, 1800);
   });
@@ -111,6 +209,18 @@ if ("IntersectionObserver" in window) {
     element.style.transitionDelay = `${Math.min(indexInGroup * 70, 350)}ms`;
     revealObserver.observe(element);
   });
+
+  /* Timeline line draw is keyed off its own is-visible state. */
+  document.querySelectorAll(".timeline").forEach((element) => {
+    revealObserver.observe(element);
+  });
+
+  /* Skill chips cascade within their row once it reveals. */
+  document.querySelectorAll(".skills-row dd").forEach((dd) => {
+    [...dd.querySelectorAll(".chip")].forEach((chip, index) => {
+      chip.style.setProperty("--chip-delay", `${index * 35}ms`);
+    });
+  });
 }
 
 /* ---------- Active nav highlighting ---------- */
@@ -120,9 +230,8 @@ if ("IntersectionObserver" in window && navLinks.length > 0) {
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        navLinks.forEach((link) => {
-          link.classList.toggle("is-active", link.getAttribute("href") === `#${entry.target.id}`);
-        });
+        const match = navLinks.find((link) => link.getAttribute("href") === `#${entry.target.id}`) || null;
+        setActiveNavLink(match);
       });
     },
     { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
@@ -135,7 +244,6 @@ if ("IntersectionObserver" in window && navLinks.length > 0) {
 
 const canvas = document.querySelector("#system-canvas");
 const context = canvas ? canvas.getContext("2d") : null;
-const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const LINK_DISTANCE = 150;
 const POINTER_RADIUS = 230;

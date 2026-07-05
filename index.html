@@ -68,6 +68,9 @@
         <path d="M8 8h11v11H8z" />
         <path d="M5 16V5h11" />
       </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path d="m5 13 4 4L19 7" />
+      </symbol>
       <symbol id="icon-file" viewBox="0 0 24 24">
         <path d="M6 3h8l4 4v14H6z" />
         <path d="M14 3v4h4" />
@@ -86,6 +89,7 @@
         <span class="brand-text">Nick Moein</span>
       </a>
       <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+        <span class="nav-indicator" aria-hidden="true"></span>
         <a href="#experience">Experience</a>
         <a href="#skills">Skills</a>
         <a href="#about">About</a>
@@ -107,15 +111,15 @@
       <section class="hero" id="home" aria-labelledby="hero-title">
         <canvas id="system-canvas" aria-hidden="true"></canvas>
         <div class="container hero-content">
-          <h1 class="reveal" id="hero-title">
+          <h1 class="hero-enter" id="hero-title">
             Full-stack .NET developer who ships <span class="accent-text">secure, production software</span>.
           </h1>
-          <p class="hero-copy reveal">
+          <p class="hero-copy hero-enter">
             C# / .NET on the backend, React / TypeScript on the frontend. I build access control features on
             Genetec security products, tune Azure CI/CD, and deliver cloud microservices. Bilingual: English and French.
           </p>
 
-          <div class="hero-actions reveal">
+          <div class="hero-actions hero-enter">
             <a class="button button-primary" href="mailto:nick.moeintaghavi@gmail.com">
               <svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
               <span>Email Nick</span>
@@ -134,9 +138,9 @@
             </a>
           </div>
 
-          <ul class="proof-strip reveal" aria-label="Measured results">
+          <ul class="proof-strip hero-enter" aria-label="Measured results">
             <li>
-              <strong>80<span class="unit">%</span></strong>
+              <strong><span class="stat-value" data-count="80">80</span><span class="unit">%</span></strong>
               <span>less variable regression test volume</span>
             </li>
             <li>
@@ -144,11 +148,11 @@
               <span>place, company hackathon</span>
             </li>
             <li>
-              <strong><span class="unit">up to </span>50<span class="unit">%</span></strong>
+              <strong><span class="unit">up to </span><span class="stat-value" data-count="50">50</span><span class="unit">%</span></strong>
               <span>shorter automated test runs</span>
             </li>
             <li>
-              <strong>50<span class="unit">%</span></strong>
+              <strong><span class="stat-value" data-count="50">50</span><span class="unit">%</span></strong>
               <span>faster Azure CI/CD builds</span>
             </li>
           </ul>
@@ -217,27 +221,71 @@
           <dl class="skills-list">
             <div class="skills-row reveal">
               <dt>Backend</dt>
-              <dd>C#, .NET, ASP.NET Core, REST APIs, Entity Framework Core, microservices</dd>
+              <dd>
+                <span class="chip">C#</span>
+                <span class="chip">.NET</span>
+                <span class="chip">ASP.NET Core</span>
+                <span class="chip">REST APIs</span>
+                <span class="chip">Entity Framework Core</span>
+                <span class="chip">Microservices</span>
+              </dd>
             </div>
             <div class="skills-row reveal">
               <dt>Frontend</dt>
-              <dd>React, TypeScript, JavaScript, Angular, HTML, CSS, accessible UI</dd>
+              <dd>
+                <span class="chip">React</span>
+                <span class="chip">TypeScript</span>
+                <span class="chip">JavaScript</span>
+                <span class="chip">Angular</span>
+                <span class="chip">HTML</span>
+                <span class="chip">CSS</span>
+                <span class="chip">Accessible UI</span>
+              </dd>
             </div>
             <div class="skills-row reveal">
               <dt>Data</dt>
-              <dd>SQL, T-SQL, MySQL, NoSQL, Redis, query design, caching</dd>
+              <dd>
+                <span class="chip">SQL</span>
+                <span class="chip">T-SQL</span>
+                <span class="chip">MySQL</span>
+                <span class="chip">NoSQL</span>
+                <span class="chip">Redis</span>
+                <span class="chip">Query design</span>
+                <span class="chip">Caching</span>
+              </dd>
             </div>
             <div class="skills-row reveal">
               <dt>Cloud &amp; DevOps</dt>
-              <dd>Azure, AWS, Docker, Kubernetes, Terraform, Jenkins, CI/CD pipelines</dd>
+              <dd>
+                <span class="chip">Azure</span>
+                <span class="chip">AWS</span>
+                <span class="chip">Docker</span>
+                <span class="chip">Kubernetes</span>
+                <span class="chip">Terraform</span>
+                <span class="chip">Jenkins</span>
+                <span class="chip">CI/CD pipelines</span>
+              </dd>
             </div>
             <div class="skills-row reveal">
               <dt>Quality</dt>
-              <dd>Unit, integration, and E2E testing, code reviews, security assessment, performance work</dd>
+              <dd>
+                <span class="chip">Unit testing</span>
+                <span class="chip">Integration testing</span>
+                <span class="chip">E2E testing</span>
+                <span class="chip">Code reviews</span>
+                <span class="chip">Security assessment</span>
+                <span class="chip">Performance work</span>
+              </dd>
             </div>
             <div class="skills-row reveal">
               <dt>Ways of working</dt>
-              <dd>Mentorship, prioritization, cross-team communication, Scrum, Kanban</dd>
+              <dd>
+                <span class="chip">Mentorship</span>
+                <span class="chip">Prioritization</span>
+                <span class="chip">Cross-team communication</span>
+                <span class="chip">Scrum</span>
+                <span class="chip">Kanban</span>
+              </dd>
             </div>
           </dl>
         </div>
@@ -254,7 +302,7 @@
             </p>
           </div>
 
-          <div class="about-panel reveal">
+          <div class="about-panel reveal" data-reveal="right">
             <div>
               <span>Education</span>
               <strong>B.S. Computer Science</strong>

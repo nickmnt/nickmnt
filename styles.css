@@ -17,6 +17,8 @@
   --radius-s: 8px;
   --max: 1120px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --shadow-soft: 0 8px 22px rgba(0, 0, 0, 0.28);
   --font-body: "Inter", ui-sans-serif, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --font-display: "Space Grotesk", var(--font-body);
 }
@@ -154,6 +156,10 @@ h1 {
 
 .accent-text {
   color: var(--accent);
+  background: linear-gradient(100deg, var(--accent), var(--accent-strong));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .section-heading h2,
@@ -250,9 +256,22 @@ h1 {
 }
 
 .site-nav {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.2rem;
+}
+
+.nav-indicator {
+  position: absolute;
+  left: 0;
+  bottom: 0.28rem;
+  height: 2px;
+  width: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 0;
+  transition: transform 320ms var(--ease-out), width 320ms var(--ease-out), opacity 200ms ease;
 }
 
 .site-nav a {
@@ -275,17 +294,6 @@ h1 {
   background: rgba(186, 196, 209, 0.09);
 }
 
-.site-nav a.is-active::after {
-  content: "";
-  position: absolute;
-  left: 0.85rem;
-  right: 0.85rem;
-  bottom: 0.28rem;
-  height: 2px;
-  border-radius: 999px;
-  background: var(--accent);
-  opacity: 0.9;
-}
 
 .header-actions {
   display: flex;
@@ -334,6 +342,8 @@ h1 {
 /* ---------- Buttons ---------- */
 
 .button {
+  position: relative;
+  overflow: hidden;
   min-height: 2.9rem;
   display: inline-flex;
   align-items: center;
@@ -354,6 +364,20 @@ h1 {
   transform: translateY(-2px);
 }
 
+.button:active {
+  transform: translateY(0);
+  transition-duration: 80ms;
+}
+
+.button .icon {
+  transition: transform 200ms var(--ease-out);
+}
+
+.button:hover .icon,
+.button:focus-visible .icon {
+  transform: translateX(2px);
+}
+
 .button-sm {
   min-height: 2.3rem;
   padding: 0 0.85rem;
@@ -365,6 +389,21 @@ h1 {
   color: var(--accent-ink);
   font-weight: 700;
   box-shadow: 0 8px 24px rgba(45, 212, 191, 0.22);
+}
+
+.button-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 32%, rgba(255, 255, 255, 0.38) 50%, transparent 68%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+
+.button-primary:hover::after,
+.button-primary:focus-visible::after {
+  transform: translateX(130%);
+  transition: transform 650ms ease;
 }
 
 .button-primary:hover,
@@ -384,6 +423,7 @@ h1 {
   border-color: var(--accent);
   background: rgba(45, 212, 191, 0.18);
   color: var(--accent-strong);
+  box-shadow: var(--shadow-soft);
 }
 
 .button-ghost {
@@ -397,6 +437,28 @@ h1 {
 .button-ghost:focus-visible {
   color: var(--text);
   background: rgba(186, 196, 209, 0.08);
+  box-shadow: var(--shadow-soft);
+}
+
+.button.is-copied {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.button.is-copied .icon {
+  animation: icon-pop 420ms var(--ease-spring);
+}
+
+@keyframes icon-pop {
+  0% {
+    transform: scale(0.4);
+  }
+  60% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* ---------- Hero ---------- */
@@ -479,6 +541,33 @@ h1 {
   gap: 0.75rem;
 }
 
+/* ---------- Hero entrance ---------- */
+
+.supports-reveal .hero-enter {
+  opacity: 0;
+  transform: translateY(26px);
+  filter: blur(6px);
+  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out), filter 700ms var(--ease-out);
+}
+
+.supports-reveal .is-loaded .hero-enter {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.hero-content > .hero-enter:nth-child(2) {
+  transition-delay: 120ms;
+}
+
+.hero-content > .hero-enter:nth-child(3) {
+  transition-delay: 240ms;
+}
+
+.hero-content > .hero-enter:nth-child(4) {
+  transition-delay: 360ms;
+}
+
 /* ---------- Proof strip ---------- */
 
 .proof-strip {
@@ -495,6 +584,15 @@ h1 {
 .proof-strip li {
   padding-left: 1rem;
   border-left: 2px solid var(--accent-line);
+  transition: border-color 240ms ease;
+}
+
+.proof-strip li:hover {
+  border-left-color: var(--accent);
+}
+
+.proof-strip li:hover strong {
+  color: var(--accent-strong);
 }
 
 .proof-strip strong {
@@ -506,6 +604,11 @@ h1 {
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--text);
+  transition: color 240ms ease;
+}
+
+.proof-strip .stat-value {
+  font-variant-numeric: tabular-nums;
 }
 
 .proof-strip .unit {
@@ -561,6 +664,16 @@ h1 {
   background: linear-gradient(to bottom, var(--accent), rgba(45, 212, 191, 0.2), transparent);
 }
 
+.supports-reveal .timeline::before {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1100ms var(--ease-out) 150ms;
+}
+
+.supports-reveal .timeline.is-visible::before {
+  transform: scaleY(1);
+}
+
 .experience-card {
   position: relative;
   margin-left: 2.5rem;
@@ -568,11 +681,14 @@ h1 {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(16, 21, 29, 0.6);
-  transition: border-color 240ms ease, background-color 240ms ease;
+  transition: border-color 240ms ease, background-color 240ms ease, transform 240ms var(--ease-out),
+    box-shadow 240ms ease;
 }
 
 .experience-card:hover {
   border-color: var(--accent-line);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
 }
 
 .experience-marker {
@@ -586,6 +702,25 @@ h1 {
   background: var(--bg);
   box-shadow: 0 0 0 5px rgba(45, 212, 191, 0.1);
   transition: box-shadow 240ms ease;
+}
+
+.supports-reveal .experience-card .experience-marker {
+  transform: scale(0);
+  transition: transform 500ms var(--ease-spring) 300ms, box-shadow 240ms ease;
+}
+
+.supports-reveal .experience-card.is-visible .experience-marker {
+  transform: scale(1);
+  animation: marker-pulse 1.1s ease-out 500ms 1;
+}
+
+@keyframes marker-pulse {
+  0% {
+    box-shadow: 0 0 0 5px rgba(45, 212, 191, 0.28);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(45, 212, 191, 0);
+  }
 }
 
 .experience-card:hover .experience-marker {
@@ -669,7 +804,52 @@ h1 {
 }
 
 .skills-row dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0.5rem;
   color: var(--body);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.32rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  line-height: 1.3;
+  transition: border-color 200ms ease, background-color 200ms ease, color 200ms ease,
+    transform 200ms var(--ease-out);
+}
+
+.chip:hover {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  transform: translateY(-2px);
+}
+
+/* Chips cascade in when their row reveals; per-chip delay set in JS. */
+.supports-reveal .skills-row .chip {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 420ms var(--ease-out), transform 420ms var(--ease-spring),
+    border-color 200ms ease, background-color 200ms ease, color 200ms ease;
+  transition-delay: var(--chip-delay, 0ms);
+}
+
+.supports-reveal .skills-row.is-visible .chip {
+  opacity: 1;
+  transform: none;
+}
+
+.supports-reveal .skills-row.is-visible .chip:hover {
+  transform: translateY(-2px);
+  transition-delay: 0ms;
 }
 
 /* ---------- About ---------- */
@@ -702,6 +882,30 @@ h1 {
 .about-panel div:last-child {
   padding-bottom: 0;
   border-bottom: 0;
+}
+
+/* Inner items stagger in after the panel itself reveals. */
+.supports-reveal .about-panel > div {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
+}
+
+.supports-reveal .about-panel.is-visible > div {
+  opacity: 1;
+  transform: none;
+}
+
+.supports-reveal .about-panel > div:nth-child(1) {
+  transition-delay: 150ms;
+}
+
+.supports-reveal .about-panel > div:nth-child(2) {
+  transition-delay: 260ms;
+}
+
+.supports-reveal .about-panel > div:nth-child(3) {
+  transition-delay: 370ms;
 }
 
 .about-panel span {
@@ -754,7 +958,15 @@ h1 {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-strong), transparent);
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong), transparent, var(--accent));
+  background-size: 250% 100%;
+  animation: border-shimmer 7s linear infinite;
+}
+
+@keyframes border-shimmer {
+  to {
+    background-position: -250% 0;
+  }
 }
 
 .contact-actions {
@@ -783,12 +995,22 @@ h1 {
 }
 
 .contact-links a {
+  transition: color 200ms ease, transform 200ms var(--ease-out);
+}
+
+.contact-links a .icon {
   transition: color 200ms ease;
 }
 
 .contact-links a:hover,
 .contact-links a:focus-visible {
   color: var(--text);
+  transform: translateX(2px);
+}
+
+.contact-links a:hover .icon,
+.contact-links a:focus-visible .icon {
+  color: var(--accent);
 }
 
 .fit-card {
@@ -797,6 +1019,13 @@ h1 {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(10, 13, 18, 0.55);
+  transition: transform 240ms var(--ease-out), border-color 240ms ease, box-shadow 240ms ease;
+}
+
+.fit-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-line);
+  box-shadow: var(--shadow-soft);
 }
 
 .fit-card h3 {
@@ -847,13 +1076,41 @@ h1 {
 
 .supports-reveal .reveal {
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 550ms var(--ease-out), transform 550ms var(--ease-out);
+  transform: translateY(20px);
+  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out), filter 600ms var(--ease-out);
+}
+
+.supports-reveal .reveal[data-reveal="left"] {
+  transform: translateX(-28px);
+}
+
+.supports-reveal .reveal[data-reveal="right"] {
+  transform: translateX(28px);
+}
+
+.supports-reveal .reveal[data-reveal="scale"] {
+  transform: scale(0.94);
+}
+
+.supports-reveal .section-heading.reveal {
+  filter: blur(6px);
 }
 
 .supports-reveal .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+  filter: none;
+}
+
+/* Eyebrow accent line draws in once its heading reveals. */
+.supports-reveal .section-heading.reveal .eyebrow::before {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 600ms var(--ease-out) 250ms;
+}
+
+.supports-reveal .section-heading.reveal.is-visible .eyebrow::before {
+  transform: scaleX(1);
 }
 
 /* ---------- Responsive ---------- */
@@ -906,7 +1163,7 @@ h1 {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 180ms ease, transform 180ms ease;
+    transition: opacity 180ms ease, transform 180ms ease, visibility 0s linear 180ms;
   }
 
   .nav-open .site-nav {
@@ -914,6 +1171,41 @@ h1 {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  /* The sliding indicator is desktop-only; the dropdown falls back to pill highlight. */
+  .nav-indicator {
+    display: none;
+  }
+
+  /* Links stagger in as the dropdown opens. */
+  .site-nav a {
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 220ms ease, transform 220ms var(--ease-out), color 200ms ease,
+      background-color 200ms ease;
+  }
+
+  .nav-open .site-nav a {
+    opacity: 1;
+    transform: none;
+  }
+
+  .nav-open .site-nav a:nth-of-type(1) {
+    transition-delay: 40ms;
+  }
+
+  .nav-open .site-nav a:nth-of-type(2) {
+    transition-delay: 90ms;
+  }
+
+  .nav-open .site-nav a:nth-of-type(3) {
+    transition-delay: 140ms;
+  }
+
+  .nav-open .site-nav a:nth-of-type(4) {
+    transition-delay: 190ms;
   }
 
   .hero {
@@ -1016,10 +1308,23 @@ h1 {
     animation: none;
   }
 
+  .contact-panel::before {
+    animation: none;
+  }
+
   .reveal,
-  .supports-reveal .reveal {
+  .supports-reveal .reveal,
+  .hero-enter,
+  .supports-reveal .hero-enter,
+  .supports-reveal .skills-row .chip,
+  .supports-reveal .about-panel > div,
+  .supports-reveal .experience-card .experience-marker,
+  .supports-reveal .section-heading.reveal .eyebrow::before,
+  .supports-reveal .timeline::before {
     opacity: 1;
     transform: none;
+    filter: none;
+    animation: none;
   }
 }
 
@@ -1056,6 +1361,17 @@ h1 {
   .skills-row dt,
   .about-panel span {
     color: #0f766e;
+  }
+
+  .accent-text {
+    background: none;
+    -webkit-text-fill-color: initial;
+  }
+
+  .chip {
+    border-color: #d1d5db;
+    background: #ffffff;
+    color: #374151;
   }
 
   .hero-copy,
