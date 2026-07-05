@@ -693,6 +693,10 @@ let auroraEpoch = 0;
 let auroraLastTime = 0;
 const auroraMouse = { x: 0.5, y: 0.5, level: 0 };
 const auroraClick = { x: 0.5, y: 0.5, start: -1 };
+/* Flow phase integrated on the CPU (starts mid-flow). Multiplying raw time
+   by a scroll-varying speed inside the shader made the whole field jump the
+   moment scrolling started; integration keeps speed changes continuous. */
+let auroraPhase = 2.1;
 
 const AURORA_VERTEX = `
 attribute vec2 a_position;
@@ -705,10 +709,12 @@ precision highp float;
 
 uniform vec2 u_resolution;
 uniform float u_time;
+uniform float u_phase;
 uniform vec2 u_mouse;
 uniform float u_mouse_level;
 uniform float u_energy;
 uniform vec3 u_click;
+uniform float u_scroll;
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -740,14 +746,20 @@ float fbm(vec2 p) {
 void main() {
   vec2 uv = gl_FragCoord.xy / u_resolution;
   float aspect = u_resolution.x / u_resolution.y;
-  vec2 st = vec2(uv.x * aspect, uv.y);
+
+  /* screenSt: fixed to the viewport (mouse light, click ripple, vignette).
+     st: "sky" space, offset by scroll so the aurora trails the page and
+     reads as a distant layer instead of cropping at the fold. */
+  vec2 screenSt = vec2(uv.x * aspect, uv.y);
+  vec2 st = vec2(screenSt.x, screenSt.y + u_scroll * 0.3);
+
   vec2 p = st * 1.6;
-  float t = u_time * (0.05 + u_energy * 0.05);
+  float t = u_phase;
 
   /* Click ripple: an expanding ring that warps the noise field. */
   float ring = 0.0;
   if (u_click.z >= 0.0 && u_click.z < 3.5) {
-    float clickDist = distance(st, vec2(u_click.x * aspect, u_click.y));
+    float clickDist = distance(screenSt, vec2(u_click.x * aspect, u_click.y));
     float band = clickDist - u_click.z * 0.55;
     ring = exp(-u_click.z * 1.7) * exp(-band * band * 70.0);
   }
@@ -761,31 +773,52 @@ void main() {
   );
   float f = fbm(p + 2.4 * r);
 
-  vec3 abyss = vec3(0.016, 0.024, 0.038);
-  vec3 indigo = vec3(0.055, 0.09, 0.16);
-  vec3 sea = vec3(0.03, 0.135, 0.14);
+  vec3 abyss = vec3(0.012, 0.02, 0.034);
+  vec3 indigo = vec3(0.05, 0.085, 0.16);
+  vec3 sea = vec3(0.028, 0.125, 0.135);
   vec3 teal = vec3(0.08, 0.34, 0.31);
   vec3 mint = vec3(0.176, 0.831, 0.749);
+  vec3 violet = vec3(0.3, 0.21, 0.52);
 
   vec3 color = mix(abyss, indigo, smoothstep(0.15, 0.95, q.y) * 0.8);
-  color = mix(color, sea, smoothstep(0.3, 0.9, f));
-  color = mix(color, teal, smoothstep(0.55, 1.0, f) * 0.8);
+  color = mix(color, sea, smoothstep(0.3, 0.9, f) * 0.9);
+  color = mix(color, teal, smoothstep(0.55, 1.0, f) * 0.55);
+
+  /* Aurora curtain: a waving band with a sharp lower edge that blooms
+     upward, mint at the base shading to violet at altitude (real auroras
+     go green low, purple high). Scroll energy makes it flare. */
+  float bandY = 0.56 + 0.21 * fbm(vec2(st.x * 1.2 + q.x, t * 0.5));
+  float dy = st.y - bandY;
+  float curtain = smoothstep(-0.045, 0.05, dy) * exp(-max(dy, 0.0) * 3.0);
+
+  /* Vertical ray structure drifting slowly sideways. */
+  float rays = fbm(vec2(st.x * 3.4 - q.y * 1.8, t * 0.55));
+  rays = 0.25 + 0.75 * smoothstep(0.32, 0.85, rays);
+
+  vec3 auroraColor = mix(mint, violet, clamp(dy * 2.4, 0.0, 1.0));
+  color += auroraColor * curtain * rays * (0.56 + u_energy * 0.2);
+
+  /* Atmospheric backscatter hugging the curtain's lower edge. */
+  color += teal * exp(-abs(dy + 0.05) * 9.0) * 0.14;
 
   /* Fine bright filaments threaded through the flow; brighten with scroll. */
   float filaments = smoothstep(0.72, 0.98, fbm(p * 2.1 + r * 1.6 + vec2(0.0, t * 0.8)));
-  color += mint * filaments * (0.16 + u_energy * 0.12);
+  color += mint * filaments * (0.14 + u_energy * 0.12);
 
   /* Standing glow upper-right, where the overlay leaves the art exposed. */
-  float beacon = exp(-distance(st, vec2(aspect * 0.74, 0.6)) * 1.9);
-  color += teal * beacon * (0.45 + 0.12 * sin(u_time * 0.4));
-  color += mint * beacon * beacon * 0.16;
+  float beacon = exp(-distance(st, vec2(aspect * 0.74, 0.62)) * 2.1);
+  color += teal * beacon * (0.36 + 0.1 * sin(u_time * 0.4));
+  color += mint * beacon * beacon * 0.14;
 
   /* Soft light trailing the cursor. */
-  float mouseDist = distance(st, vec2(u_mouse.x * aspect, u_mouse.y));
+  float mouseDist = distance(screenSt, vec2(u_mouse.x * aspect, u_mouse.y));
   color += teal * exp(-mouseDist * 2.2) * 0.35 * u_mouse_level;
   color += mint * exp(-mouseDist * 5.0) * 0.12 * u_mouse_level;
 
   color += mint * ring * 0.7;
+
+  /* Leaving the hero dims the sky so the exit feels graded, not cropped. */
+  color *= 1.0 - u_scroll * 0.45;
 
   /* Vignette, then a hair of dither to stop banding on the dark ramps. */
   float vignette = smoothstep(1.5, 0.35, distance(uv, vec2(0.5, 0.55)));
@@ -851,10 +884,12 @@ function setupAurora() {
   auroraUniforms = {
     resolution: gl.getUniformLocation(program, "u_resolution"),
     time: gl.getUniformLocation(program, "u_time"),
+    phase: gl.getUniformLocation(program, "u_phase"),
     mouse: gl.getUniformLocation(program, "u_mouse"),
     mouseLevel: gl.getUniformLocation(program, "u_mouse_level"),
     energy: gl.getUniformLocation(program, "u_energy"),
     click: gl.getUniformLocation(program, "u_click"),
+    scroll: gl.getUniformLocation(program, "u_scroll"),
   };
 
   auroraGL = gl;
@@ -884,12 +919,22 @@ function renderAurora(now) {
 
   const clickAge = auroraClick.start < 0 ? -1 : Math.min(10, (now - auroraClick.start) / 1000);
 
+  /* Scroll energy speeds the flow up smoothly (integrated, never jumps). */
+  auroraPhase += ((dt * 16.667) / 1000) * (0.05 + scrollEnergy * 0.05);
+
+  /* 0 at the top of the page, 1 once the hero has scrolled past. */
+  const heroScroll = hero
+    ? Math.min(1, Math.max(0, window.scrollY / Math.max(1, hero.offsetHeight)))
+    : 0;
+
   gl.uniform2f(auroraUniforms.resolution, auroraCanvas.width, auroraCanvas.height);
   gl.uniform1f(auroraUniforms.time, (now - auroraEpoch) / 1000);
+  gl.uniform1f(auroraUniforms.phase, auroraPhase);
   gl.uniform2f(auroraUniforms.mouse, auroraMouse.x, auroraMouse.y);
   gl.uniform1f(auroraUniforms.mouseLevel, auroraMouse.level);
   gl.uniform1f(auroraUniforms.energy, scrollEnergy);
   gl.uniform3f(auroraUniforms.click, auroraClick.x, auroraClick.y, clickAge);
+  gl.uniform1f(auroraUniforms.scroll, heroScroll);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 
   if (auroraRunning && !reducedMotion) {
