@@ -38,6 +38,11 @@ function setPageProgress() {
   const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
   header.style.setProperty("--scroll-progress", progress.toFixed(4));
   header.classList.toggle("is-scrolled", window.scrollY > 12);
+
+  /* Drives the ambient background glow drift (body::before). */
+  if (!reducedMotion) {
+    document.documentElement.style.setProperty("--drift", progress.toFixed(4));
+  }
 }
 
 window.addEventListener("scroll", setPageProgress, { passive: true });

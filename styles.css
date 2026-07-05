@@ -56,15 +56,17 @@ body {
   overflow-x: hidden;
 }
 
+/* Ambient glows drift slowly with scroll progress (--drift, 0..1 set in JS)
+   so the backdrop feels alive without competing with the content. */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(52rem 30rem at 82% -6%, rgba(45, 212, 191, 0.07), transparent 68%),
-    radial-gradient(40rem 26rem at -8% 40%, rgba(45, 212, 191, 0.04), transparent 70%),
-    radial-gradient(48rem 30rem at 50% 112%, rgba(45, 212, 191, 0.045), transparent 72%),
+    radial-gradient(52rem 30rem at calc(82% - 14% * var(--drift, 0)) calc(-6% + 18% * var(--drift, 0)), rgba(45, 212, 191, 0.07), transparent 68%),
+    radial-gradient(40rem 26rem at calc(-8% + 12% * var(--drift, 0)) calc(40% + 12% * var(--drift, 0)), rgba(45, 212, 191, 0.04), transparent 70%),
+    radial-gradient(48rem 30rem at 50% calc(112% - 16% * var(--drift, 0)), rgba(45, 212, 191, 0.045), transparent 72%),
     var(--bg);
 }
 
@@ -530,7 +532,6 @@ h1 {
   display: flex;
   align-items: center;
   isolation: isolate;
-  overflow: hidden;
   padding: 7rem 0 3.4rem;
 }
 
@@ -541,7 +542,6 @@ h1 {
   inset: 0;
   z-index: -3;
   width: 100%;
-  height: 100%;
 }
 
 #system-canvas {
@@ -549,7 +549,17 @@ h1 {
   inset: 0;
   z-index: -2;
   width: 100%;
-  height: 100%;
+}
+
+/* Canvases AND the legibility overlay overshoot the hero together and
+   dissolve via the same mask, so aurora, stars, and their shading all fade
+   into the Experience section as one layer — no edge can show. */
+#aurora-canvas,
+#system-canvas,
+.hero::after {
+  height: calc(100% + 18rem);
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 97%);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 97%);
 }
 
 .hero::after {
@@ -557,9 +567,7 @@ h1 {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background:
-    linear-gradient(90deg, rgba(10, 13, 18, 0.96) 0%, rgba(10, 13, 18, 0.78) 50%, rgba(10, 13, 18, 0.18) 100%),
-    linear-gradient(to top, var(--bg) 0%, transparent 48%);
+  background: linear-gradient(90deg, rgba(10, 13, 18, 0.96) 0%, rgba(10, 13, 18, 0.78) 50%, rgba(10, 13, 18, 0.18) 100%);
 }
 
 .status-chip {
