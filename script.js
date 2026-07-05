@@ -13,12 +13,12 @@ const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-m
 /* GSAP + Lenis load from a CDN and are optional: when absent (or motion is
    reduced) every feature below falls back to the CSS/IntersectionObserver
    behavior, so the site never depends on them. */
-const hasGsap = typeof window.gsap !== "undefined";
-const hasScrollTrigger = hasGsap && typeof window.ScrollTrigger !== "undefined";
-const hasSplitText = hasGsap && typeof window.SplitText !== "undefined";
-const hasLenis = typeof window.Lenis !== "undefined";
+let hasGsap = typeof window.gsap !== "undefined";
+let hasScrollTrigger = hasGsap && typeof window.ScrollTrigger !== "undefined";
+let hasSplitText = hasGsap && typeof window.SplitText !== "undefined";
+let hasLenis = typeof window.Lenis !== "undefined";
 const finePointer = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-const motionEnhanced = hasGsap && hasScrollTrigger && !reducedMotion;
+let motionEnhanced = hasGsap && hasScrollTrigger && !reducedMotion;
 
 /* Added before first paint so .gsap-enhanced CSS applies from the start. */
 if (motionEnhanced) {
@@ -45,7 +45,17 @@ function setPageProgress() {
   }
 }
 
-window.addEventListener("scroll", setPageProgress, { passive: true });
+let progressFrame = 0;
+
+function schedulePageProgress() {
+  if (progressFrame) return;
+  progressFrame = requestAnimationFrame(() => {
+    progressFrame = 0;
+    setPageProgress();
+  });
+}
+
+window.addEventListener("scroll", schedulePageProgress, { passive: true });
 setPageProgress();
 
 /* ---------- Mobile navigation ---------- */
@@ -145,7 +155,17 @@ function setActiveNavLink(link) {
   positionNavIndicator();
 }
 
-window.addEventListener("resize", positionNavIndicator);
+let navIndicatorFrame = 0;
+
+function scheduleNavIndicator() {
+  if (navIndicatorFrame) return;
+  navIndicatorFrame = requestAnimationFrame(() => {
+    navIndicatorFrame = 0;
+    positionNavIndicator();
+  });
+}
+
+window.addEventListener("resize", scheduleNavIndicator);
 
 if (document.fonts && document.fonts.ready) {
   document.fonts.ready.then(positionNavIndicator);
@@ -454,7 +474,7 @@ function buildHeroShade() {
 function resizeCanvas() {
   if (!canvas || !context) return;
 
-  const ratio = Math.min(window.devicePixelRatio || 1, 2);
+  const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
   const previousWidth = width;
   width = canvas.offsetWidth;
   height = canvas.offsetHeight;
@@ -1210,7 +1230,9 @@ if (hero && !reducedMotion) {
   });
 }
 
-window.addEventListener("resize", () => {
+let canvasResizeFrame = 0;
+
+function resizeHeroCanvases() {
   const shouldRestart = networkRunning;
 
   stopNetwork();
@@ -1219,7 +1241,17 @@ window.addEventListener("resize", () => {
   if (shouldRestart) {
     startNetwork();
   }
-});
+}
+
+function scheduleHeroCanvasResize() {
+  if (canvasResizeFrame) return;
+  canvasResizeFrame = requestAnimationFrame(() => {
+    canvasResizeFrame = 0;
+    resizeHeroCanvases();
+  });
+}
+
+window.addEventListener("resize", scheduleHeroCanvasResize);
 
 document.addEventListener("visibilitychange", () => {
   stopNetwork();
@@ -1232,9 +1264,11 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-resizeCanvas();
-setupAurora();
-resizeAurora();
+function initHeroCanvases() {
+  resizeCanvas();
+  setupAurora();
+  resizeAurora();
+}
 
 if ("IntersectionObserver" in window && hero) {
   const heroCanvasObserver = new IntersectionObserver(
@@ -1243,7 +1277,7 @@ if ("IntersectionObserver" in window && hero) {
         heroInView = entry.isIntersecting;
 
         if (entry.isIntersecting && !document.hidden) {
-          resizeCanvas();
+          initHeroCanvases();
           startNetwork();
           startAurora();
         } else {
@@ -1257,6 +1291,7 @@ if ("IntersectionObserver" in window && hero) {
 
   heroCanvasObserver.observe(hero);
 } else {
+  initHeroCanvases();
   startNetwork();
   startAurora();
 }
@@ -1639,7 +1674,11 @@ function initMotion() {
   ScrollTrigger.config({ ignoreMobileResize: true });
 
   initSmoothScroll();
-  initHeroIntro();
+  if (!document.body.classList.contains("is-loaded")) {
+    initHeroIntro();
+  } else {
+    heroIntroStarted = true;
+  }
   initHeroScrollExit();
   initSectionHeadings();
   initSectionNumbers();
@@ -1650,6 +1689,84 @@ function initMotion() {
   initCardGlow();
 }
 
+const motionScriptUrls = {
+  gsap: "https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js",
+  scrollTrigger: "https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js",
+  splitText: "https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js",
+  lenis: "https://cdn.jsdelivr.net/npm/lenis@1.3.25/dist/lenis.min.js",
+};
+
+let motionLoadStarted = false;
+
+function preconnectMotionHost() {
+  if (document.querySelector('link[href="https://cdn.jsdelivr.net"]')) return;
+
+  const link = document.createElement("link");
+  link.rel = "preconnect";
+  link.href = "https://cdn.jsdelivr.net";
+  link.crossOrigin = "anonymous";
+  document.head.appendChild(link);
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+async function loadMotionEnhancements() {
+  if (motionLoadStarted || reducedMotion) return;
+  motionLoadStarted = true;
+  preconnectMotionHost();
+
+  try {
+    await loadScript(motionScriptUrls.gsap);
+    await Promise.all([
+      loadScript(motionScriptUrls.scrollTrigger),
+      loadScript(motionScriptUrls.splitText).catch(() => null),
+      loadScript(motionScriptUrls.lenis).catch(() => null),
+    ]);
+  } catch {
+    return;
+  }
+
+  hasGsap = typeof window.gsap !== "undefined";
+  hasScrollTrigger = hasGsap && typeof window.ScrollTrigger !== "undefined";
+  hasSplitText = hasGsap && typeof window.SplitText !== "undefined";
+  hasLenis = typeof window.Lenis !== "undefined";
+  motionEnhanced = hasGsap && hasScrollTrigger && !reducedMotion;
+
+  if (!motionEnhanced) return;
+  document.documentElement.classList.add("gsap-enhanced");
+  initMotion();
+}
+
+function scheduleMotionEnhancements() {
+  if (reducedMotion) return;
+
+  const loadSoon = () => loadMotionEnhancements();
+  const loadWhenIdle = () => {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(loadSoon, { timeout: 1800 });
+    } else {
+      window.setTimeout(loadSoon, 900);
+    }
+  };
+
+  window.addEventListener("load", loadWhenIdle, { once: true });
+  ["pointerdown", "keydown", "wheel", "touchstart"].forEach((eventName) => {
+    window.addEventListener(eventName, loadSoon, { once: true, passive: true });
+  });
+}
+
 if (motionEnhanced) {
   initMotion();
+} else {
+  scheduleMotionEnhancements();
 }

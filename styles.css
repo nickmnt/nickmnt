@@ -776,6 +776,17 @@ h1 {
   isolation: isolate;
 }
 
+@supports (content-visibility: auto) {
+  .section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 760px;
+  }
+
+  .contact-section {
+    contain-intrinsic-size: auto 560px;
+  }
+}
+
 .section-alt {
   background: linear-gradient(to bottom, transparent, rgba(22, 29, 39, 0.4), transparent);
 }
@@ -1529,6 +1540,11 @@ html.gsap-enhanced .about-panel.reveal {
   transform: none;
   filter: none;
   transition: none;
+}
+
+html.gsap-enhanced .section {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
 }
 
 /* GSAP scrubs the timeline draw with scroll position via --line-scale. */
