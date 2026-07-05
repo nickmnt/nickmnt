@@ -187,8 +187,8 @@ h1 {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* Soft halo behind the gradient glyphs so the headline reads lit, not flat. */
-  filter: drop-shadow(0 0 22px rgba(45, 212, 191, 0.3));
+  filter: drop-shadow(0 0 0.4rem rgba(125, 240, 220, 0.3))
+    drop-shadow(0 0 1.15rem rgba(45, 212, 191, 0.16));
 }
 
 .section-heading h2,
