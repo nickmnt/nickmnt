@@ -307,19 +307,31 @@ const canvas = document.querySelector("#system-canvas");
 const context = canvas ? canvas.getContext("2d") : null;
 
 const LINK_DISTANCE = 150;
-const POINTER_RADIUS = 230;
-const POINTER_LINK_RADIUS = 190;
+/* Cursor lens: stateless render-space displacement — the field parts around
+   the pointer and springs back. Nothing feeds into velocity, so particles
+   can never gather or clump under a held cursor. */
+const LENS_RADIUS = 210;
+const LENS_STRENGTH = 26;
+/* Torch: existing links and stars near the cursor brighten, instead of the
+   old spoke lines that re-wired the constellation to the pointer. */
+const TORCH_RADIUS = 240;
 const WRAP_MARGIN = 40;
 
 let width = 0;
 let height = 0;
 let particles = [];
+let farStars = [];
 let pulses = [];
+let meteors = [];
 let animationFrame = 0;
 let networkRunning = false;
 let heroInView = !hero;
 let lastFrameTime = 0;
 let lastPulseTime = 0;
+let lastMeteorTime = 0;
+let nextMeteorDelay = 3200 + Math.random() * 3800;
+/* Lens strength eased 0..1 so the cursor effect fades in and out softly. */
+let lensLevel = 0;
 const smoothPointer = { x: -1, y: -1, inCanvas: false };
 
 /* Scroll "energy" (0..1) fed by Lenis while smooth-scrolling; stays 0 when
@@ -385,10 +397,29 @@ function createParticles() {
       bright: Math.random() < 0.14,
       renderX: 0,
       renderY: 0,
+      /* Eased lens offset so stars glide away from the cursor and glide
+         back, instead of snapping to the displaced position. */
+      lensX: 0,
+      lensY: 0,
     };
   });
 
+  /* Distant starfield behind the constellation: tiny, dim, unlinked, and
+     parallax-free, so the linked field reads as the near layer of a deep
+     sky instead of floating on a flat wash. */
+  const farCount = Math.round(count * 1.7);
+  farStars = Array.from({ length: farCount }, () => ({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    size: 0.35 + Math.random() * 0.75,
+    phase: Math.random() * Math.PI * 2,
+    twinkleSpeed: 0.2 + Math.random() * 0.55,
+    drift: 0.006 + Math.random() * 0.015,
+    violet: Math.random() < 0.12,
+  }));
+
   pulses = [];
+  meteors = [];
 }
 
 function resizeCanvas() {
@@ -440,6 +471,10 @@ function updatePointer(dt) {
 }
 
 function updateParticles(dt, time) {
+  /* Lens eases toward on/off so the parting appears and recovers softly. */
+  const lensTarget = smoothPointer.inCanvas && finePointer ? 1 : 0;
+  lensLevel += (lensTarget - lensLevel) * Math.min(1, 0.07 * dt);
+
   /* Subtle whole-field parallax from the cursor, scaled by depth. */
   const parallaxX = smoothPointer.inCanvas ? (smoothPointer.x / width - 0.5) * 18 : 0;
   const parallaxY = smoothPointer.inCanvas ? (smoothPointer.y / height - 0.5) * 12 : 0;
@@ -453,20 +488,6 @@ function updateParticles(dt, time) {
        network feels physically coupled to scrolling. */
     if (scrollEnergy > 0.001) {
       particle.vy -= scrollDirection * scrollEnergy * 0.02 * particle.z * dt;
-    }
-
-    if (smoothPointer.inCanvas) {
-      const dx = smoothPointer.x - particle.x;
-      const dy = smoothPointer.y - particle.y;
-      const distance = Math.hypot(dx, dy);
-
-      if (distance > 0.001 && distance < POINTER_RADIUS) {
-        /* Drawn softly toward the cursor; pushed back when too close so the
-           field orbits instead of clumping. */
-        const strength = distance < 48 ? -0.05 : 0.014 * (1 - distance / POINTER_RADIUS);
-        particle.vx += (dx / distance) * strength * particle.z * dt;
-        particle.vy += (dy / distance) * strength * particle.z * dt;
-      }
     }
 
     const speed = Math.hypot(particle.vx, particle.vy);
@@ -486,6 +507,31 @@ function updateParticles(dt, time) {
 
     particle.renderX = particle.x + parallaxX * particle.z;
     particle.renderY = particle.y + parallaxY * particle.z;
+
+    /* Lens: displacement lives in render space only (no velocity feedback,
+       so no gathering), and each star eases toward its displaced position
+       so it glides aside and drifts back instead of teleporting. */
+    let pushX = 0;
+    let pushY = 0;
+
+    if (lensLevel > 0.004) {
+      const dx = particle.renderX - smoothPointer.x;
+      const dy = particle.renderY - smoothPointer.y;
+      const distance = Math.hypot(dx, dy);
+
+      if (distance > 0.001 && distance < LENS_RADIUS) {
+        const falloff = 1 - distance / LENS_RADIUS;
+        const push = LENS_STRENGTH * falloff * falloff * lensLevel * (0.45 + 0.55 * particle.z);
+        pushX = (dx / distance) * push;
+        pushY = (dy / distance) * push;
+      }
+    }
+
+    const glide = Math.min(1, 0.07 * dt);
+    particle.lensX += (pushX - particle.lensX) * glide;
+    particle.lensY += (pushY - particle.lensY) * glide;
+    particle.renderX += particle.lensX;
+    particle.renderY += particle.lensY;
   });
 }
 
@@ -528,9 +574,31 @@ function drawAmbientWash() {
   context.fillRect(0, 0, width, height);
 }
 
+function drawFarStars(time, dt) {
+  farStars.forEach((star) => {
+    if (!reducedMotion) {
+      star.x += star.drift * dt;
+      if (star.x > width + 2) star.x = -2;
+    }
+
+    const twinkle = reducedMotion
+      ? 0.7
+      : 0.45 + 0.55 * Math.sin((time / 1000) * star.twinkleSpeed + star.phase);
+
+    context.globalAlpha = 0.34 * twinkle;
+    context.fillStyle = star.violet ? "rgba(196, 181, 253, 0.9)" : "rgba(186, 232, 228, 0.9)";
+    context.beginPath();
+    context.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+    context.fill();
+  });
+
+  context.globalAlpha = 1;
+}
+
 function drawLinks() {
   /* Links glow brighter while the page is being scrolled, then settle. */
   const energyBoost = 1 + scrollEnergy * 0.5;
+  const torchOn = lensLevel > 0.02;
 
   for (let i = 0; i < particles.length; i += 1) {
     const a = particles[i];
@@ -545,12 +613,30 @@ function drawLinks() {
       if (distance >= LINK_DISTANCE) continue;
 
       const depth = Math.min(a.z, b.z);
-      const alpha = Math.min(
+      let alpha = Math.min(
         0.85,
         Math.pow(1 - distance / LINK_DISTANCE, 1.4) * 0.5 * (0.4 + 0.6 * depth) * energyBoost
       );
-      context.strokeStyle = `rgba(45, 212, 191, ${alpha.toFixed(3)})`;
-      context.lineWidth = 0.5 + depth * 0.7;
+
+      /* Torch: links already in the constellation illuminate near the
+         cursor — it reveals the network rather than re-wiring it. */
+      let torch = 0;
+      if (torchOn) {
+        const midDist = Math.hypot(
+          (a.renderX + b.renderX) * 0.5 - smoothPointer.x,
+          (a.renderY + b.renderY) * 0.5 - smoothPointer.y
+        );
+        if (midDist < TORCH_RADIUS) {
+          torch = (1 - midDist / TORCH_RADIUS) * lensLevel;
+          alpha = Math.min(0.9, alpha + torch * torch * 0.45);
+        }
+      }
+
+      context.strokeStyle =
+        torch > 0.35
+          ? `rgba(125, 240, 220, ${alpha.toFixed(3)})`
+          : `rgba(45, 212, 191, ${alpha.toFixed(3)})`;
+      context.lineWidth = 0.5 + depth * 0.7 + torch * 0.4;
       context.beginPath();
       context.moveTo(a.renderX, a.renderY);
       context.lineTo(b.renderX, b.renderY);
@@ -559,35 +645,31 @@ function drawLinks() {
   }
 }
 
-function drawPointerLinks() {
-  if (!smoothPointer.inCanvas) return;
-
-  particles.forEach((particle) => {
-    const dx = particle.renderX - smoothPointer.x;
-    const dy = particle.renderY - smoothPointer.y;
-    const distance = Math.hypot(dx, dy);
-
-    if (distance < POINTER_LINK_RADIUS) {
-      const alpha = Math.pow(1 - distance / POINTER_LINK_RADIUS, 1.8) * 0.45;
-      context.strokeStyle = `rgba(125, 240, 220, ${alpha.toFixed(3)})`;
-      context.lineWidth = 0.8;
-      context.beginPath();
-      context.moveTo(particle.renderX, particle.renderY);
-      context.lineTo(smoothPointer.x, smoothPointer.y);
-      context.stroke();
-    }
-  });
-}
-
 function drawParticles(time) {
+  const torchOn = lensLevel > 0.02;
+
   particles.forEach((particle) => {
     const twinkle = reducedMotion
       ? 0.8
       : 0.6 + 0.4 * Math.sin((time / 1000) * particle.twinkleSpeed + particle.phase);
-    const alpha = (0.3 + 0.7 * particle.z) * twinkle;
-    const glowRadius = particle.size * (particle.bright ? 9 : 5.5);
 
-    context.globalAlpha = alpha * (particle.bright ? 0.85 : 0.5);
+    /* Stars caught in the cursor torch brighten and swell slightly. */
+    let torch = 0;
+    if (torchOn) {
+      const distance = Math.hypot(
+        particle.renderX - smoothPointer.x,
+        particle.renderY - smoothPointer.y
+      );
+      if (distance < TORCH_RADIUS) {
+        torch = (1 - distance / TORCH_RADIUS) * lensLevel;
+      }
+    }
+
+    const alpha = Math.min(1, (0.3 + 0.7 * particle.z) * twinkle * (1 + torch * 0.9));
+    const size = particle.size * (1 + torch * 0.3);
+    const glowRadius = size * (particle.bright ? 9 : 5.5) * (1 + torch * 0.4);
+
+    context.globalAlpha = Math.min(1, alpha * (particle.bright ? 0.85 : 0.5) * (1 + torch * 0.5));
     context.drawImage(
       glowSprite,
       particle.renderX - glowRadius,
@@ -598,9 +680,63 @@ function drawParticles(time) {
 
     context.globalAlpha = Math.min(1, alpha + 0.15);
     context.beginPath();
-    context.arc(particle.renderX, particle.renderY, particle.size, 0, Math.PI * 2);
+    context.arc(particle.renderX, particle.renderY, size, 0, Math.PI * 2);
     context.fillStyle = particle.bright ? "rgba(190, 255, 244, 0.95)" : "rgba(125, 240, 220, 0.8)";
     context.fill();
+  });
+
+  context.globalAlpha = 1;
+}
+
+/* Occasional meteor: a fast gradient streak with a glowing head, spawned
+   on a randomized 7-16s cadence. Two can coexist at most in practice. */
+function spawnMeteor(time) {
+  const direction = Math.random() < 0.5 ? 1 : -1;
+  const tilt = 0.35 + Math.random() * 0.3;
+  const speed = 6.5 + Math.random() * 3.5;
+
+  meteors.push({
+    x: width * (0.15 + Math.random() * 0.7),
+    y: height * (0.05 + Math.random() * 0.38),
+    vx: Math.cos(tilt) * speed * direction,
+    vy: Math.sin(tilt) * speed,
+    life: 0,
+    duration: 42 + Math.random() * 26,
+    trail: 90 + Math.random() * 70,
+  });
+
+  lastMeteorTime = time;
+  nextMeteorDelay = 7000 + Math.random() * 9000;
+}
+
+function drawMeteors(dt) {
+  meteors = meteors.filter((meteor) => meteor.life < meteor.duration);
+
+  meteors.forEach((meteor) => {
+    meteor.life += dt;
+    meteor.x += meteor.vx * dt;
+    meteor.y += meteor.vy * dt;
+
+    const t = Math.min(1, meteor.life / meteor.duration);
+    const fade = Math.sin(Math.PI * t);
+    const speed = Math.hypot(meteor.vx, meteor.vy);
+    const tailX = meteor.x - (meteor.vx / speed) * meteor.trail * fade;
+    const tailY = meteor.y - (meteor.vy / speed) * meteor.trail * fade;
+
+    const streak = context.createLinearGradient(meteor.x, meteor.y, tailX, tailY);
+    streak.addColorStop(0, `rgba(220, 255, 248, ${(0.85 * fade).toFixed(3)})`);
+    streak.addColorStop(0.4, `rgba(125, 240, 220, ${(0.3 * fade).toFixed(3)})`);
+    streak.addColorStop(1, "rgba(125, 240, 220, 0)");
+
+    context.strokeStyle = streak;
+    context.lineWidth = 1.3;
+    context.beginPath();
+    context.moveTo(meteor.x, meteor.y);
+    context.lineTo(tailX, tailY);
+    context.stroke();
+
+    context.globalAlpha = fade * 0.9;
+    context.drawImage(glowSprite, meteor.x - 7, meteor.y - 7, 14, 14);
   });
 
   context.globalAlpha = 1;
@@ -639,6 +775,7 @@ function drawNetwork(time) {
 
   context.clearRect(0, 0, width, height);
   drawAmbientWash();
+  drawFarStars(time, dt);
 
   if (!reducedMotion) {
     updatePointer(dt);
@@ -648,6 +785,10 @@ function drawNetwork(time) {
     if (networkRunning && time - lastPulseTime > 750 && pulses.length < 5) {
       spawnPulse(time);
     }
+
+    if (networkRunning && time - lastMeteorTime > nextMeteorDelay) {
+      spawnMeteor(time);
+    }
   } else {
     particles.forEach((particle) => {
       particle.renderX = particle.x;
@@ -656,11 +797,11 @@ function drawNetwork(time) {
   }
 
   drawLinks();
-  drawPointerLinks();
   drawParticles(time);
 
   if (!reducedMotion) {
     drawPulses(dt);
+    drawMeteors(dt);
   }
 
   if (!reducedMotion && networkRunning) {
@@ -1188,13 +1329,9 @@ function initHeroIntro() {
      buttons get transition: none so their CSS hover transition doesn't
      fight the tween; clearProps restores it afterwards. */
   gsap.set(title, { autoAlpha: 0 });
-  gsap.set(".status-chip", { autoAlpha: 0, y: 14 });
   gsap.set(".hero-copy", { autoAlpha: 0, y: 24 });
   gsap.set(".hero-actions .button", { autoAlpha: 0, y: 16, transition: "none" });
   gsap.set(".proof-strip li", { autoAlpha: 0, y: 18 });
-
-  /* The chip leads the entrance, ahead of the headline rise. */
-  gsap.to(".status-chip", { autoAlpha: 1, y: 0, duration: 0.7, ease: "power4.out", delay: 0.15 });
 
   /* Split after fonts settle so line breaks are measured correctly; the
      cap keeps a slow font from stalling the entrance. */
