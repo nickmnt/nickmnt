@@ -422,6 +422,35 @@ function createParticles() {
   meteors = [];
 }
 
+/* Gentle legibility shade for the 2D layer: drawn content (stars, links,
+   pulses, meteors) eases down toward the text column via destination-in.
+   Kept subtle — a strong uniform mask reads as a shadow layer sitting on
+   the scene; the real density falloff comes from the particles' own
+   right-biased distribution. Eased stops matter: two-stop gradients kink. */
+let heroShade = null;
+let heroFade = null;
+
+function buildHeroShade() {
+  heroShade = context.createLinearGradient(0, 0, width, 0);
+  for (let i = 0; i <= 8; i += 1) {
+    const x = i / 8;
+    const t = Math.min(1, Math.max(0, (x - 0.05) / 0.9));
+    const s = t * t * (3 - 2 * t);
+    heroShade.addColorStop(x, `rgba(0, 0, 0, ${(0.55 + 0.45 * s).toFixed(3)})`);
+  }
+
+  /* Bottom dissolve (replaces the CSS mask, whose stops showed as faint
+     horizontal lines): smoothstep sampled densely, mirroring the aurora
+     shader's own fade band so both layers dissolve as one sky. */
+  heroFade = context.createLinearGradient(0, 0, 0, height);
+  heroFade.addColorStop(0, "rgba(0, 0, 0, 1)");
+  for (let i = 0; i <= 12; i += 1) {
+    const t = i / 12;
+    const s = t * t * (3 - 2 * t);
+    heroFade.addColorStop(0.55 + 0.42 * t, `rgba(0, 0, 0, ${(1 - s).toFixed(3)})`);
+  }
+}
+
 function resizeCanvas() {
   if (!canvas || !context) return;
 
@@ -432,6 +461,7 @@ function resizeCanvas() {
   canvas.width = Math.floor(width * ratio);
   canvas.height = Math.floor(height * ratio);
   context.setTransform(ratio, 0, 0, ratio, 0, 0);
+  buildHeroShade();
 
   /* Height-only resizes (mobile URL bar show/hide) keep the existing particles
      so the field doesn't visibly jump mid-scroll. */
@@ -804,6 +834,15 @@ function drawNetwork(time) {
     drawMeteors(dt);
   }
 
+  if (heroShade) {
+    context.globalCompositeOperation = "destination-in";
+    context.fillStyle = heroShade;
+    context.fillRect(0, 0, width, height);
+    context.fillStyle = heroFade;
+    context.fillRect(0, 0, width, height);
+    context.globalCompositeOperation = "source-over";
+  }
+
   if (!reducedMotion && networkRunning) {
     animationFrame = requestAnimationFrame(drawNetwork);
   }
@@ -927,8 +966,17 @@ void main() {
   vec3 violet = vec3(0.3, 0.21, 0.52);
 
   vec3 color = mix(abyss, indigo, smoothstep(0.15, 0.95, q.y) * 0.8);
-  color = mix(color, sea, smoothstep(0.3, 0.9, f) * 0.9);
-  color = mix(color, teal, smoothstep(0.55, 1.0, f) * 0.55);
+
+  /* Activity ramp: aurora features concentrate on the right while the base
+     sky color stays uniform across the screen — darkening everything with
+     one screen-space ramp read as a shadow layer sitting on top. The edge
+     is warped by the flow field itself so the falloff follows the aurora's
+     own folds instead of a straight screen gradient. */
+  float activity = mix(0.15, 1.0, smoothstep(0.02, 0.85, uv.x + (f - 0.5) * 0.5));
+  activity *= mix(0.6, 1.0, smoothstep(0.7, 1.1, aspect));
+
+  color = mix(color, sea, smoothstep(0.3, 0.9, f) * 0.9 * activity);
+  color = mix(color, teal, smoothstep(0.55, 1.0, f) * 0.55 * activity);
 
   /* Aurora curtain: a waving band with a sharp lower edge that blooms
      upward, mint at the base shading to violet at altitude (real auroras
@@ -942,19 +990,19 @@ void main() {
   rays = 0.25 + 0.75 * smoothstep(0.32, 0.85, rays);
 
   vec3 auroraColor = mix(mint, violet, clamp(dy * 2.4, 0.0, 1.0));
-  color += auroraColor * curtain * rays * (0.56 + u_energy * 0.2);
+  color += auroraColor * curtain * rays * (0.56 + u_energy * 0.2) * activity;
 
   /* Atmospheric backscatter hugging the curtain's lower edge. */
-  color += teal * exp(-abs(dy + 0.05) * 9.0) * 0.14;
+  color += teal * exp(-abs(dy + 0.05) * 9.0) * 0.14 * activity;
 
   /* Fine bright filaments threaded through the flow; brighten with scroll. */
   float filaments = smoothstep(0.72, 0.98, fbm(p * 2.1 + r * 1.6 + vec2(0.0, t * 0.8)));
-  color += mint * filaments * (0.14 + u_energy * 0.12);
+  color += mint * filaments * (0.14 + u_energy * 0.12) * activity;
 
-  /* Standing glow upper-right, where the overlay leaves the art exposed. */
+  /* Standing glow upper-right, in the sky's active region. */
   float beacon = exp(-distance(st, vec2(aspect * 0.74, 0.62)) * 2.1);
-  color += teal * beacon * (0.36 + 0.1 * sin(u_time * 0.4));
-  color += mint * beacon * beacon * 0.14;
+  color += teal * beacon * (0.36 + 0.1 * sin(u_time * 0.4)) * activity;
+  color += mint * beacon * beacon * 0.14 * activity;
 
   /* Soft light trailing the cursor. */
   float mouseDist = distance(screenSt, vec2(u_mouse.x * aspect, u_mouse.y));
@@ -966,12 +1014,21 @@ void main() {
   /* Leaving the hero dims the sky so the exit feels graded, not cropped. */
   color *= 1.0 - u_scroll * 0.45;
 
-  /* Vignette, then a hair of dither to stop banding on the dark ramps. */
+  /* Vignette, then dither to stop banding on the dark ramps. Amplitude is
+     2/255 because the canvas renders at half resolution: bilinear upscale
+     averages neighboring texels, which halves the dither and would let the
+     contours re-emerge at 1/255. */
   float vignette = smoothstep(1.5, 0.35, distance(uv, vec2(0.5, 0.55)));
   color *= 0.6 + 0.4 * vignette;
-  color += (hash(gl_FragCoord.xy + fract(u_time)) - 0.5) / 255.0;
+  float dither = hash(gl_FragCoord.xy + fract(u_time)) - 0.5;
+  color += dither * (2.0 / 255.0);
 
-  gl_FragColor = vec4(color, 1.0);
+  /* Bottom dissolve into the next section, done in-shader instead of a CSS
+     mask: gradient masks are piecewise linear and their stops read as faint
+     horizontal lines. smoothstep is curvature-continuous and the dithered
+     alpha kills the remaining 8-bit contours. Premultiplied output. */
+  float fade = clamp(smoothstep(0.03, 0.45, uv.y) + dither / 255.0, 0.0, 1.0);
+  gl_FragColor = vec4(color * fade, fade);
 }`;
 
 function compileAuroraShader(gl, type, source) {
@@ -990,8 +1047,10 @@ function compileAuroraShader(gl, type, source) {
 function setupAurora() {
   if (!auroraCanvas || auroraGL) return;
 
+  /* alpha: true — the shader writes its own bottom fade-out, so the canvas
+     must compose transparently over the page background. */
   const gl = auroraCanvas.getContext("webgl", {
-    alpha: false,
+    alpha: true,
     antialias: false,
     depth: false,
     stencil: false,

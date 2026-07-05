@@ -551,23 +551,16 @@ h1 {
   width: 100%;
 }
 
-/* Canvases AND the legibility overlay overshoot the hero together and
-   dissolve via the same mask, so aurora, stars, and their shading all fade
-   into the Experience section as one layer — no edge can show. */
+/* Both canvases overshoot the hero so the sky can dissolve into the
+   Experience section with no edge. The dissolve itself is NOT a CSS mask:
+   piecewise-linear gradient masks show Mach-band lines at every stop over
+   smooth dark content. Instead each canvas fades itself out — the aurora
+   shader fades (dithered) alpha near its bottom, and the particle canvas
+   applies a matching eased alpha ramp. Text legibility shading also lives
+   in-scene, so no flat veil ever sits on top of the art. */
 #aurora-canvas,
-#system-canvas,
-.hero::after {
+#system-canvas {
   height: calc(100% + 18rem);
-  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 97%);
-  mask-image: linear-gradient(to bottom, #000 60%, transparent 97%);
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(90deg, rgba(10, 13, 18, 0.96) 0%, rgba(10, 13, 18, 0.78) 50%, rgba(10, 13, 18, 0.18) 100%);
 }
 
 .status-chip {
@@ -1695,8 +1688,7 @@ html.gsap-enhanced .contact-copy h2 {
   }
 
   body::before,
-  body::after,
-  .hero::after {
+  body::after {
     display: none;
   }
 
