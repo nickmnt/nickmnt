@@ -187,6 +187,8 @@ h1 {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  /* Soft halo behind the gradient glyphs so the headline reads lit, not flat. */
+  filter: drop-shadow(0 0 22px rgba(45, 212, 191, 0.3));
 }
 
 .section-heading h2,
@@ -532,6 +534,16 @@ h1 {
   padding: 7rem 0 3.4rem;
 }
 
+/* WebGL aurora: domain-warped noise shader rendered at reduced resolution.
+   Sits beneath the particle network; hidden by JS when WebGL is missing. */
+#aurora-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  width: 100%;
+  height: 100%;
+}
+
 #system-canvas {
   position: absolute;
   inset: 0;
@@ -546,7 +558,7 @@ h1 {
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(90deg, rgba(10, 13, 18, 0.97) 0%, rgba(10, 13, 18, 0.85) 50%, rgba(10, 13, 18, 0.35) 100%),
+    linear-gradient(90deg, rgba(10, 13, 18, 0.96) 0%, rgba(10, 13, 18, 0.78) 50%, rgba(10, 13, 18, 0.22) 100%),
     linear-gradient(to top, var(--bg) 0%, transparent 40%);
 }
 
@@ -616,15 +628,87 @@ h1 {
 }
 
 .hero-content > .hero-enter:nth-child(2) {
-  transition-delay: 120ms;
+  transition-delay: 100ms;
 }
 
 .hero-content > .hero-enter:nth-child(3) {
-  transition-delay: 240ms;
+  transition-delay: 200ms;
 }
 
 .hero-content > .hero-enter:nth-child(4) {
-  transition-delay: 360ms;
+  transition-delay: 300ms;
+}
+
+.hero-content > .hero-enter:nth-child(5) {
+  transition-delay: 400ms;
+}
+
+/* ---------- Scroll cue ---------- */
+
+.scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 1.3rem;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.scroll-cue-track {
+  position: relative;
+  width: 1px;
+  height: 2.6rem;
+  overflow: hidden;
+  background: rgba(186, 196, 209, 0.18);
+}
+
+.scroll-cue-dot {
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 3px;
+  height: 0.9rem;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  animation: cue-fall 2.2s var(--ease-out) infinite;
+}
+
+@keyframes cue-fall {
+  0% {
+    transform: translateY(-100%);
+  }
+  65%,
+  100% {
+    transform: translateY(2.6rem);
+  }
+}
+
+/* Entrance is a one-shot animation (not a transition) so the GSAP scroll
+   fade can own inline opacity afterwards without a cascade fight. */
+.supports-reveal .scroll-cue {
+  opacity: 0;
+}
+
+.supports-reveal .is-loaded .scroll-cue {
+  opacity: 1;
+  animation: cue-in 900ms ease 1200ms backwards;
+}
+
+@keyframes cue-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ---------- Proof strip ---------- */
@@ -1261,6 +1345,10 @@ h1 {
 }
 
 @media (max-width: 760px) {
+  .scroll-cue {
+    display: none;
+  }
+
   .site-header {
     top: 0.75rem;
     width: calc(100% - 1rem);
@@ -1584,7 +1672,9 @@ html.gsap-enhanced .contact-copy h2 {
 
 @media print {
   .site-header,
+  #aurora-canvas,
   #system-canvas,
+  .scroll-cue,
   .hero-actions,
   .contact-actions,
   .skip-link {
@@ -1619,6 +1709,7 @@ html.gsap-enhanced .contact-copy h2 {
   .accent-text {
     background: none;
     -webkit-text-fill-color: initial;
+    filter: none;
   }
 
   .chip {

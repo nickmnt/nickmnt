@@ -678,11 +678,294 @@ function stopNetwork() {
   animationFrame = 0;
 }
 
+/* ---------- Hero aurora (WebGL domain-warped noise shader) ----------
+   A single fullscreen triangle running an fbm "liquid aurora" in the brand
+   palette. Mouse light, scroll energy, and click ripples feed in as
+   uniforms. Optional layer: no WebGL means the canvas hides itself and the
+   CSS gradients + particle network carry the hero unchanged. */
+
+const auroraCanvas = document.querySelector("#aurora-canvas");
+let auroraGL = null;
+let auroraUniforms = null;
+let auroraRunning = false;
+let auroraFrame = 0;
+let auroraEpoch = 0;
+let auroraLastTime = 0;
+const auroraMouse = { x: 0.5, y: 0.5, level: 0 };
+const auroraClick = { x: 0.5, y: 0.5, start: -1 };
+
+const AURORA_VERTEX = `
+attribute vec2 a_position;
+void main() {
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+
+const AURORA_FRAGMENT = `
+precision highp float;
+
+uniform vec2 u_resolution;
+uniform float u_time;
+uniform vec2 u_mouse;
+uniform float u_mouse_level;
+uniform float u_energy;
+uniform vec3 u_click;
+
+float hash(vec2 p) {
+  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+}
+
+float noise(vec2 p) {
+  vec2 i = floor(p);
+  vec2 f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  float a = hash(i);
+  float b = hash(i + vec2(1.0, 0.0));
+  float c = hash(i + vec2(0.0, 1.0));
+  float d = hash(i + vec2(1.0, 1.0));
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+
+float fbm(vec2 p) {
+  float value = 0.0;
+  float amplitude = 0.5;
+  mat2 rotate = mat2(0.8, -0.6, 0.6, 0.8);
+  for (int i = 0; i < 4; i++) {
+    value += amplitude * noise(p);
+    p = rotate * p * 2.03;
+    amplitude *= 0.55;
+  }
+  return value;
+}
+
+void main() {
+  vec2 uv = gl_FragCoord.xy / u_resolution;
+  float aspect = u_resolution.x / u_resolution.y;
+  vec2 st = vec2(uv.x * aspect, uv.y);
+  vec2 p = st * 1.6;
+  float t = u_time * (0.05 + u_energy * 0.05);
+
+  /* Click ripple: an expanding ring that warps the noise field. */
+  float ring = 0.0;
+  if (u_click.z >= 0.0 && u_click.z < 3.5) {
+    float clickDist = distance(st, vec2(u_click.x * aspect, u_click.y));
+    float band = clickDist - u_click.z * 0.55;
+    ring = exp(-u_click.z * 1.7) * exp(-band * band * 70.0);
+  }
+  p += ring * 0.4;
+
+  /* Two rounds of domain warping give the flow its silk folds. */
+  vec2 q = vec2(fbm(p + vec2(0.0, t)), fbm(p + vec2(5.2, 1.3) - t * 0.75));
+  vec2 r = vec2(
+    fbm(p + 2.2 * q + vec2(1.7, 9.2) + t * 0.45),
+    fbm(p + 2.4 * q + vec2(8.3, 2.8) - t * 0.35)
+  );
+  float f = fbm(p + 2.4 * r);
+
+  vec3 abyss = vec3(0.016, 0.024, 0.038);
+  vec3 indigo = vec3(0.055, 0.09, 0.16);
+  vec3 sea = vec3(0.03, 0.135, 0.14);
+  vec3 teal = vec3(0.08, 0.34, 0.31);
+  vec3 mint = vec3(0.176, 0.831, 0.749);
+
+  vec3 color = mix(abyss, indigo, smoothstep(0.15, 0.95, q.y) * 0.8);
+  color = mix(color, sea, smoothstep(0.3, 0.9, f));
+  color = mix(color, teal, smoothstep(0.55, 1.0, f) * 0.8);
+
+  /* Fine bright filaments threaded through the flow; brighten with scroll. */
+  float filaments = smoothstep(0.72, 0.98, fbm(p * 2.1 + r * 1.6 + vec2(0.0, t * 0.8)));
+  color += mint * filaments * (0.16 + u_energy * 0.12);
+
+  /* Standing glow upper-right, where the overlay leaves the art exposed. */
+  float beacon = exp(-distance(st, vec2(aspect * 0.74, 0.6)) * 1.9);
+  color += teal * beacon * (0.45 + 0.12 * sin(u_time * 0.4));
+  color += mint * beacon * beacon * 0.16;
+
+  /* Soft light trailing the cursor. */
+  float mouseDist = distance(st, vec2(u_mouse.x * aspect, u_mouse.y));
+  color += teal * exp(-mouseDist * 2.2) * 0.35 * u_mouse_level;
+  color += mint * exp(-mouseDist * 5.0) * 0.12 * u_mouse_level;
+
+  color += mint * ring * 0.7;
+
+  /* Vignette, then a hair of dither to stop banding on the dark ramps. */
+  float vignette = smoothstep(1.5, 0.35, distance(uv, vec2(0.5, 0.55)));
+  color *= 0.6 + 0.4 * vignette;
+  color += (hash(gl_FragCoord.xy + fract(u_time)) - 0.5) / 255.0;
+
+  gl_FragColor = vec4(color, 1.0);
+}`;
+
+function compileAuroraShader(gl, type, source) {
+  const shader = gl.createShader(type);
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    gl.deleteShader(shader);
+    return null;
+  }
+
+  return shader;
+}
+
+function setupAurora() {
+  if (!auroraCanvas || auroraGL) return;
+
+  const gl = auroraCanvas.getContext("webgl", {
+    alpha: false,
+    antialias: false,
+    depth: false,
+    stencil: false,
+    powerPreference: "low-power",
+  });
+
+  if (!gl) {
+    auroraCanvas.style.display = "none";
+    return;
+  }
+
+  const vertex = compileAuroraShader(gl, gl.VERTEX_SHADER, AURORA_VERTEX);
+  const fragment = compileAuroraShader(gl, gl.FRAGMENT_SHADER, AURORA_FRAGMENT);
+  if (!vertex || !fragment) {
+    auroraCanvas.style.display = "none";
+    return;
+  }
+
+  const program = gl.createProgram();
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, fragment);
+  gl.linkProgram(program);
+
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    auroraCanvas.style.display = "none";
+    return;
+  }
+
+  gl.useProgram(program);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const position = gl.getAttribLocation(program, "a_position");
+  gl.enableVertexAttribArray(position);
+  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+  auroraUniforms = {
+    resolution: gl.getUniformLocation(program, "u_resolution"),
+    time: gl.getUniformLocation(program, "u_time"),
+    mouse: gl.getUniformLocation(program, "u_mouse"),
+    mouseLevel: gl.getUniformLocation(program, "u_mouse_level"),
+    energy: gl.getUniformLocation(program, "u_energy"),
+    click: gl.getUniformLocation(program, "u_click"),
+  };
+
+  auroraGL = gl;
+  auroraEpoch = performance.now();
+}
+
+function renderAurora(now) {
+  const gl = auroraGL;
+  if (!gl) return;
+
+  const dt = auroraLastTime === 0 ? 1 : Math.min(2.5, (now - auroraLastTime) / 16.667);
+  auroraLastTime = now;
+
+  /* Mouse light eased toward the pointer, in uv space (y up). */
+  if (!reducedMotion && pointer.active) {
+    const rect = auroraCanvas.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      const targetX = (pointer.x - rect.left) / rect.width;
+      const targetY = 1 - (pointer.y - rect.top) / rect.height;
+      const ease = Math.min(1, 0.09 * dt);
+      auroraMouse.x += (targetX - auroraMouse.x) * ease;
+      auroraMouse.y += (targetY - auroraMouse.y) * ease;
+    }
+  }
+  const targetLevel = !reducedMotion && pointer.active ? 1 : 0;
+  auroraMouse.level += (targetLevel - auroraMouse.level) * Math.min(1, 0.05 * dt);
+
+  const clickAge = auroraClick.start < 0 ? -1 : Math.min(10, (now - auroraClick.start) / 1000);
+
+  gl.uniform2f(auroraUniforms.resolution, auroraCanvas.width, auroraCanvas.height);
+  gl.uniform1f(auroraUniforms.time, (now - auroraEpoch) / 1000);
+  gl.uniform2f(auroraUniforms.mouse, auroraMouse.x, auroraMouse.y);
+  gl.uniform1f(auroraUniforms.mouseLevel, auroraMouse.level);
+  gl.uniform1f(auroraUniforms.energy, scrollEnergy);
+  gl.uniform3f(auroraUniforms.click, auroraClick.x, auroraClick.y, clickAge);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+  if (auroraRunning && !reducedMotion) {
+    auroraFrame = requestAnimationFrame(renderAurora);
+  }
+}
+
+function resizeAurora() {
+  if (!auroraGL || !auroraCanvas) return;
+
+  /* The field is low-frequency, so half resolution (capped) upscales
+     invisibly and keeps the fragment cost tiny. */
+  const cssWidth = Math.max(1, auroraCanvas.offsetWidth);
+  const cssHeight = Math.max(1, auroraCanvas.offsetHeight);
+  const scale = Math.min(0.5, 900 / cssWidth);
+  auroraCanvas.width = Math.max(1, Math.round(cssWidth * scale));
+  auroraCanvas.height = Math.max(1, Math.round(cssHeight * scale));
+  auroraGL.viewport(0, 0, auroraCanvas.width, auroraCanvas.height);
+
+  /* Reduced motion gets a single still frame from mid-flow. */
+  if (reducedMotion) {
+    renderAurora(auroraEpoch + 42000);
+  }
+}
+
+function startAurora() {
+  if (!auroraGL || reducedMotion || auroraRunning) return;
+
+  auroraRunning = true;
+  auroraLastTime = 0;
+  auroraFrame = requestAnimationFrame(renderAurora);
+}
+
+function stopAurora() {
+  auroraRunning = false;
+  auroraLastTime = 0;
+  cancelAnimationFrame(auroraFrame);
+  auroraFrame = 0;
+}
+
+if (auroraCanvas) {
+  auroraCanvas.addEventListener("webglcontextlost", (event) => {
+    event.preventDefault();
+    stopAurora();
+    auroraGL = null;
+  });
+
+  auroraCanvas.addEventListener("webglcontextrestored", () => {
+    setupAurora();
+    resizeAurora();
+    if (heroInView && !document.hidden) {
+      startAurora();
+    }
+  });
+}
+
+/* Clicking anywhere in the hero drops a ripple into the field. */
+if (hero && !reducedMotion) {
+  hero.addEventListener("pointerdown", (event) => {
+    if (!auroraGL) return;
+
+    const rect = auroraCanvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    auroraClick.x = (event.clientX - rect.left) / rect.width;
+    auroraClick.y = 1 - (event.clientY - rect.top) / rect.height;
+    auroraClick.start = performance.now();
+  });
+}
+
 window.addEventListener("resize", () => {
   const shouldRestart = networkRunning;
 
   stopNetwork();
   resizeCanvas();
+  resizeAurora();
   if (shouldRestart) {
     startNetwork();
   }
@@ -690,14 +973,18 @@ window.addEventListener("resize", () => {
 
 document.addEventListener("visibilitychange", () => {
   stopNetwork();
+  stopAurora();
 
   if (!document.hidden && heroInView) {
     resizeCanvas();
     startNetwork();
+    startAurora();
   }
 });
 
 resizeCanvas();
+setupAurora();
+resizeAurora();
 
 if ("IntersectionObserver" in window && hero) {
   const heroCanvasObserver = new IntersectionObserver(
@@ -708,8 +995,10 @@ if ("IntersectionObserver" in window && hero) {
         if (entry.isIntersecting && !document.hidden) {
           resizeCanvas();
           startNetwork();
+          startAurora();
         } else {
           stopNetwork();
+          stopAurora();
         }
       });
     },
@@ -719,6 +1008,7 @@ if ("IntersectionObserver" in window && hero) {
   heroCanvasObserver.observe(hero);
 } else {
   startNetwork();
+  startAurora();
 }
 
 /* ==================================================================
@@ -848,9 +1138,13 @@ function initHeroIntro() {
      buttons get transition: none so their CSS hover transition doesn't
      fight the tween; clearProps restores it afterwards. */
   gsap.set(title, { autoAlpha: 0 });
+  gsap.set(".status-chip", { autoAlpha: 0, y: 14 });
   gsap.set(".hero-copy", { autoAlpha: 0, y: 24 });
   gsap.set(".hero-actions .button", { autoAlpha: 0, y: 16, transition: "none" });
   gsap.set(".proof-strip li", { autoAlpha: 0, y: 18 });
+
+  /* The chip leads the entrance, ahead of the headline rise. */
+  gsap.to(".status-chip", { autoAlpha: 1, y: 0, duration: 0.7, ease: "power4.out", delay: 0.15 });
 
   /* Split after fonts settle so line breaks are measured correctly; the
      cap keeps a slow font from stalling the entrance. */
@@ -895,6 +1189,20 @@ function initHeroScrollExit() {
 
   gsap.to(".hero-content", { yPercent: -6, autoAlpha: 0.35, ease: "none", scrollTrigger: scrollOut });
   gsap.to("#system-canvas", { yPercent: 12, ease: "none", scrollTrigger: { ...scrollOut } });
+
+  /* The cue is the first thing to go once scrolling starts. fromTo with
+     immediateRender off, so ScrollTrigger refreshes restore it to visible
+     instead of re-capturing the CSS entrance's hidden state. */
+  gsap.fromTo(
+    ".scroll-cue",
+    { autoAlpha: 1 },
+    {
+      autoAlpha: 0,
+      ease: "none",
+      immediateRender: false,
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "20% top", scrub: 0.4 },
+    }
+  );
 }
 
 /* ----- Section choreography: masked heading reveals, ghost number
