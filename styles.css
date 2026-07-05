@@ -56,18 +56,23 @@ body {
   overflow-x: hidden;
 }
 
-/* Ambient glows drift slowly with scroll progress (--drift, 0..1 set in JS)
-   so the backdrop feels alive without competing with the content. */
+/* Ambient glows drift slowly with scroll progress (--drift, 0..1 set in JS).
+   The gradients stay static; only the layer transform changes, which keeps
+   scrolling on the compositor instead of repainting the viewport. */
 body::before {
   content: "";
   position: fixed;
-  inset: 0;
+  inset: -12vh -10vw;
   z-index: -2;
+  pointer-events: none;
   background:
-    radial-gradient(52rem 30rem at calc(82% - 14% * var(--drift, 0)) calc(-6% + 18% * var(--drift, 0)), rgba(45, 212, 191, 0.07), transparent 68%),
-    radial-gradient(40rem 26rem at calc(-8% + 12% * var(--drift, 0)) calc(40% + 12% * var(--drift, 0)), rgba(45, 212, 191, 0.04), transparent 70%),
-    radial-gradient(48rem 30rem at 50% calc(112% - 16% * var(--drift, 0)), rgba(45, 212, 191, 0.045), transparent 72%),
+    radial-gradient(52rem 30rem at 82% -6%, rgba(45, 212, 191, 0.07), transparent 68%),
+    radial-gradient(40rem 26rem at -8% 40%, rgba(45, 212, 191, 0.04), transparent 70%),
+    radial-gradient(48rem 30rem at 50% 112%, rgba(45, 212, 191, 0.045), transparent 72%),
     var(--bg);
+  transform: translate3d(calc(var(--drift, 0) * -5vw), calc(var(--drift, 0) * 4vh), 0);
+  will-change: transform;
+  contain: paint;
 }
 
 /* Static film grain: keeps large dark surfaces from looking flat.

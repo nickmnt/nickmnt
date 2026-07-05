@@ -19,6 +19,9 @@ let hasSplitText = hasGsap && typeof window.SplitText !== "undefined";
 let hasLenis = typeof window.Lenis !== "undefined";
 const finePointer = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 let motionEnhanced = hasGsap && hasScrollTrigger && !reducedMotion;
+let lenis = null;
+let lastNativeScrollAt = 0;
+let lastPageProgressScrollY = window.scrollY;
 
 /* Added before first paint so .gsap-enhanced CSS applies from the start. */
 if (motionEnhanced) {
@@ -31,23 +34,47 @@ if (year) {
 
 /* ---------- Header scroll progress ---------- */
 
+let lastProgress = -1;
+let lastDriftProgress = -1;
+let headerScrolled = null;
+
 function setPageProgress() {
   if (!header) return;
 
   const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
   const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
-  header.style.setProperty("--scroll-progress", progress.toFixed(4));
-  header.classList.toggle("is-scrolled", window.scrollY > 12);
+  const roundedProgress = Math.round(progress * 10000) / 10000;
+  const isScrolled = window.scrollY > 12;
+
+  if (roundedProgress !== lastProgress) {
+    header.style.setProperty("--scroll-progress", roundedProgress.toFixed(4));
+    lastProgress = roundedProgress;
+  }
+
+  if (isScrolled !== headerScrolled) {
+    header.classList.toggle("is-scrolled", isScrolled);
+    headerScrolled = isScrolled;
+  }
 
   /* Drives the ambient background glow drift (body::before). */
   if (!reducedMotion) {
-    document.documentElement.style.setProperty("--drift", progress.toFixed(4));
+    const driftProgress = Math.round(progress * 10000) / 10000;
+    if (driftProgress !== lastDriftProgress) {
+      document.documentElement.style.setProperty("--drift", driftProgress.toFixed(4));
+      lastDriftProgress = driftProgress;
+    }
   }
 }
 
 let progressFrame = 0;
 
 function schedulePageProgress() {
+  const currentScrollY = window.scrollY;
+  if (!lenis && Math.abs(currentScrollY - lastPageProgressScrollY) > 1) {
+    lastNativeScrollAt = performance.now();
+  }
+  lastPageProgressScrollY = currentScrollY;
+
   if (progressFrame) return;
   progressFrame = requestAnimationFrame(() => {
     progressFrame = 0;
@@ -339,6 +366,7 @@ const WRAP_MARGIN = 40;
 
 let width = 0;
 let height = 0;
+let canvasRatio = 0;
 let particles = [];
 let farStars = [];
 let pulses = [];
@@ -354,12 +382,31 @@ let nextMeteorDelay = 3200 + Math.random() * 3800;
 let lensLevel = 0;
 const smoothPointer = { x: -1, y: -1, inCanvas: false };
 
-/* Scroll "energy" (0..1) fed by Lenis while smooth-scrolling; stays 0 when
-   Lenis is absent so the field behaves exactly as before. */
+/* Scroll "energy" (0..1) feeds the hero field from native scroll or Lenis. */
 let scrollEnergy = 0;
 let scrollDirection = 1;
+let lastScrollY = window.scrollY;
+let lastScrollTime = performance.now();
 
 if (!reducedMotion) {
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (lenis) return;
+
+      const now = performance.now();
+      const currentY = window.scrollY;
+      const elapsed = Math.max(16, now - lastScrollTime);
+      const velocity = ((currentY - lastScrollY) / elapsed) * 16.667;
+
+      scrollEnergy = Math.min(1, Math.max(scrollEnergy, Math.abs(velocity) / 18));
+      scrollDirection = velocity >= 0 ? 1 : -1;
+      lastScrollY = currentY;
+      lastScrollTime = now;
+    },
+    { passive: true }
+  );
+
   window.addEventListener(
     "pointermove",
     (event) => {
@@ -449,6 +496,8 @@ function createParticles() {
    right-biased distribution. Eased stops matter: two-stop gradients kink. */
 let heroShade = null;
 let heroFade = null;
+const ambientWash = document.createElement("canvas");
+const ambientWashContext = ambientWash.getContext("2d");
 
 function buildHeroShade() {
   heroShade = context.createLinearGradient(0, 0, width, 0);
@@ -471,17 +520,41 @@ function buildHeroShade() {
   }
 }
 
+function buildAmbientWash() {
+  if (!ambientWashContext) return;
+
+  ambientWash.width = Math.max(1, Math.ceil(width));
+  ambientWash.height = Math.max(1, Math.ceil(height));
+  ambientWashContext.clearRect(0, 0, ambientWash.width, ambientWash.height);
+
+  const glow = ambientWashContext.createRadialGradient(
+    width * 0.72, height * 0.38, 0,
+    width * 0.72, height * 0.38, Math.max(width, height) * 0.72
+  );
+  glow.addColorStop(0, "rgba(45, 212, 191, 0.07)");
+  glow.addColorStop(0.5, "rgba(45, 212, 191, 0.025)");
+  glow.addColorStop(1, "rgba(45, 212, 191, 0)");
+  ambientWashContext.fillStyle = glow;
+  ambientWashContext.fillRect(0, 0, width, height);
+}
+
 function resizeCanvas() {
   if (!canvas || !context) return;
 
   const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+  const nextWidth = canvas.offsetWidth;
+  const nextHeight = canvas.offsetHeight;
+  if (particles.length > 0 && nextWidth === width && nextHeight === height && ratio === canvasRatio) return;
+
   const previousWidth = width;
-  width = canvas.offsetWidth;
-  height = canvas.offsetHeight;
+  width = nextWidth;
+  height = nextHeight;
+  canvasRatio = ratio;
   canvas.width = Math.floor(width * ratio);
   canvas.height = Math.floor(height * ratio);
   context.setTransform(ratio, 0, 0, ratio, 0, 0);
   buildHeroShade();
+  buildAmbientWash();
 
   /* Height-only resizes (mobile URL bar show/hide) keep the existing particles
      so the field doesn't visibly jump mid-scroll. */
@@ -613,15 +686,9 @@ function spawnPulse(time) {
 }
 
 function drawAmbientWash() {
-  const glow = context.createRadialGradient(
-    width * 0.72, height * 0.38, 0,
-    width * 0.72, height * 0.38, Math.max(width, height) * 0.72
-  );
-  glow.addColorStop(0, "rgba(45, 212, 191, 0.07)");
-  glow.addColorStop(0.5, "rgba(45, 212, 191, 0.025)");
-  glow.addColorStop(1, "rgba(45, 212, 191, 0)");
-  context.fillStyle = glow;
-  context.fillRect(0, 0, width, height);
+  if (ambientWash.width > 0 && ambientWash.height > 0) {
+    context.drawImage(ambientWash, 0, 0, width, height);
+  }
 }
 
 function drawFarStars(time, dt) {
@@ -896,6 +963,8 @@ let auroraRunning = false;
 let auroraFrame = 0;
 let auroraEpoch = 0;
 let auroraLastTime = 0;
+let auroraBackWidth = 0;
+let auroraBackHeight = 0;
 const auroraMouse = { x: 0.5, y: 0.5, level: 0 };
 const auroraClick = { x: 0.5, y: 0.5, start: -1 };
 /* Flow phase integrated on the CPU (starts mid-flow). Multiplying raw time
@@ -1119,6 +1188,8 @@ function setupAurora() {
 
   auroraGL = gl;
   auroraEpoch = performance.now();
+  auroraBackWidth = 0;
+  auroraBackHeight = 0;
 }
 
 function renderAurora(now) {
@@ -1175,8 +1246,14 @@ function resizeAurora() {
   const cssWidth = Math.max(1, auroraCanvas.offsetWidth);
   const cssHeight = Math.max(1, auroraCanvas.offsetHeight);
   const scale = Math.min(0.5, 900 / cssWidth);
-  auroraCanvas.width = Math.max(1, Math.round(cssWidth * scale));
-  auroraCanvas.height = Math.max(1, Math.round(cssHeight * scale));
+  const nextBackWidth = Math.max(1, Math.round(cssWidth * scale));
+  const nextBackHeight = Math.max(1, Math.round(cssHeight * scale));
+  if (nextBackWidth === auroraBackWidth && nextBackHeight === auroraBackHeight) return;
+
+  auroraBackWidth = nextBackWidth;
+  auroraBackHeight = nextBackHeight;
+  auroraCanvas.width = nextBackWidth;
+  auroraCanvas.height = nextBackHeight;
   auroraGL.viewport(0, 0, auroraCanvas.width, auroraCanvas.height);
 
   /* Reduced motion gets a single still frame from mid-flow. */
@@ -1205,6 +1282,8 @@ if (auroraCanvas) {
     event.preventDefault();
     stopAurora();
     auroraGL = null;
+    auroraBackWidth = 0;
+    auroraBackHeight = 0;
   });
 
   auroraCanvas.addEventListener("webglcontextrestored", () => {
@@ -1302,15 +1381,14 @@ if ("IntersectionObserver" in window && hero) {
    everything above already provides the complete experience.
    ================================================================== */
 
-let lenis = null;
-
 function initSmoothScroll() {
-  if (!hasLenis) return;
+  if (!hasLenis || lenis) return;
+  if (window.scrollY > 2 || (lastNativeScrollAt > 0 && performance.now() - lastNativeScrollAt < 600)) return;
 
   lenis = new Lenis({
-    duration: 1.05,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    lerp: 0.12,
     smoothWheel: true,
+    wheelMultiplier: 0.9,
     syncTouch: false,
     autoRaf: false,
   });
@@ -1335,7 +1413,7 @@ function initSmoothScroll() {
 
       event.preventDefault();
       history.pushState(null, "", hash);
-      lenis.scrollTo(target, { offset: -96, duration: 1.2 });
+      lenis.scrollTo(target, { offset: -96, duration: 0.85 });
     });
   });
 }
@@ -1750,19 +1828,7 @@ async function loadMotionEnhancements() {
 function scheduleMotionEnhancements() {
   if (reducedMotion) return;
 
-  const loadSoon = () => loadMotionEnhancements();
-  const loadWhenIdle = () => {
-    if ("requestIdleCallback" in window) {
-      window.requestIdleCallback(loadSoon, { timeout: 1800 });
-    } else {
-      window.setTimeout(loadSoon, 900);
-    }
-  };
-
-  window.addEventListener("load", loadWhenIdle, { once: true });
-  ["pointerdown", "keydown", "wheel", "touchstart"].forEach((eventName) => {
-    window.addEventListener(eventName, loadSoon, { once: true, passive: true });
-  });
+  window.addEventListener("load", () => window.setTimeout(loadMotionEnhancements, 0), { once: true });
 }
 
 if (motionEnhanced) {
