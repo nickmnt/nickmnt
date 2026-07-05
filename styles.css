@@ -172,11 +172,11 @@ h3 {
 }
 
 h1 {
-  max-width: 20ch;
+  max-width: 18ch;
   margin-bottom: 1.4rem;
-  font-size: clamp(2.6rem, 1.35rem + 4.6vw, 5.2rem);
+  font-size: clamp(2.6rem, 1.1rem + 5.2vw, 5.4rem);
   font-weight: 700;
-  line-height: 1.02;
+  line-height: 0.98;
   letter-spacing: -0.035em;
   text-wrap: balance;
 }
@@ -1367,6 +1367,11 @@ h1 {
   .skills-row {
     grid-template-columns: 1fr;
     gap: 0.3rem;
+  }
+
+  .supports-reveal .reveal[data-reveal="left"],
+  .supports-reveal .reveal[data-reveal="right"] {
+    transform: translateY(20px);
   }
 
   .footer-inner {

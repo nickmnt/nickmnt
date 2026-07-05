@@ -997,9 +997,11 @@ function initPanelParallax() {
   if (aboutPanel) {
     /* GSAP owns both the entrance and the drift here, so inline transforms
        never fight the CSS reveal (disabled under .gsap-enhanced). */
+    const wideLayout = window.matchMedia("(min-width: 761px)").matches;
     gsap.from(aboutPanel, {
       autoAlpha: 0,
-      x: 32,
+      x: wideLayout ? 32 : 0,
+      y: wideLayout ? 0 : 18,
       duration: 0.9,
       ease: "power4.out",
       scrollTrigger: { trigger: aboutPanel, start: "top 85%", once: true },
