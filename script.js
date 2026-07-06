@@ -307,7 +307,9 @@ let heroInView = !hero;
 let lastFrameTime = 0;
 let lastPulseTime = 0;
 let lastMeteorTime = 0;
-let nextMeteorDelay = 3200 + Math.random() * 3800;
+/* First meteor holds back until the entrance and first read are over; a
+   streak inside the first-impression window reads as showing off. */
+let nextMeteorDelay = 9000 + Math.random() * 6000;
 /* Lens strength eased 0..1 so the cursor effect fades in and out softly. */
 let lensLevel = 0;
 const smoothPointer = { x: -1, y: -1, inCanvas: false };
@@ -736,7 +738,8 @@ function drawParticles(time) {
 }
 
 /* Occasional meteor: a fast gradient streak with a glowing head, spawned
-   on a randomized 7-16s cadence. Two can coexist at most in practice. */
+   on a randomized 14-26s cadence — rare enough that each one feels found
+   rather than performed. */
 function spawnMeteor(time) {
   const direction = Math.random() < 0.5 ? 1 : -1;
   const tilt = 0.35 + Math.random() * 0.3;
@@ -753,7 +756,7 @@ function spawnMeteor(time) {
   });
 
   lastMeteorTime = time;
-  nextMeteorDelay = 7000 + Math.random() * 9000;
+  nextMeteorDelay = 14000 + Math.random() * 12000;
 }
 
 function drawMeteors(dt) {
@@ -977,12 +980,15 @@ void main() {
   );
   float f = fbm(p + 2.4 * r);
 
+  /* Palette sits deep and slightly desaturated on purpose: the sky must
+     read as distant atmosphere behind the type, never as a light source
+     competing with it. Brighten these and the hero turns electric. */
   vec3 abyss = vec3(0.012, 0.02, 0.034);
   vec3 indigo = vec3(0.05, 0.085, 0.16);
   vec3 sea = vec3(0.028, 0.125, 0.135);
   vec3 teal = vec3(0.08, 0.34, 0.31);
-  vec3 mint = vec3(0.176, 0.831, 0.749);
-  vec3 violet = vec3(0.3, 0.21, 0.52);
+  vec3 mint = vec3(0.15, 0.68, 0.62);
+  vec3 violet = vec3(0.23, 0.17, 0.42);
 
   vec3 color = mix(abyss, indigo, smoothstep(0.15, 0.95, q.y) * 0.8);
 
@@ -991,11 +997,11 @@ void main() {
      one screen-space ramp read as a shadow layer sitting on top. The edge
      is warped by the flow field itself so the falloff follows the aurora's
      own folds instead of a straight screen gradient. */
-  float activity = mix(0.15, 1.0, smoothstep(0.02, 0.85, uv.x + (f - 0.5) * 0.5));
+  float activity = mix(0.12, 0.88, smoothstep(0.02, 0.85, uv.x + (f - 0.5) * 0.5));
   activity *= mix(0.6, 1.0, smoothstep(0.7, 1.1, aspect));
 
-  color = mix(color, sea, smoothstep(0.3, 0.9, f) * 0.9 * activity);
-  color = mix(color, teal, smoothstep(0.55, 1.0, f) * 0.55 * activity);
+  color = mix(color, sea, smoothstep(0.3, 0.9, f) * 0.8 * activity);
+  color = mix(color, teal, smoothstep(0.55, 1.0, f) * 0.45 * activity);
 
   /* Aurora curtain: a waving band with a sharp lower edge that blooms
      upward, mint at the base shading to violet at altitude (real auroras
@@ -1009,26 +1015,26 @@ void main() {
   rays = 0.25 + 0.75 * smoothstep(0.32, 0.85, rays);
 
   vec3 auroraColor = mix(mint, violet, clamp(dy * 2.4, 0.0, 1.0));
-  color += auroraColor * curtain * rays * (0.56 + u_energy * 0.2) * activity;
+  color += auroraColor * curtain * rays * (0.4 + u_energy * 0.15) * activity;
 
   /* Atmospheric backscatter hugging the curtain's lower edge. */
-  color += teal * exp(-abs(dy + 0.05) * 9.0) * 0.14 * activity;
+  color += teal * exp(-abs(dy + 0.05) * 9.0) * 0.11 * activity;
 
   /* Fine bright filaments threaded through the flow; brighten with scroll. */
   float filaments = smoothstep(0.72, 0.98, fbm(p * 2.1 + r * 1.6 + vec2(0.0, t * 0.8)));
-  color += mint * filaments * (0.14 + u_energy * 0.12) * activity;
+  color += mint * filaments * (0.1 + u_energy * 0.08) * activity;
 
   /* Standing glow upper-right, in the sky's active region. */
   float beacon = exp(-distance(st, vec2(aspect * 0.74, 0.62)) * 2.1);
-  color += teal * beacon * (0.36 + 0.1 * sin(u_time * 0.4)) * activity;
-  color += mint * beacon * beacon * 0.14 * activity;
+  color += teal * beacon * (0.27 + 0.06 * sin(u_time * 0.4)) * activity;
+  color += mint * beacon * beacon * 0.09 * activity;
 
   /* Soft light trailing the cursor. */
   float mouseDist = distance(screenSt, vec2(u_mouse.x * aspect, u_mouse.y));
-  color += teal * exp(-mouseDist * 2.2) * 0.35 * u_mouse_level;
-  color += mint * exp(-mouseDist * 5.0) * 0.12 * u_mouse_level;
+  color += teal * exp(-mouseDist * 2.2) * 0.3 * u_mouse_level;
+  color += mint * exp(-mouseDist * 5.0) * 0.1 * u_mouse_level;
 
-  color += mint * ring * 0.7;
+  color += mint * ring * 0.55;
 
   /* Leaving the hero dims the sky so the exit feels graded, not cropped. */
   color *= 1.0 - u_scroll * 0.45;
@@ -1431,6 +1437,7 @@ function initHeroIntro() {
      buttons get transition: none so their CSS hover transition doesn't
      fight the tween; clearProps restores it afterwards. */
   gsap.set(title, { autoAlpha: 0 });
+  gsap.set(".hero-kicker", { autoAlpha: 0, y: 12 });
   gsap.set(".hero-copy", { autoAlpha: 0, y: 24 });
   gsap.set(".hero-actions .button", { autoAlpha: 0, y: 16, transition: "none" });
   gsap.set(".proof-strip li", { autoAlpha: 0, y: 18 });
@@ -1441,6 +1448,9 @@ function initHeroIntro() {
   const ready = Promise.race([fontsReady, new Promise((resolve) => window.setTimeout(resolve, 600))]);
 
   ready.then(() => {
+    /* The credential line leads: it settles as the headline rises under it. */
+    gsap.to(".hero-kicker", { autoAlpha: 1, y: 0, duration: 0.6, ease: "power4.out" });
+
     if (hasSplitText) {
       SplitText.create(title, {
         type: "lines,words",
