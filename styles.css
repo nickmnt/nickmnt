@@ -291,9 +291,37 @@ h1 {
   border: 1px solid var(--accent-line);
   border-radius: var(--radius-s);
   background: var(--accent-soft);
-  color: var(--accent-strong);
-  font-size: 0.84rem;
-  letter-spacing: 0.02em;
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+
+.brand-mark svg {
+  width: 1.55rem;
+  height: 1.55rem;
+  filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0));
+  transition: filter 300ms ease;
+}
+
+/* Monogram draws itself on load, like the aurora tracing a signal. */
+.brand-mark path {
+  stroke-dasharray: 100;
+  animation: brand-draw 1100ms var(--ease-out) 250ms backwards;
+}
+
+@keyframes brand-draw {
+  from {
+    stroke-dashoffset: 100;
+  }
+}
+
+.brand:hover .brand-mark,
+.brand:focus-visible .brand-mark {
+  border-color: var(--accent);
+  box-shadow: 0 0 18px rgba(45, 212, 191, 0.22);
+}
+
+.brand:hover .brand-mark svg,
+.brand:focus-visible .brand-mark svg {
+  filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.6));
 }
 
 .site-nav {
