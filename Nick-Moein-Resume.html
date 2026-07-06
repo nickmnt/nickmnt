@@ -3,14 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nick Moein Resume</title>
+    <meta name="robots" content="noindex" />
+    <title>Nick Moein &mdash; Resume</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         color-scheme: light;
         --ink: #111827;
-        --muted: #4b5563;
-        --line: #d1d5db;
+        --body: #374151;
+        --muted: #6b7280;
+        --line: #e5e7eb;
+        --line-strong: #d1d5db;
         --accent: #0f766e;
+        --accent-dark: #115e59;
       }
 
       * {
@@ -18,70 +29,131 @@
       }
 
       body {
-        max-width: 900px;
+        max-width: 820px;
         margin: 0 auto;
-        padding: 48px 28px;
-        color: var(--ink);
-        font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-        line-height: 1.5;
+        padding: 40px 28px 56px;
+        color: var(--body);
+        font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.55;
       }
 
       header {
         border-bottom: 2px solid var(--ink);
-        padding-bottom: 18px;
-        margin-bottom: 28px;
+        padding-bottom: 20px;
+        margin-bottom: 26px;
       }
 
       h1,
       h2,
       h3,
-      p {
+      p,
+      ul {
         margin-top: 0;
       }
 
       h1 {
-        margin-bottom: 6px;
-        font-size: 2.4rem;
-        line-height: 1;
+        margin-bottom: 4px;
+        color: var(--ink);
+        font-size: 2.1rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+
+      .subhead {
+        margin-bottom: 10px;
+        color: var(--ink);
+        font-size: 1.02rem;
+        font-weight: 500;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0;
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .meta > * {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .meta > * + *::before {
+        content: "\00b7";
+        margin: 0 0.55em;
+        color: var(--line-strong);
       }
 
       h2 {
-        margin: 28px 0 10px;
-        border-bottom: 1px solid var(--line);
+        margin: 26px 0 12px;
+        border-bottom: 1px solid var(--line-strong);
         padding-bottom: 6px;
         color: var(--accent);
-        font-size: 1rem;
-        letter-spacing: 0.04em;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
       }
 
       h3 {
-        margin-bottom: 4px;
-        font-size: 1.05rem;
+        margin-bottom: 2px;
+        color: var(--ink);
+        font-size: 1.02rem;
+        font-weight: 600;
       }
 
       a {
         color: var(--accent);
+        text-decoration: none;
       }
 
-      .meta,
-      .subhead {
-        color: var(--muted);
+      a:hover,
+      a:focus-visible {
+        text-decoration: underline;
+      }
+
+      section + section {
+        margin-top: 4px;
+      }
+
+      article + article {
+        margin-top: 18px;
       }
 
       .role {
         display: flex;
+        align-items: baseline;
         justify-content: space-between;
         gap: 20px;
       }
 
+      .role span {
+        flex: 0 0 auto;
+        color: var(--muted);
+        font-size: 0.92rem;
+        font-variant-numeric: tabular-nums;
+      }
+
       ul {
-        margin-top: 8px;
-        padding-left: 20px;
+        margin: 6px 0 0;
+        padding-left: 18px;
       }
 
       li + li {
         margin-top: 5px;
+      }
+
+      li::marker {
+        color: var(--accent);
+      }
+
+      strong {
+        color: var(--ink);
+        font-weight: 600;
       }
 
       .toolbar {
@@ -89,36 +161,62 @@
         justify-content: space-between;
         align-items: center;
         gap: 16px;
-        margin-bottom: 28px;
-        font-size: 0.95rem;
+        margin-bottom: 30px;
+        font-size: 0.92rem;
       }
 
       .toolbar button {
-        padding: 8px 16px;
+        padding: 9px 18px;
         border: 1px solid var(--accent);
         border-radius: 8px;
         background: var(--accent);
         color: #ffffff;
+        font: inherit;
         font-weight: 600;
         cursor: pointer;
+        transition: background-color 150ms ease, border-color 150ms ease;
       }
 
-      .toolbar button:hover {
-        background: #115e59;
+      .toolbar button:hover,
+      .toolbar button:focus-visible {
+        border-color: var(--accent-dark);
+        background: var(--accent-dark);
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      @media (max-width: 560px) {
+        body {
+          padding: 24px 18px 40px;
+        }
+
+        .role {
+          flex-direction: column;
+          gap: 0;
+        }
       }
 
       @media print {
         body {
+          max-width: none;
           padding: 0;
+          font-size: 13.5px;
         }
 
         a {
           color: var(--ink);
-          text-decoration: none;
         }
 
         .toolbar {
           display: none;
+        }
+
+        h2 {
+          margin-top: 20px;
         }
       }
     </style>
@@ -132,7 +230,10 @@
       <h1>Nick Moein</h1>
       <p class="subhead">Full-stack .NET developer in Canada</p>
       <p class="meta">
-        Canada | nick.moeintaghavi@gmail.com | github.com/nickmnt | linkedin.com/in/nickmnt
+        <span>Canada</span>
+        <a href="mailto:nick.moeintaghavi@gmail.com">nick.moeintaghavi@gmail.com</a>
+        <a href="https://github.com/nickmnt">github.com/nickmnt</a>
+        <a href="https://www.linkedin.com/in/nickmnt/">linkedin.com/in/nickmnt</a>
       </p>
     </header>
 
@@ -152,12 +253,12 @@
         <article>
           <div class="role">
             <h3>Software Developer II, Genetec</h3>
-            <span>Jan 2026 - Present</span>
+            <span>Jan 2026 &ndash; Present</span>
           </div>
           <ul>
             <li>Build and maintain .NET Core access control applications for Genetec security products.</li>
-            <li>Cut Azure CI/CD build times by 50% through pipeline fixes and reliability work.</li>
-            <li>Shortened selected automated test runs by up to 50% while making the flows easier to maintain.</li>
+            <li>Cut Azure CI/CD build times by <strong>50%</strong> through pipeline fixes and reliability work.</li>
+            <li>Shortened selected automated test runs by <strong>up to 50%</strong> while making the flows easier to maintain.</li>
             <li>Mentor junior developers through onboarding, code reviews, and delivery practices.</li>
             <li>Automate developer and QA workflows to reduce manual handoffs and speed up issue triage.</li>
           </ul>
@@ -166,11 +267,11 @@
         <article>
           <div class="role">
             <h3>Software Developer, Genetec</h3>
-            <span>Jun 2024 - Jan 2026</span>
+            <span>Jun 2024 &ndash; Jan 2026</span>
           </div>
           <ul>
             <li>Shipped full-stack features with C#, .NET, React, TypeScript, and SQL.</li>
-            <li>Won 1st place in a company hackathon with a project that shaped product roadmap discussions.</li>
+            <li>Won <strong>1st place</strong> in a company hackathon with a project that shaped product roadmap discussions.</li>
             <li>Found and fixed security vulnerabilities through code reviews and security assessments.</li>
             <li>Refactored legacy components and expanded automated tests to make the product easier to maintain.</li>
           </ul>
