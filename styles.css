@@ -364,18 +364,6 @@ h1 {
   gap: 0.2rem;
 }
 
-.nav-indicator {
-  position: absolute;
-  left: 0;
-  bottom: 0.28rem;
-  height: 2px;
-  width: 0;
-  border-radius: 999px;
-  background: var(--accent);
-  opacity: 0;
-  transition: transform 320ms var(--ease-out), width 320ms var(--ease-out), opacity 200ms ease;
-}
-
 .site-nav a {
   position: relative;
   min-height: 2.3rem;
@@ -386,31 +374,20 @@ h1 {
   color: var(--muted);
   font-size: 0.93rem;
   font-weight: 500;
-  transition: color 200ms ease, background-color 200ms ease;
+  text-shadow: 0 0 0 rgba(125, 240, 220, 0);
+  transition: color 420ms ease, text-shadow 420ms ease;
 }
 
 .site-nav a:hover,
 .site-nav a:focus-visible,
 .site-nav a.is-active {
   color: var(--text);
-  background-color: rgba(186, 196, 209, 0.09);
+  text-shadow: 0 0 14px rgba(125, 240, 220, 0.3);
 }
 
-/* Desktop hover preview: a gradient underline sweeps in under links that
-   aren't already marked by the sliding indicator. */
-@media (min-width: 761px) {
-  .site-nav a {
-    background-image: linear-gradient(90deg, var(--accent), var(--accent-strong));
-    background-repeat: no-repeat;
-    background-position: 0.85rem calc(100% - 0.28rem);
-    background-size: 0% 2px;
-    transition: color 200ms ease, background-color 200ms ease, background-size 320ms var(--ease-out);
-  }
-
-  .site-nav a:hover:not(.is-active),
-  .site-nav a:focus-visible:not(.is-active) {
-    background-size: calc(100% - 1.7rem) 2px;
-  }
+.site-nav a.is-active {
+  color: var(--accent-strong);
+  font-weight: 600;
 }
 
 
@@ -1539,17 +1516,17 @@ h1 {
     transition: opacity 200ms ease, transform 340ms var(--ease-spring);
   }
 
-  /* The sliding indicator is desktop-only; the dropdown falls back to pill highlight. */
-  .nav-indicator {
-    display: none;
-  }
-
   /* Links stagger in as the dropdown opens. */
   .site-nav a {
     opacity: 0;
     transform: translateY(-6px);
     transition: opacity 220ms ease, transform 220ms var(--ease-out), color 200ms ease,
-      background-color 200ms ease;
+      text-shadow 220ms ease, background 200ms ease;
+  }
+
+  .site-nav a:hover,
+  .site-nav a:focus-visible {
+    background: rgba(186, 196, 209, 0.09);
   }
 
   .nav-open .site-nav a {
@@ -1670,11 +1647,6 @@ h1 {
    and motion isn't reduced. Rules here hand ownership of an animation to
    GSAP by switching off its CSS fallback, so the two never fight over the
    same properties. */
-
-/* GSAP animates the indicator's transform/width; CSS keeps only the fade. */
-html.gsap-enhanced .nav-indicator {
-  transition: opacity 200ms ease;
-}
 
 html.gsap-enhanced .hero-enter,
 html.gsap-enhanced .section-heading.reveal,

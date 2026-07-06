@@ -120,82 +120,12 @@ navLinks.forEach((link) => {
   });
 });
 
-/* ---------- Sliding nav indicator ---------- */
-
-const navIndicator = document.querySelector(".nav-indicator");
-let activeNavLink = null;
-
-function positionNavIndicator() {
-  if (!navIndicator) return;
-
-  if (!activeNavLink) {
-    navIndicator.style.opacity = "0";
-    return;
-  }
-
-  /* Inset by the link's own padding so the bar sits under the label. */
-  const inset = parseFloat(getComputedStyle(activeNavLink).paddingLeft) || 0;
-  const targetX = activeNavLink.offsetLeft + inset;
-  const targetWidth = Math.max(0, activeNavLink.offsetWidth - inset * 2);
-  const wasHidden = navIndicator.style.opacity !== "1";
-
-  if (motionEnhanced) {
-    if (wasHidden) {
-      gsap.set(navIndicator, { opacity: 1, width: targetWidth, x: targetX });
-      return;
-    }
-
-    /* Gooey stretch: the bar first grows to span both links, then snaps
-       shut on the destination. */
-    const currentX = Number(gsap.getProperty(navIndicator, "x")) || 0;
-    const currentWidth = navIndicator.offsetWidth;
-    const spanX = Math.min(currentX, targetX);
-    const spanWidth = Math.max(currentX + currentWidth, targetX + targetWidth) - spanX;
-
-    gsap
-      .timeline()
-      .to(navIndicator, { x: spanX, width: spanWidth, duration: 0.18, ease: "power2.in", overwrite: "auto" })
-      .to(navIndicator, { x: targetX, width: targetWidth, duration: 0.4, ease: "power3.out" });
-    return;
-  }
-
-  /* When appearing from hidden, jump into place instead of sweeping from x=0. */
-  if (wasHidden) {
-    navIndicator.style.transition = "none";
-  }
-
-  navIndicator.style.opacity = "1";
-  navIndicator.style.width = `${targetWidth}px`;
-  navIndicator.style.transform = `translateX(${targetX}px)`;
-
-  if (wasHidden) {
-    void navIndicator.offsetWidth;
-    navIndicator.style.transition = "";
-  }
-}
+/* ---------- Active nav highlighting ---------- */
 
 function setActiveNavLink(link) {
   navLinks.forEach((candidate) => {
     candidate.classList.toggle("is-active", candidate === link);
   });
-  activeNavLink = link || null;
-  positionNavIndicator();
-}
-
-let navIndicatorFrame = 0;
-
-function scheduleNavIndicator() {
-  if (navIndicatorFrame) return;
-  navIndicatorFrame = requestAnimationFrame(() => {
-    navIndicatorFrame = 0;
-    positionNavIndicator();
-  });
-}
-
-window.addEventListener("resize", scheduleNavIndicator);
-
-if (document.fonts && document.fonts.ready) {
-  document.fonts.ready.then(positionNavIndicator);
 }
 
 /* ---------- Hero entrance ---------- */
