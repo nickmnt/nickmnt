@@ -1026,58 +1026,124 @@ h1 {
 /* ---------- Skills ---------- */
 
 .skills-list {
-  max-width: 860px;
-  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  counter-reset: skill;
 }
 
 .skills-row {
+  --skill-accent: 45, 212, 191;
   position: relative; /* anchors the pointer-tracking glow */
+  isolation: isolate;
+  overflow: hidden;
   display: grid;
-  grid-template-columns: 12rem 1fr;
-  gap: 1.5rem;
-  padding: 1.15rem 0.25rem;
-  border-bottom: 1px solid var(--line);
-  transition: background-color 200ms ease;
+  align-content: start;
+  gap: 1rem;
+  min-height: 100%;
+  padding: 1.15rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+  background:
+    linear-gradient(180deg, rgba(16, 21, 29, 0.9), rgba(16, 21, 29, 0.72)) padding-box,
+    linear-gradient(135deg, rgba(var(--skill-accent), 0.42), rgba(186, 196, 209, 0.08) 48%, rgba(255, 255, 255, 0.06)) border-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 14px 36px rgba(0, 0, 0, 0.28);
+  counter-increment: skill;
+  transition: transform 220ms var(--ease-out), box-shadow 220ms ease;
+}
+
+.skills-row:nth-child(2) {
+  --skill-accent: 96, 165, 250;
+}
+
+.skills-row:nth-child(3) {
+  --skill-accent: 251, 191, 36;
+}
+
+.skills-row:nth-child(4) {
+  --skill-accent: 129, 140, 248;
+}
+
+.skills-row:nth-child(5) {
+  --skill-accent: 244, 114, 182;
+}
+
+.skills-row:nth-child(6) {
+  --skill-accent: 52, 211, 153;
+}
+
+.skills-row::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(to right, rgb(var(--skill-accent)), rgba(var(--skill-accent), 0.1));
+  z-index: 0;
 }
 
 .skills-row:hover {
-  background: rgba(22, 29, 39, 0.5);
+  transform: translateY(-4px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), var(--shadow-hover);
 }
 
 .skills-row dt {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
   font-family: var(--font-display);
-  color: var(--accent);
-  font-weight: 600;
-  font-size: 0.97rem;
+  color: rgb(var(--skill-accent));
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.skills-row dt::before {
+  content: "0" counter(skill);
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(var(--skill-accent), 0.28);
+  border-radius: 50%;
+  background: rgba(var(--skill-accent), 0.12);
+  color: rgb(var(--skill-accent));
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 800;
 }
 
 .skills-row dd {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: 0.5rem;
+  gap: 0.45rem;
   color: var(--body);
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
-  padding: 0.32rem 0.75rem;
-  border: 1px solid var(--line);
+  max-width: 100%;
+  padding: 0.34rem 0.72rem;
+  border: 1px solid rgba(var(--skill-accent), 0.18);
   border-radius: 999px;
-  background: var(--surface-2);
-  color: var(--body);
+  background: rgba(255, 255, 255, 0.035);
+  color: #d8e1ec;
   font-size: 0.88rem;
   font-weight: 500;
   line-height: 1.3;
+  overflow-wrap: anywhere;
   transition: border-color 200ms ease, background-color 200ms ease, color 200ms ease,
     transform 200ms var(--ease-out);
 }
 
 .chip:hover {
-  border-color: var(--accent-line);
-  background: var(--accent-soft);
-  color: var(--accent-strong);
+  border-color: rgba(var(--skill-accent), 0.55);
+  background: rgba(var(--skill-accent), 0.12);
+  color: var(--text);
   transform: translateY(-2px);
 }
 
@@ -1420,6 +1486,10 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.3rem;
   }
+
+  .skills-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -1530,9 +1600,12 @@ h1 {
     justify-items: start;
   }
 
-  .skills-row {
+  .skills-list {
     grid-template-columns: 1fr;
-    gap: 0.3rem;
+  }
+
+  .skills-row {
+    gap: 0.85rem;
   }
 
   .supports-reveal .reveal[data-reveal="left"],
@@ -1577,6 +1650,10 @@ h1 {
 
   .proof-strip {
     gap: 1.1rem;
+  }
+
+  .skills-row {
+    padding: 1rem;
   }
 
   .contact-actions {
@@ -1826,10 +1903,16 @@ html.gsap-enhanced .contact-copy h2 {
   .experience-card,
   .about-panel,
   .contact-panel,
-  .fit-card {
+  .fit-card,
+  .skills-row {
     box-shadow: none;
     background: #ffffff;
     border-color: #d1d5db;
+  }
+
+  .skills-row::before,
+  .skills-row dt::before {
+    display: none;
   }
 
   .status-chip {
