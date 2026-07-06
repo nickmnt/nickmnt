@@ -298,11 +298,17 @@ h1 {
   width: 1.55rem;
   height: 1.55rem;
   filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0));
-  transition: filter 300ms ease;
+  transition: filter 300ms ease, transform 300ms var(--ease-spring);
 }
 
-/* Monogram draws itself on load, like the aurora tracing a signal. */
-.brand-mark path {
+/* Logo is three copies of one path: a faint ghost rail, the gradient ink
+   that draws itself on load (like the aurora tracing a signal), and a
+   comet of light that patrols the monogram forever afterwards. */
+.logo-track {
+  stroke: rgba(45, 212, 191, 0.16);
+}
+
+.logo-ink {
   stroke-dasharray: 100;
   animation: brand-draw 1100ms var(--ease-out) 250ms backwards;
 }
@@ -310,6 +316,27 @@ h1 {
 @keyframes brand-draw {
   from {
     stroke-dashoffset: 100;
+  }
+}
+
+.logo-pulse {
+  stroke: #eafff9;
+  stroke-dasharray: 10 90;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 3px var(--accent-strong));
+  animation: logo-comet 5.5s linear 1600ms infinite backwards,
+    logo-pulse-in 600ms ease 1600ms backwards;
+}
+
+@keyframes logo-comet {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+@keyframes logo-pulse-in {
+  from {
+    opacity: 0;
   }
 }
 
@@ -321,7 +348,13 @@ h1 {
 
 .brand:hover .brand-mark svg,
 .brand:focus-visible .brand-mark svg {
-  filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.6));
+  filter: drop-shadow(0 0 6px rgba(45, 212, 191, 0.7));
+  transform: scale(1.08);
+}
+
+.brand:hover .logo-track,
+.brand:focus-visible .logo-track {
+  stroke: rgba(45, 212, 191, 0.3);
 }
 
 .site-nav {
@@ -1696,6 +1729,11 @@ html.gsap-enhanced .contact-copy h2 {
 
   .status-dot {
     animation: none;
+  }
+
+  /* Frozen comet reads as a broken stroke; the static monogram stands alone. */
+  .logo-pulse {
+    display: none;
   }
 
   .contact-panel::before {
