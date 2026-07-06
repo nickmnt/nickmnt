@@ -231,6 +231,9 @@ h1 {
 /* ---------- Header ---------- */
 
 .site-header {
+  --progress-bottom: -1px;
+  --progress-gutter: 0.9rem;
+  --progress-height: 2px;
   position: fixed;
   top: 1rem;
   left: 50%;
@@ -250,18 +253,28 @@ h1 {
     width 450ms var(--ease-out), padding 350ms var(--ease-out);
 }
 
+.site-header::before,
 .site-header::after {
   content: "";
   position: absolute;
-  left: 0.8rem;
-  right: 0.8rem;
-  bottom: 0;
-  height: 2px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  left: var(--progress-gutter);
+  right: var(--progress-gutter);
+  bottom: var(--progress-bottom);
+  height: var(--progress-height);
+  pointer-events: none;
+}
+
+.site-header::before {
+  background: linear-gradient(90deg, transparent, rgba(186, 196, 209, 0.14) 16%, rgba(186, 196, 209, 0.14) 84%, transparent);
+}
+
+.site-header::after {
+  background: linear-gradient(90deg, transparent, #eafff9 14%, var(--accent-strong) 42%, var(--accent) 74%, rgba(226, 255, 249, 0.72));
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.24);
   transform: scaleX(var(--scroll-progress, 0));
-  transform-origin: left;
-  opacity: 0.9;
+  transform-origin: left center;
+  transition: transform 120ms linear;
+  will-change: transform;
 }
 
 /* Scrolling condenses the header into a tighter floating dock. */
