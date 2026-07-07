@@ -619,6 +619,7 @@ h1 {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  contain: paint;
   background:
     radial-gradient(58rem 34rem at 78% 30%, rgba(45, 212, 191, 0.065), transparent 72%),
     radial-gradient(42rem 26rem at 72% 82%, rgba(91, 141, 166, 0.052), transparent 70%),
@@ -638,6 +639,7 @@ h1 {
   position: absolute;
   inset: -1px;
   opacity: 0.38;
+  contain: paint;
   background-image:
     linear-gradient(rgba(125, 240, 220, 0.065) 1px, transparent 1px),
     linear-gradient(90deg, rgba(125, 240, 220, 0.065) 1px, transparent 1px),
@@ -654,6 +656,7 @@ h1 {
   position: absolute;
   inset: 0;
   opacity: 0.68;
+  will-change: opacity;
   background-image:
     linear-gradient(rgba(125, 240, 220, 0.2) 1px, transparent 1px),
     linear-gradient(90deg, rgba(125, 240, 220, 0.2) 1px, transparent 1px),
@@ -662,14 +665,14 @@ h1 {
   background-size: 64px 64px, 64px 64px, 256px 256px, 256px 256px;
   background-position: center;
   mask-image: radial-gradient(38rem 24rem at center, #000 0%, rgba(0, 0, 0, 0.74) 34%, transparent 66%);
-  mask-position: 112% 4%;
+  mask-position: 78% 34%;
   mask-repeat: no-repeat;
   mask-size: 92% 92%;
   -webkit-mask-image: radial-gradient(38rem 24rem at center, #000 0%, rgba(0, 0, 0, 0.74) 34%, transparent 66%);
-  -webkit-mask-position: 112% 4%;
+  -webkit-mask-position: 78% 34%;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: 92% 92%;
-  animation: grid-light-pass 34s ease-in-out infinite;
+  animation: grid-light-pass 8s ease-in-out infinite;
 }
 
 .hero-grid::after {
@@ -695,7 +698,7 @@ h1 {
   top: 4%;
   right: -12%;
   transform: rotate(-14deg);
-  animation: hero-light-drift-a 38s ease-in-out infinite alternate;
+  animation: hero-light-drift-a 20s ease-in-out infinite alternate;
 }
 
 .hero-light-b {
@@ -705,7 +708,7 @@ h1 {
   height: min(24rem, 42vh);
   opacity: 0.2;
   background: radial-gradient(ellipse at center, rgba(91, 141, 166, 0.2), rgba(45, 212, 191, 0.034) 48%, transparent 72%);
-  animation: hero-light-drift-b 46s ease-in-out infinite alternate;
+  animation: hero-light-drift-b 24s ease-in-out infinite alternate;
 }
 
 .hero-system-map {
@@ -714,6 +717,7 @@ h1 {
   width: 100%;
   height: 100%;
   opacity: 0.58;
+  contain: paint;
   mask-image: linear-gradient(to bottom, transparent 6%, #000 18%, #000 72%, transparent 94%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 6%, #000 18%, #000 72%, transparent 94%);
 }
@@ -725,7 +729,7 @@ h1 {
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
-  animation: system-line-breathe 24s ease-in-out infinite;
+  animation: system-line-breathe 12s ease-in-out infinite;
 }
 
 .line-b {
@@ -750,7 +754,7 @@ h1 {
   stroke-dasharray: 8 116;
   stroke-dashoffset: 124;
   filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.28));
-  animation: system-signal-flow 18s ease-in-out infinite;
+  animation: system-signal-flow 8s ease-in-out infinite;
 }
 
 .signal-b {
@@ -782,7 +786,7 @@ h1 {
   border-radius: inherit;
   opacity: 0;
   transform: scale(0.58);
-  animation: system-node-pulse 16s ease-out infinite;
+  animation: system-node-pulse 9s ease-out infinite;
   animation-delay: var(--delay);
 }
 
@@ -842,12 +846,10 @@ h1 {
 @keyframes grid-light-pass {
   0%,
   100% {
-    mask-position: 112% 4%;
-    -webkit-mask-position: 112% 4%;
+    opacity: 0.52;
   }
   50% {
-    mask-position: 54% 62%;
-    -webkit-mask-position: 54% 62%;
+    opacity: 0.74;
   }
 }
 
