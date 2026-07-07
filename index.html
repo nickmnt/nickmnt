@@ -128,16 +128,37 @@
 
     <main id="main">
       <section class="hero" id="home" aria-labelledby="hero-title">
-        <canvas id="aurora-canvas" aria-hidden="true"></canvas>
-        <canvas id="system-canvas" aria-hidden="true"></canvas>
+        <div class="hero-backdrop" aria-hidden="true">
+          <div class="hero-grid"></div>
+          <div class="hero-light hero-light-a"></div>
+          <div class="hero-light hero-light-b"></div>
+          <svg class="hero-system-map" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <g class="system-lines">
+              <path class="system-line line-a" d="M54 24 H74 V40 H88" />
+              <path class="system-line line-b" d="M48 58 H66 V72 H82" />
+              <path class="system-line line-c" d="M72 18 V36 H58 V52" />
+              <path class="system-line line-d" d="M62 82 H42 V64 H28" />
+            </g>
+            <g class="system-signals">
+              <path class="system-signal signal-a" d="M54 24 H74 V40 H88" />
+              <path class="system-signal signal-b" d="M62 82 H42 V64 H28" />
+            </g>
+          </svg>
+          <span class="system-node node-a"></span>
+          <span class="system-node node-b"></span>
+          <span class="system-node node-c"></span>
+          <span class="system-node node-d"></span>
+          <span class="system-node node-e"></span>
+        </div>
         <div class="container hero-content">
           <p class="eyebrow hero-kicker hero-enter">Software Developer II at Genetec &middot; Canada</p>
           <h1 class="hero-enter" id="hero-title">
             Full-stack .NET developer building <span class="accent-text">production enterprise software.</span>
           </h1>
           <p class="hero-copy hero-enter">
-            I work on Genetec access control products with C# / .NET, React / TypeScript, Azure CI/CD,
-            cloud microservices, and automated testing. Bilingual in English and French.
+            At Genetec, I build access control product software across C# / .NET services,
+            React / TypeScript UI, Azure CI/CD, cloud microservices, and automated tests,
+            with security and reliability work tied to measurable outcomes.
           </p>
 
           <div class="hero-actions hero-enter">

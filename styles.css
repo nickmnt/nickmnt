@@ -184,7 +184,7 @@ h1 {
   font-size: clamp(2.6rem, 1.1rem + 5.2vw, 5.4rem);
   font-weight: 700;
   line-height: 1.04;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
   text-wrap: balance;
 }
 
@@ -202,7 +202,7 @@ h1 {
   font-size: clamp(1.9rem, 1.1rem + 2.6vw, 3.2rem);
   font-weight: 600;
   line-height: 1.14;
-  letter-spacing: -0.025em;
+  letter-spacing: 0;
   text-wrap: balance;
 }
 
@@ -313,8 +313,7 @@ h1 {
 }
 
 /* Logo is three copies of one path: a faint ghost rail, the gradient ink
-   that draws itself on load (like the aurora tracing a signal), and a
-   comet of light that patrols the monogram forever afterwards. */
+   that draws itself on load, and a light pass that patrols the monogram. */
 .logo-track {
   stroke: rgba(45, 212, 191, 0.16);
 }
@@ -586,35 +585,315 @@ h1 {
   display: flex;
   align-items: center;
   isolation: isolate;
+  overflow: hidden;
   padding: 7rem 0 3.4rem;
+  background:
+    radial-gradient(42rem 28rem at 76% 30%, rgba(45, 212, 191, 0.055), transparent 72%),
+    linear-gradient(180deg, rgba(10, 13, 18, 0.98), rgba(10, 13, 18, 0.9) 60%, var(--bg));
 }
 
-/* WebGL aurora: domain-warped noise shader rendered at reduced resolution.
-   Sits beneath the particle network; hidden by JS when WebGL is missing. */
-#aurora-canvas {
+.hero::before,
+.hero::after {
+  content: "";
   position: absolute;
   inset: 0;
-  z-index: -3;
-  width: 100%;
+  z-index: 1;
+  pointer-events: none;
 }
 
-#system-canvas {
+.hero::before {
+  background:
+    linear-gradient(90deg, rgba(10, 13, 18, 0.98) 0%, rgba(10, 13, 18, 0.88) 42%, rgba(10, 13, 18, 0.34) 76%, rgba(10, 13, 18, 0.2) 100%),
+    radial-gradient(42rem 30rem at 18% 42%, rgba(10, 13, 18, 0.78), transparent 72%);
+}
+
+.hero::after {
+  top: auto;
+  height: 13rem;
+  background: linear-gradient(to bottom, rgba(10, 13, 18, 0), var(--bg) 78%);
+}
+
+.hero-backdrop {
+  position: absolute;
+  inset: 0 0 -9rem;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(58rem 34rem at 78% 30%, rgba(45, 212, 191, 0.065), transparent 72%),
+    radial-gradient(42rem 26rem at 72% 82%, rgba(91, 141, 166, 0.052), transparent 70%),
+    linear-gradient(115deg, rgba(16, 29, 39, 0.34), rgba(10, 13, 18, 0));
+}
+
+.hero-backdrop::after {
+  content: "";
   position: absolute;
   inset: 0;
-  z-index: -2;
-  width: 100%;
+  background:
+    radial-gradient(42rem 24rem at 80% 45%, rgba(125, 240, 220, 0.04), transparent 72%),
+    linear-gradient(to bottom, transparent 54%, rgba(10, 13, 18, 0.82));
 }
 
-/* Both canvases overshoot the hero so the sky can dissolve into the
-   Experience section with no edge. The dissolve itself is NOT a CSS mask:
-   piecewise-linear gradient masks show Mach-band lines at every stop over
-   smooth dark content. Instead each canvas fades itself out — the aurora
-   shader fades (dithered) alpha near its bottom, and the particle canvas
-   applies a matching eased alpha ramp. Text legibility shading also lives
-   in-scene, so no flat veil ever sits on top of the art. */
-#aurora-canvas,
-#system-canvas {
-  height: calc(100% + 18rem);
+.hero-grid {
+  position: absolute;
+  inset: -1px;
+  opacity: 0.38;
+  background-image:
+    linear-gradient(rgba(125, 240, 220, 0.065) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 240, 220, 0.065) 1px, transparent 1px),
+    linear-gradient(rgba(186, 196, 209, 0.038) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(186, 196, 209, 0.038) 1px, transparent 1px);
+  background-size: 64px 64px, 64px 64px, 256px 256px, 256px 256px;
+  background-position: center;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 70%, transparent 100%);
+}
+
+.hero-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.68;
+  background-image:
+    linear-gradient(rgba(125, 240, 220, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 240, 220, 0.2) 1px, transparent 1px),
+    linear-gradient(rgba(125, 240, 220, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 240, 220, 0.08) 1px, transparent 1px);
+  background-size: 64px 64px, 64px 64px, 256px 256px, 256px 256px;
+  background-position: center;
+  mask-image: radial-gradient(38rem 24rem at center, #000 0%, rgba(0, 0, 0, 0.74) 34%, transparent 66%);
+  mask-position: 112% 4%;
+  mask-repeat: no-repeat;
+  mask-size: 92% 92%;
+  -webkit-mask-image: radial-gradient(38rem 24rem at center, #000 0%, rgba(0, 0, 0, 0.74) 34%, transparent 66%);
+  -webkit-mask-position: 112% 4%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 92% 92%;
+  animation: grid-light-pass 34s ease-in-out infinite;
+}
+
+.hero-grid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(10, 13, 18, 0.94), rgba(10, 13, 18, 0.4) 48%, rgba(10, 13, 18, 0.08)),
+    radial-gradient(34rem 22rem at 22% 44%, rgba(10, 13, 18, 0.66), transparent 72%);
+}
+
+.hero-light {
+  position: absolute;
+  width: min(60rem, 82vw);
+  height: min(34rem, 58vh);
+  border-radius: 999px;
+  opacity: 0.42;
+  background: radial-gradient(ellipse at center, rgba(45, 212, 191, 0.14), rgba(45, 212, 191, 0.052) 42%, transparent 72%);
+  will-change: transform;
+}
+
+.hero-light-a {
+  top: 4%;
+  right: -12%;
+  transform: rotate(-14deg);
+  animation: hero-light-drift-a 38s ease-in-out infinite alternate;
+}
+
+.hero-light-b {
+  right: 22%;
+  bottom: 10%;
+  width: min(44rem, 62vw);
+  height: min(24rem, 42vh);
+  opacity: 0.2;
+  background: radial-gradient(ellipse at center, rgba(91, 141, 166, 0.2), rgba(45, 212, 191, 0.034) 48%, transparent 72%);
+  animation: hero-light-drift-b 46s ease-in-out infinite alternate;
+}
+
+.hero-system-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.58;
+  mask-image: linear-gradient(to bottom, transparent 6%, #000 18%, #000 72%, transparent 94%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 6%, #000 18%, #000 72%, transparent 94%);
+}
+
+.system-line {
+  fill: none;
+  stroke: rgba(125, 240, 220, 0.14);
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  animation: system-line-breathe 24s ease-in-out infinite;
+}
+
+.line-b {
+  animation-delay: -6s;
+}
+
+.line-c {
+  animation-delay: -11s;
+}
+
+.line-d {
+  animation-delay: -16s;
+}
+
+.system-signal {
+  fill: none;
+  stroke: rgba(190, 255, 244, 0.64);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 8 116;
+  stroke-dashoffset: 124;
+  filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.28));
+  animation: system-signal-flow 18s ease-in-out infinite;
+}
+
+.signal-b {
+  animation-delay: -8s;
+}
+
+.system-node {
+  --x: 50%;
+  --y: 50%;
+  --delay: 0s;
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid rgba(190, 255, 244, 0.5);
+  border-radius: 999px;
+  background: rgba(45, 212, 191, 0.52);
+  box-shadow: 0 0 13px rgba(45, 212, 191, 0.28);
+  opacity: 0.78;
+  transform: translate(-50%, -50%);
+}
+
+.system-node::before {
+  content: "";
+  position: absolute;
+  inset: -0.62rem;
+  border: 1px solid rgba(125, 240, 220, 0.34);
+  border-radius: inherit;
+  opacity: 0;
+  transform: scale(0.58);
+  animation: system-node-pulse 16s ease-out infinite;
+  animation-delay: var(--delay);
+}
+
+.node-a {
+  --x: 54%;
+  --y: 24%;
+  --delay: -1s;
+}
+
+.node-b {
+  --x: 74%;
+  --y: 40%;
+  --delay: -5s;
+}
+
+.node-c {
+  --x: 88%;
+  --y: 40%;
+  --delay: -9s;
+}
+
+.node-d {
+  --x: 66%;
+  --y: 72%;
+  --delay: -13s;
+}
+
+.node-e {
+  --x: 42%;
+  --y: 64%;
+  --delay: -15s;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes hero-light-drift-a {
+  from {
+    transform: translate3d(0, 0, 0) rotate(-14deg);
+  }
+  to {
+    transform: translate3d(-8vw, 5vh, 0) rotate(-14deg);
+  }
+}
+
+@keyframes hero-light-drift-b {
+  from {
+    transform: translate3d(-3vw, 2vh, 0);
+  }
+  to {
+    transform: translate3d(6vw, -4vh, 0);
+  }
+}
+
+@keyframes grid-light-pass {
+  0%,
+  100% {
+    mask-position: 112% 4%;
+    -webkit-mask-position: 112% 4%;
+  }
+  50% {
+    mask-position: 54% 62%;
+    -webkit-mask-position: 54% 62%;
+  }
+}
+
+@keyframes system-line-breathe {
+  0%,
+  100% {
+    stroke-opacity: 0.5;
+  }
+  45% {
+    stroke-opacity: 1;
+  }
+}
+
+@keyframes system-signal-flow {
+  0%,
+  56%,
+  100% {
+    stroke-dashoffset: 124;
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.42;
+  }
+  30% {
+    stroke-dashoffset: 0;
+    opacity: 0.38;
+  }
+  42% {
+    opacity: 0;
+  }
+}
+
+@keyframes system-node-pulse {
+  0%,
+  68%,
+  100% {
+    opacity: 0;
+    transform: scale(0.58);
+  }
+  10% {
+    opacity: 0.48;
+  }
+  34% {
+    opacity: 0;
+    transform: scale(1.58);
+  }
 }
 
 .hero-copy {
@@ -736,22 +1015,32 @@ h1 {
 .proof-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.6rem;
-  max-width: 880px;
-  margin: 2.6rem 0 0;
-  padding: 1.5rem 0 0;
-  border-top: 1px solid var(--line);
+  gap: 0;
+  max-width: 920px;
+  margin: 2.45rem 0 0;
+  padding: 1.05rem 0 0;
+  border-top: 1px solid rgba(186, 196, 209, 0.14);
   list-style: none;
 }
 
 .proof-strip li {
-  padding-left: 1rem;
-  border-left: 2px solid var(--accent-line);
-  transition: border-color 240ms ease;
+  min-height: 5.6rem;
+  padding: 0.25rem 1.25rem 0.25rem 0;
+  border-right: 1px solid rgba(186, 196, 209, 0.1);
+  transition: border-color 240ms ease, transform 240ms var(--ease-out);
+}
+
+.proof-strip li + li {
+  padding-left: 1.25rem;
+}
+
+.proof-strip li:last-child {
+  border-right: 0;
 }
 
 .proof-strip li:hover {
-  border-left-color: var(--accent);
+  border-color: rgba(45, 212, 191, 0.24);
+  transform: translateY(-2px);
 }
 
 .proof-strip li:hover strong {
@@ -765,7 +1054,7 @@ h1 {
   font-size: clamp(1.7rem, 1.4rem + 1.1vw, 2.3rem);
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   color: var(--text);
   transition: color 240ms ease;
 }
@@ -827,7 +1116,7 @@ h1 {
   font-size: clamp(5rem, 3rem + 9vw, 10rem);
   font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
   color: transparent;
   -webkit-text-stroke: 1px rgba(45, 212, 191, 0.11);
   pointer-events: none;
@@ -938,7 +1227,7 @@ h1 {
 .experience-head h3 {
   margin-bottom: 0.25rem;
   font-size: 1.3rem;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 .company {
@@ -1158,7 +1447,7 @@ h1 {
   margin-bottom: 0.3rem;
   font-family: var(--font-display);
   font-size: 1.16rem;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 .about-panel p {
@@ -1305,7 +1594,7 @@ h1 {
 .fit-card h3 {
   margin-bottom: 0.9rem;
   font-size: 1.2rem;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 .fit-card ul {
@@ -1401,7 +1690,11 @@ h1 {
 
   .proof-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.3rem;
+    gap: 1.3rem 0;
+  }
+
+  .proof-strip li:nth-child(2n) {
+    border-right: 0;
   }
 
   .skills-list {
@@ -1412,6 +1705,18 @@ h1 {
 @media (max-width: 760px) {
   .scroll-cue {
     display: none;
+  }
+
+  .hero-backdrop {
+    bottom: -5rem;
+  }
+
+  .hero-grid {
+    opacity: 0.34;
+  }
+
+  .hero-system-map {
+    opacity: 0.46;
   }
 
   .site-header {
@@ -1566,7 +1871,15 @@ h1 {
   }
 
   .proof-strip {
-    gap: 1.1rem;
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .proof-strip li,
+  .proof-strip li + li {
+    padding-left: 0;
+    padding-right: 0;
+    border-right: 0;
   }
 
   .skills-row {
@@ -1725,6 +2038,14 @@ html.gsap-enhanced .contact-copy h2 {
     animation: none;
   }
 
+  .hero-grid::before,
+  .hero-light,
+  .system-line,
+  .system-signal,
+  .system-node::before {
+    animation: none;
+  }
+
   .reveal,
   .supports-reveal .reveal,
   .hero-enter,
@@ -1745,8 +2066,7 @@ html.gsap-enhanced .contact-copy h2 {
 
 @media print {
   .site-header,
-  #aurora-canvas,
-  #system-canvas,
+  .hero-backdrop,
   .scroll-cue,
   .hero-actions,
   .contact-actions,
