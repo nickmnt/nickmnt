@@ -196,21 +196,18 @@ if ("IntersectionObserver" in window && proofStrip && statValues.length > 0 && !
 if (copyEmailButton) {
   copyEmailButton.addEventListener("click", async (event) => {
     const button = event.currentTarget;
-    const label = button.querySelector("span");
-    const iconUse = button.querySelector("use");
-    const previous = label ? label.textContent : "";
+    const previous = button.textContent;
 
     try {
       await navigator.clipboard.writeText(email);
-      if (label) label.textContent = "Copied";
-      if (iconUse) iconUse.setAttribute("href", "#icon-check");
+      button.textContent = "Copied";
       button.classList.add("is-copied");
       if (copyStatus) {
         copyStatus.textContent = "Email copied to clipboard.";
         copyStatus.classList.add("is-shown");
       }
     } catch {
-      if (label) label.textContent = email;
+      button.textContent = email;
       if (copyStatus) {
         copyStatus.textContent = email;
         copyStatus.classList.add("is-shown");
@@ -218,8 +215,7 @@ if (copyEmailButton) {
     }
 
     window.setTimeout(() => {
-      if (label) label.textContent = previous;
-      if (iconUse) iconUse.setAttribute("href", "#icon-copy");
+      button.textContent = previous;
       button.classList.remove("is-copied");
       if (copyStatus) {
         copyStatus.classList.remove("is-shown");
@@ -269,7 +265,7 @@ if ("IntersectionObserver" in window) {
     });
 
     /* Skill chips cascade within their row once it reveals. */
-    document.querySelectorAll(".skills-row dd").forEach((dd) => {
+    document.querySelectorAll(".skills-group dd").forEach((dd) => {
       [...dd.querySelectorAll(".chip")].forEach((chip, index) => {
         chip.style.setProperty("--chip-delay", `${index * 35}ms`);
       });
@@ -557,7 +553,7 @@ function initTimelineDraw() {
 }
 
 function initSkillChips() {
-  document.querySelectorAll(".skills-row").forEach((row) => {
+  document.querySelectorAll(".skills-group").forEach((row) => {
     const chips = row.querySelectorAll(".chip");
     if (chips.length === 0) return;
 
@@ -623,7 +619,7 @@ function initPanelParallax() {
 function initCardGlow() {
   if (!finePointer) return;
 
-  document.querySelectorAll(".experience-card, .about-panel, .fit-card, .skills-row").forEach((card) => {
+  document.querySelectorAll(".experience-row, .about-panel, .fit-card, .skills-group").forEach((card) => {
     let frame = 0;
 
     card.addEventListener("pointermove", (event) => {
