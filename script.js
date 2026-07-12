@@ -9,6 +9,10 @@ const copyStatus = document.querySelector("[data-copy-status]");
 const hero = document.querySelector(".hero");
 const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+if (window.matchMedia && window.matchMedia("(max-width: 560px)").matches) {
+  document.querySelectorAll(".skills-group").forEach((group) => group.removeAttribute("open"));
+}
+
 /* GSAP + Lenis load from a CDN and are optional: when absent (or motion is
    reduced) every feature below falls back to the CSS/IntersectionObserver
    behavior, so the site never depends on them. */
@@ -256,8 +260,8 @@ if ("IntersectionObserver" in window) {
     });
 
     /* Skill chips cascade within their row once it reveals. */
-    document.querySelectorAll(".skills-group dd").forEach((dd) => {
-      [...dd.querySelectorAll(".chip")].forEach((chip, index) => {
+    document.querySelectorAll(".skills-tags").forEach((tags) => {
+      [...tags.querySelectorAll(".chip")].forEach((chip, index) => {
         chip.style.setProperty("--chip-delay", `${index * 35}ms`);
       });
     });
