@@ -40,7 +40,7 @@ let headerScrolled = null;
 function setPageProgress() {
   if (!header) return;
 
-  const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  const maxScroll = Math.max(1, document.documentElement.scrollHeight - document.documentElement.clientHeight);
   const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
   const roundedProgress = Math.round(progress * 10000) / 10000;
   const isScrolled = window.scrollY > 12;
