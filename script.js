@@ -129,10 +129,7 @@ function setActiveNavLink(link) {
 
 /* ---------- Hero entrance ---------- */
 
-/* The CSS entrance is the guaranteed baseline; the GSAP masked-line intro
-   gets a short head start to claim the entrance first (see the deadline
-   below). is-loaded always lands either way — the scroll cue and the hero
-   status sweep key off it regardless of which intro ran. */
+/* CSS owns the hero entrance. It is deterministic and needs no CDN race. */
 let loadedMarked = false;
 let introDeadlineTimer = 0;
 
@@ -170,15 +167,9 @@ function animateCount(element) {
   requestAnimationFrame(frame);
 }
 
-/* Fallback count-up: when GSAP is present the hero timeline drives this instead. */
-if ("IntersectionObserver" in window && proofStrip && statValues.length > 0 && !reducedMotion && !motionEnhanced) {
+if ("IntersectionObserver" in window && proofStrip && statValues.length > 0 && !reducedMotion) {
   const statObserver = new IntersectionObserver(
     (entries) => {
-      /* The GSAP hero timeline owns the count-up once it loads. */
-      if (motionEnhanced) {
-        statObserver.disconnect();
-        return;
-      }
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         statValues.forEach(animateCount);
@@ -329,9 +320,6 @@ function initSmoothScroll() {
   });
 }
 
-/* ----- Hero entrance: masked split-headline rise, then a follow-through
-   cascade over the copy, actions, and proof stats. ----- */
-
 /* Hand-rolled word splitter used when the SplitText plugin didn't load.
    Mirrors the wrapper classes SplitText is configured with below. */
 function wrapWords(element) {
@@ -367,93 +355,6 @@ function wrapWords(element) {
 
   walk(element);
   return words;
-}
-
-function animateStatCounts() {
-  statValues.forEach((element) => {
-    const target = Number(element.dataset.count);
-    if (!Number.isFinite(target)) return;
-
-    gsap.fromTo(
-      element,
-      { textContent: 0 },
-      { textContent: target, duration: 1.4, ease: "power3.out", snap: { textContent: 1 } }
-    );
-  });
-}
-
-let heroIntroStarted = false;
-
-function playHeroFollowThrough() {
-  if (heroIntroStarted) return;
-  heroIntroStarted = true;
-
-  gsap
-    .timeline({ defaults: { ease: "power3.out" }, delay: 0.5 })
-    .to(".hero-copy", { autoAlpha: 1, y: 0, duration: 0.8 })
-    .to(
-      ".hero-actions .button",
-      { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.05, clearProps: "all" },
-      "-=0.5"
-    )
-    .to(
-      ".proof-strip li",
-      { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.09, onStart: animateStatCounts },
-      "-=0.4"
-    );
-}
-
-function initHeroIntro() {
-  const title = document.querySelector("#hero-title");
-  if (!title) return;
-
-  /* Hidden states are applied here at runtime (pre-paint) rather than in
-     static CSS, so a CDN failure can never leave content invisible. The
-     buttons get transition: none so their CSS hover transition doesn't
-     fight the tween; clearProps restores it afterwards. */
-  gsap.set(title, { autoAlpha: 0 });
-  gsap.set(".hero-kicker", { autoAlpha: 0, y: 12 });
-  gsap.set(".hero-copy", { autoAlpha: 0, y: 24 });
-  gsap.set(".hero-actions .button", { autoAlpha: 0, y: 16, transition: "none" });
-  gsap.set(".proof-strip li", { autoAlpha: 0, y: 18 });
-
-  /* Split after fonts settle so line breaks are measured correctly; the
-     cap keeps a slow font from stalling the entrance. */
-  const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
-  const ready = Promise.race([fontsReady, new Promise((resolve) => window.setTimeout(resolve, 600))]);
-
-  ready.then(() => {
-    /* The credential line leads: it settles as the headline rises under it. */
-    gsap.to(".hero-kicker", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" });
-
-    if (hasSplitText) {
-      /* Whole lines rise behind masks — one deliberate movement per line,
-         not a cascade of words competing for attention. */
-      SplitText.create(title, {
-        type: "lines",
-        mask: "lines",
-        autoSplit: true,
-        onSplit(self) {
-          gsap.set(title, { autoAlpha: 1 });
-          const rise = gsap.from(self.lines, {
-            yPercent: 110,
-            duration: 1.1,
-            ease: "power3.out",
-            stagger: 0.14,
-          });
-          playHeroFollowThrough();
-          /* Returning the tween lets autoSplit clean up and replay it if a
-             late font load or resize changes the line breaks. */
-          return rise;
-        },
-      });
-    } else {
-      const words = wrapWords(title);
-      gsap.set(title, { autoAlpha: 1 });
-      gsap.from(words, { yPercent: 110, duration: 1.0, ease: "power3.out", stagger: 0.04 });
-      playHeroFollowThrough();
-    }
-  });
 }
 
 /* ----- Hero scroll exit: content drifts up and fades gently. ----- */
@@ -642,11 +543,6 @@ function initMotion() {
   ScrollTrigger.config({ ignoreMobileResize: true });
 
   initSmoothScroll();
-  if (!document.body.classList.contains("is-loaded")) {
-    initHeroIntro();
-  } else {
-    heroIntroStarted = true;
-  }
   initHeroScrollExit();
   initSectionHeadings();
   initSectionNumbers();

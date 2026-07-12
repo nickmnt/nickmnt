@@ -1047,7 +1047,6 @@ h1 em {
    motion isn't reduced; these rules hand ownership to GSAP so CSS and JS
    never fight the same property. */
 
-html.gsap-enhanced .hero-enter,
 html.gsap-enhanced .section-heading.reveal,
 html.gsap-enhanced .about-panel.reveal {
   opacity: 1;
