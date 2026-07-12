@@ -808,9 +808,6 @@ h1 em {
 }
 
 .contact-layout {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 5rem;
   margin-top: 1.75rem;
   padding-bottom: 6.875rem;
 }
@@ -876,26 +873,6 @@ h1 em {
 
 .contact-links span {
   color: var(--faint);
-}
-
-.fit-card {
-  align-self: start;
-  border-left: 1px solid rgba(234, 232, 225, 0.12);
-  padding-left: 3rem;
-}
-
-.fit-card h3 {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.fit-card .lede-list {
-  margin-top: 1.75rem;
-  gap: 1.375rem;
 }
 
 /* ---------- Footer ---------- */
@@ -1093,20 +1070,20 @@ html.gsap-enhanced .contact-copy h2 {
   text-wrap: initial;
 }
 
+html.gsap-enhanced .contact-copy h2 {
+  opacity: 0;
+}
+
+html.gsap-enhanced .contact-copy.is-visible h2 {
+  opacity: 1;
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1020px) {
-  .about-layout,
-  .contact-layout {
+  .about-layout {
     grid-template-columns: 1fr;
     gap: 3.5rem;
-  }
-
-  .fit-card {
-    border-left: 0;
-    border-top: 1px solid var(--line-strong);
-    padding-left: 0;
-    padding-top: 2rem;
   }
 
   .skills-grid {
@@ -1301,7 +1278,6 @@ html.gsap-enhanced .contact-copy h2 {
   .eyebrow,
   .section-index .num,
   .skills-group dt,
-  .fit-card h3,
   .experience-meta .period.is-current {
     color: #3f7266;
   }
