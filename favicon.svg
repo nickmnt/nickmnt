@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="NM">
   <defs>
     <linearGradient id="s" x1="15" y1="43" x2="49" y2="21" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2dd4bf"/>
-      <stop offset="1" stop-color="#7df0dc"/>
+      <stop offset="0" stop-color="#5eae9e"/>
+      <stop offset="1" stop-color="#9fd8c9"/>
     </linearGradient>
     <radialGradient id="a" cx="0.5" cy="1.15" r="1.05">
-      <stop offset="0" stop-color="#2dd4bf" stop-opacity="0.3"/>
-      <stop offset="0.65" stop-color="#2dd4bf" stop-opacity="0"/>
+      <stop offset="0" stop-color="#5eae9e" stop-opacity="0.3"/>
+      <stop offset="0.65" stop-color="#5eae9e" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <rect width="64" height="64" rx="14" fill="#0a0d12"/>
+  <rect width="64" height="64" rx="14" fill="#0c0f0e"/>
   <rect width="64" height="64" rx="14" fill="url(#a)"/>
-  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5" fill="none" stroke="#2dd4bf" stroke-opacity="0.35"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5" fill="none" stroke="#5eae9e" stroke-opacity="0.35"/>
   <path d="M15 43V21L30 43V21L39.5 36 49 21V43" fill="none" stroke="url(#s)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

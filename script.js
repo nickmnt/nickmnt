@@ -129,12 +129,24 @@ function setActiveNavLink(link) {
 
 /* ---------- Hero entrance ---------- */
 
-/* Double rAF guarantees the hidden state paints once before the transition runs. */
-requestAnimationFrame(() => {
+/* The CSS entrance is the guaranteed baseline; the GSAP masked-line intro
+   gets a short head start to claim the entrance first (see the deadline
+   below). is-loaded always lands either way — the scroll cue and the hero
+   status sweep key off it regardless of which intro ran. */
+let loadedMarked = false;
+let introDeadlineTimer = 0;
+
+function markLoaded() {
+  if (loadedMarked) return;
+  loadedMarked = true;
+  window.clearTimeout(introDeadlineTimer);
+  /* rAF guarantees the hidden state painted once before the transition runs. */
   requestAnimationFrame(() => {
     document.body.classList.add("is-loaded");
   });
-});
+}
+
+introDeadlineTimer = window.setTimeout(markLoaded, 350);
 
 /* ---------- Proof strip count-up ---------- */
 
@@ -162,6 +174,11 @@ function animateCount(element) {
 if ("IntersectionObserver" in window && proofStrip && statValues.length > 0 && !reducedMotion && !motionEnhanced) {
   const statObserver = new IntersectionObserver(
     (entries) => {
+      /* The GSAP hero timeline owns the count-up once it loads. */
+      if (motionEnhanced) {
+        statObserver.disconnect();
+        return;
+      }
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         statValues.forEach(animateCount);
@@ -376,17 +393,17 @@ function playHeroFollowThrough() {
   heroIntroStarted = true;
 
   gsap
-    .timeline({ defaults: { ease: "power4.out" }, delay: 0.35 })
-    .to(".hero-copy", { autoAlpha: 1, y: 0, duration: 0.7 })
+    .timeline({ defaults: { ease: "power3.out" }, delay: 0.5 })
+    .to(".hero-copy", { autoAlpha: 1, y: 0, duration: 0.8 })
     .to(
       ".hero-actions .button",
-      { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.06, clearProps: "all" },
-      "-=0.45"
+      { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.05, clearProps: "all" },
+      "-=0.5"
     )
     .to(
       ".proof-strip li",
-      { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.08, onStart: animateStatCounts },
-      "-=0.35"
+      { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.09, onStart: animateStatCounts },
+      "-=0.4"
     );
 }
 
@@ -411,21 +428,22 @@ function initHeroIntro() {
 
   ready.then(() => {
     /* The credential line leads: it settles as the headline rises under it. */
-    gsap.to(".hero-kicker", { autoAlpha: 1, y: 0, duration: 0.6, ease: "power4.out" });
+    gsap.to(".hero-kicker", { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" });
 
     if (hasSplitText) {
+      /* Whole lines rise behind masks — one deliberate movement per line,
+         not a cascade of words competing for attention. */
       SplitText.create(title, {
-        type: "lines,words",
+        type: "lines",
         mask: "lines",
         autoSplit: true,
-        wordsClass: "split-word",
         onSplit(self) {
           gsap.set(title, { autoAlpha: 1 });
-          const rise = gsap.from(self.words, {
+          const rise = gsap.from(self.lines, {
             yPercent: 110,
-            duration: 0.9,
-            ease: "power4.out",
-            stagger: 0.045,
+            duration: 1.1,
+            ease: "power3.out",
+            stagger: 0.14,
           });
           playHeroFollowThrough();
           /* Returning the tween lets autoSplit clean up and replay it if a
@@ -436,7 +454,7 @@ function initHeroIntro() {
     } else {
       const words = wrapWords(title);
       gsap.set(title, { autoAlpha: 1 });
-      gsap.from(words, { yPercent: 110, duration: 0.9, ease: "power4.out", stagger: 0.045 });
+      gsap.from(words, { yPercent: 110, duration: 1.0, ease: "power3.out", stagger: 0.04 });
       playHeroFollowThrough();
     }
   });
@@ -488,7 +506,7 @@ function initSectionHeadings() {
         : wrapWords(title);
 
       const tl = gsap.timeline({
-        defaults: { ease: "power4.out" },
+        defaults: { ease: "power3.out" },
         scrollTrigger: { trigger: heading, start: "top 82%", once: true },
         /* Reuses the existing CSS that draws the eyebrow's accent line. */
         onStart: () => heading.classList.add("is-visible"),
@@ -547,12 +565,11 @@ function initSkillChips() {
        chips' CSS hover transition can't fight the cascade. */
     gsap.set(chips, { transition: "none" });
     gsap.from(chips, {
-      y: 14,
-      scale: 0.9,
+      y: 12,
       autoAlpha: 0,
       duration: 0.5,
-      ease: "back.out(1.7)",
-      stagger: 0.03,
+      ease: "power3.out",
+      stagger: 0.025,
       clearProps: "all",
       scrollTrigger: { trigger: row, start: "top 85%", once: true },
     });
@@ -603,29 +620,6 @@ function initPanelParallax() {
 
 /* ----- Micro-interactions (fine pointers only) ----- */
 
-function initMagneticButtons() {
-  if (!finePointer) return;
-
-  const magnets = document.querySelectorAll(".hero-actions .button, .contact-actions .button, .header-cta");
-
-  magnets.forEach((button) => {
-    button.classList.add("is-magnetic");
-
-    button.addEventListener("pointermove", (event) => {
-      const rect = button.getBoundingClientRect();
-      const pullX = gsap.utils.clamp(-5, 5, (event.clientX - (rect.left + rect.width / 2)) * 0.18);
-      const pullY = gsap.utils.clamp(-5, 5, (event.clientY - (rect.top + rect.height / 2)) * 0.18);
-
-      /* -2 keeps the hover lift the CSS used to provide. */
-      gsap.to(button, { x: pullX, y: pullY - 2, duration: 0.4, ease: "power3.out", overwrite: "auto" });
-    });
-
-    button.addEventListener("pointerleave", () => {
-      gsap.to(button, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.5)", overwrite: "auto" });
-    });
-  });
-}
-
 function initCardGlow() {
   if (!finePointer) return;
 
@@ -663,7 +657,6 @@ function initMotion() {
   initTimelineDraw();
   initSkillChips();
   initPanelParallax();
-  initMagneticButtons();
   initCardGlow();
 }
 
@@ -720,19 +713,24 @@ async function loadMotionEnhancements() {
   hasLenis = typeof window.Lenis !== "undefined";
   motionEnhanced = hasGsap && hasScrollTrigger && !reducedMotion;
 
-  if (!motionEnhanced) return;
+  if (!motionEnhanced) {
+    markLoaded();
+    return;
+  }
   document.documentElement.classList.add("gsap-enhanced");
   initMotion();
-}
-
-function scheduleMotionEnhancements() {
-  if (reducedMotion) return;
-
-  window.addEventListener("load", () => window.setTimeout(loadMotionEnhancements, 0), { once: true });
+  /* If the GSAP intro claimed the entrance it hides its own elements, so
+     is-loaded is safe to land now: under .gsap-enhanced it only triggers
+     the scroll cue and the hero status sweep. */
+  markLoaded();
 }
 
 if (motionEnhanced) {
   initMotion();
+} else if (!reducedMotion) {
+  /* Load immediately (not after window.load) so the masked-line intro can
+     win the entrance race on a warm connection. */
+  loadMotionEnhancements();
 } else {
-  scheduleMotionEnhancements();
+  markLoaded();
 }
