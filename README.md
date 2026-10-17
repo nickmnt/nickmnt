@@ -14,7 +14,7 @@ I work mostly with C#, .NET, React, Angular, TypeScript, SQL, Docker, Kubernetes
 
 ## Personal projects
 
-| Project | What recruiters can see | Stack |
+| Project | Description | Stack |
 | --- | --- | --- |
 | [Realtime Matchmaking App](https://github.com/nickmnt/dating-app) | Authenticated product flows, admin screens, matching, and SignalR messaging | .NET, Angular, TypeScript, NgRx, SignalR, EF Core, SQL, xUnit |
 | [Realtime Messaging Platform](https://github.com/nickmnt/react-talk) | Chat, group management, contacts, saved messages, and realtime state | .NET, React, TypeScript, MobX, SignalR, EF Core, SQL, Docker |
