@@ -1,8 +1,10 @@
 # Nick Moein
 
-Full-stack .NET developer in Canada building production security software with C#, .NET, React, TypeScript, and Azure.
+Full-stack .NET developer building production security software with C#, .NET, React, TypeScript, and Azure.
 
 I work mostly with C#, .NET, React, Angular, TypeScript, SQL, Docker, Kubernetes, Azure, gRPC, and RabbitMQ.
+
+Location: Canada
 
 [Portfolio and background](https://nickmnt.github.io/nickmnt/) | [LinkedIn](https://www.linkedin.com/in/nickmnt/) | [Email](mailto:nick.moeintaghavi@gmail.com)
 
