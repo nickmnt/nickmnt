@@ -1,24 +1,24 @@
 :root {
   color-scheme: dark;
-  --bg: #0b0e0d;
-  --bg-alt: #0d110f;
-  --heading: #f2f0ea;
-  --text: #eae8e1;
-  --lede: #b4bbb4;
-  --copy: #a9b1aa;
-  --muted: #9aa29b;
-  --faint: #7e867f;
-  --accent: #5cb58b;
-  --accent-strong: #84cfa9;
-  --accent-ink: #0b0e0d;
-  --em: #c9d6cc;
-  --btn-bg: #eae8e1;
-  --btn-bg-hover: #ffffff;
-  --btn-ink: #0b0e0d;
-  --line: rgba(234, 232, 225, 0.1);
-  --line-soft: rgba(234, 232, 225, 0.08);
-  --line-strong: rgba(234, 232, 225, 0.14);
-  --line-outline: rgba(234, 232, 225, 0.22);
+  --bg: #101722;
+  --bg-alt: #17212e;
+  --heading: #f5f2eb;
+  --text: #e2e7ee;
+  --lede: #c3cddb;
+  --copy: #b2becd;
+  --muted: #a3b0c2;
+  --faint: #92a0b3;
+  --accent: #91b6f5;
+  --accent-strong: #b9d2fc;
+  --accent-ink: var(--bg);
+  --em: #c8d6eb;
+  --btn-bg: var(--accent);
+  --btn-bg-hover: var(--accent-strong);
+  --btn-ink: var(--bg);
+  --line: rgba(226, 231, 238, 0.1);
+  --line-soft: rgba(226, 231, 238, 0.08);
+  --line-strong: rgba(226, 231, 238, 0.14);
+  --line-outline: rgba(226, 231, 238, 0.4);
   --max: 1240px;
   --gutter: 2rem;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -84,8 +84,8 @@ button {
 }
 
 ::selection {
-  background: rgba(92, 181, 139, 0.28);
-  color: var(--heading);
+  background: var(--accent-strong);
+  color: var(--accent-ink);
 }
 
 .container {
@@ -108,6 +108,10 @@ button {
   font-weight: 600;
   border-radius: 2px;
   transition: top 160ms ease;
+}
+
+.skip-link:hover {
+  color: var(--accent-ink);
 }
 
 .skip-link:focus-visible {
@@ -222,7 +226,7 @@ h1 em {
   left: 0;
   right: 0;
   z-index: 50;
-  background: rgba(11, 14, 13, 0.72);
+  background: rgba(16, 23, 34, 0.72);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
@@ -307,7 +311,7 @@ h1 em {
   justify-content: center;
   border: 1px solid var(--line-strong);
   border-radius: 2px;
-  background: rgba(13, 17, 15, 0.7);
+  background: rgba(23, 33, 46, 0.7);
   color: var(--text);
 }
 
@@ -440,14 +444,14 @@ h1 em {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(900px 600px at 78% -10%, rgba(92, 181, 139, 0.1), transparent 65%),
-    radial-gradient(700px 500px at 8% 110%, rgba(92, 181, 139, 0.05), transparent 60%);
+    radial-gradient(900px 600px at 78% -10%, rgba(145, 182, 245, 0.1), transparent 65%),
+    radial-gradient(700px 500px at 8% 110%, rgba(145, 182, 245, 0.05), transparent 60%);
 }
 
 .hero-scanlines {
   position: absolute;
   inset: 0;
-  background: linear-gradient(rgba(234, 232, 225, 0.035) 0 1px, transparent 1px 0);
+  background: linear-gradient(rgba(226, 231, 238, 0.035) 0 1px, transparent 1px 0);
   background-size: 100% 25%;
   background-position: 0 100%;
 }
@@ -567,7 +571,7 @@ h1 em {
   width: 1px;
   height: 3.5rem;
   overflow: hidden;
-  background: rgba(234, 232, 225, 0.12);
+  background: rgba(226, 231, 238, 0.12);
 }
 
 .scroll-cue-dot {
@@ -721,14 +725,14 @@ h1 em {
   border-radius: 2px;
   font-family: var(--font-mono);
   font-size: 0.8125rem;
-  color: #c4cbc4;
+  color: var(--lede);
   transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease;
 }
 
 .chip:hover {
   border-color: var(--accent);
   color: var(--accent-strong);
-  background: rgba(92, 181, 139, 0.06);
+  background: rgba(145, 182, 245, 0.06);
 }
 
 /* ---------- About ---------- */
@@ -808,7 +812,7 @@ h1 em {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(800px 500px at 50% 120%, rgba(92, 181, 139, 0.08), transparent 65%);
+  background: radial-gradient(800px 500px at 50% 120%, rgba(145, 182, 245, 0.08), transparent 65%);
 }
 
 .contact-section > .container {
@@ -1141,7 +1145,7 @@ html.gsap-enhanced .contact-copy.is-visible h2 {
     padding: 0.5rem;
     border: 1px solid var(--line-strong);
     border-radius: 2px;
-    background: rgba(11, 14, 13, 0.96);
+    background: rgba(16, 23, 34, 0.96);
     backdrop-filter: blur(12px);
     transform: translateY(-8px);
     opacity: 0;
@@ -1443,7 +1447,7 @@ html.gsap-enhanced .contact-copy.is-visible h2 {
   .section-index .num,
   .skills-group dt,
   .experience-meta .period.is-current {
-    color: #3f7266;
+    color: #34588a;
   }
 
   .chip {
