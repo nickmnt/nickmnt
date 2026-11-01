@@ -34,7 +34,7 @@
     ],
     '#skills-title': 'Les technologies que j’utilise.',
     '#skills .section-heading > p:last-child': 'Développement backend et frontend, infonuagique, données, qualité et pratiques d’équipe pour créer des logiciels sécurisés de bout en bout.',
-    '.skills-group summary': ['Backend .NET', 'Frontend', 'Bases de données et mise en cache', 'Infonuagique et DevOps', 'Outils', 'Tests et pratiques', 'Compétences interpersonnelles', 'Langues'],
+    '.skills-group summary': ['Backend', 'Frontend', 'Bases de données et mise en cache', 'Infonuagique et DevOps', 'Outils', 'Tests et pratiques', 'Compétences interpersonnelles', 'Langues'],
     '.skills-group:nth-child(3) .chip': ['SQL', 'T-SQL', 'MySQL', 'NoSQL', 'Redis'],
     '.skills-group:nth-child(4) .chip:last-child': 'Pipelines CI/CD',
     '.skills-group:nth-child(5) .chip:last-child': 'Agile (Scrum, Kanban)',
