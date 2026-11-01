@@ -191,14 +191,12 @@ if ("IntersectionObserver" in window && proofStrip && statValues.length > 0 && !
 if (copyEmailButton) {
   copyEmailButton.addEventListener("click", async (event) => {
     const button = event.currentTarget;
-    const previous = button.textContent;
-
     try {
       await navigator.clipboard.writeText(email);
-      button.textContent = "Copied";
+      button.textContent = document.documentElement.lang === "fr" ? "Copié" : "Copied";
       button.classList.add("is-copied");
       if (copyStatus) {
-        copyStatus.textContent = "Email copied to clipboard.";
+        copyStatus.textContent = document.documentElement.lang === "fr" ? "Adresse courriel copiée." : "Email copied to clipboard.";
         copyStatus.classList.add("is-shown");
       }
     } catch {
@@ -210,7 +208,7 @@ if (copyEmailButton) {
     }
 
     window.setTimeout(() => {
-      button.textContent = previous;
+      button.textContent = document.documentElement.lang === "fr" ? "Copier le courriel" : "Copy email";
       button.classList.remove("is-copied");
       if (copyStatus) {
         copyStatus.classList.remove("is-shown");

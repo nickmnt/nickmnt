@@ -407,6 +407,11 @@ h1 em {
   text-transform: uppercase;
 }
 
+.language-toggle {
+  min-width: 2.75rem;
+  padding-inline: 0.65rem;
+}
+
 .button.is-copied {
   border-color: var(--accent);
   color: var(--accent-strong);
