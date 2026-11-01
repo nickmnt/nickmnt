@@ -33,4 +33,4 @@ Location: Canada
 | Architecture | Microservices, gRPC, RabbitMQ, distributed systems, cloud services |
 | Quality | Unit testing, integration testing, E2E testing, code review, security review, performance work |
 
-Portfolio, resume, and contact details: [nickmnt.github.io/nickmnt](https://nickmnt.github.io/nickmnt/).
+Portfolio and contact details: [nickmnt.github.io/nickmnt](https://nickmnt.github.io/nickmnt/).
