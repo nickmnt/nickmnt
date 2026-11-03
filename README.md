@@ -4,6 +4,13 @@ Full-stack .NET developer in Canada and Software Developer II at Genetec, buildi
 
 [Portfolio](https://nickmnt.github.io/nickmnt/) | [GitHub](https://github.com/nickmnt) | [LinkedIn](https://www.linkedin.com/in/nickmnt/) | [Email](mailto:nick.moeintaghavi@gmail.com)
 
+## What I work on
+
+- Backend services, APIs, and data systems.
+- Frontend applications and product workflows.
+- Security, authentication, and code reviews.
+- Automated testing, CI/CD, and performance optimization.
+
 ## Tech stack
 
 | Area | Technologies and practices |
