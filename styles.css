@@ -1341,6 +1341,7 @@ html.gsap-enhanced .contact-copy.is-visible h2 {
 
   .proof-strip li,
   .proof-strip li:first-child,
+  .proof-strip li:nth-child(2),
   .proof-strip li:nth-child(3) {
     padding: 1.25rem 0;
     border-right: 0;
