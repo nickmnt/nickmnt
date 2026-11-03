@@ -1286,6 +1286,10 @@ html.gsap-enhanced .contact-copy.is-visible h2 {
 }
 
 @media (max-width: 560px) {
+  .hero-scanlines {
+    display: none;
+  }
+
   .header-cta {
     display: none;
   }
