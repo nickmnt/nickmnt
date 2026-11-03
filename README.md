@@ -1,18 +1,20 @@
 # Nick Moein
 
-Full-stack .NET developer building production security software with C#, .NET, React, TypeScript, and Azure.
+Full-stack .NET developer in Canada and Software Developer II at Genetec, building production enterprise and access control software with C#, .NET, React, TypeScript, Azure CI/CD, and automated testing.
 
-I work mostly with C#, .NET, React, Angular, TypeScript, SQL, Docker, Kubernetes, Azure, gRPC, and RabbitMQ.
+[Portfolio](https://nickmnt.github.io/nickmnt/) | [GitHub](https://github.com/nickmnt) | [LinkedIn](https://www.linkedin.com/in/nickmnt/) | [Email](mailto:nick.moeintaghavi@gmail.com)
 
-Location: Canada
+## Tech stack
 
-[Portfolio and background](https://nickmnt.github.io/nickmnt/) | [LinkedIn](https://www.linkedin.com/in/nickmnt/) | [Email](mailto:nick.moeintaghavi@gmail.com)
+| Area | Technologies and practices |
+| --- | --- |
+| Backend | C#, .NET, REST APIs, Entity Framework Core, microservices |
+| Frontend | React, Angular, TypeScript, JavaScript, HTML, CSS |
+| Databases and caching | SQL, T-SQL, MySQL, NoSQL, Redis |
+| Cloud and DevOps | Azure, AWS, Docker, Kubernetes, CI/CD pipelines |
+| Testing and practices | Unit, integration, and end-to-end testing; code reviews; performance optimization |
+| Tools and collaboration | Visual Studio, VS Code, Agile, Scrum, Kanban, mentorship |
 
-## What I work on
-
-- .NET APIs, access control features, data modeling, authentication, and service design.
-- React and Angular frontends for product workflows.
-- Automated testing, CI/CD pipelines, Dockerized services, and Azure/AWS deployments.
 
 ## Personal projects
 
@@ -23,14 +25,3 @@ Location: Canada
 | [Ecommerce Storefront](https://github.com/nickmnt/shop) | Product catalog, cart, checkout, and order flow | .NET, React, TypeScript, Redux, EF Core, SQL, Docker |
 | [Publishing CMS](https://github.com/nickmnt/publishing_cms) | Articles, comments, rich editing, moderation, and user management | .NET, React, TypeScript, MobX, EF Core, SQL, Docker |
 
-## Stack
-
-| Area | Tools |
-| --- | --- |
-| Backend | C#, .NET, ASP.NET Core, REST APIs, Entity Framework, SQL, NoSQL, Redis |
-| Frontend | React, Angular, TypeScript, JavaScript, RxJS, NgRx, Redux, MobX |
-| Cloud and DevOps | Azure, AWS, Docker, Kubernetes, Terraform, Jenkins, CI/CD |
-| Architecture | Microservices, gRPC, RabbitMQ, distributed systems, cloud services |
-| Quality | Unit testing, integration testing, E2E testing, code review, security review, performance work |
-
-Portfolio and contact details: [nickmnt.github.io/nickmnt](https://nickmnt.github.io/nickmnt/).
